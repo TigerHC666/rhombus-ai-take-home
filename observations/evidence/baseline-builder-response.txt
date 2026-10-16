@@ -1,0 +1,95 @@
+/pipeline Build the cleaning pipeline on this project's canvas using the existing Amazon S3 Data Input bound to orders.csv. Create and configure all cleaning transformations yourself. Do not replace the S3 source with a local upload or a static copy. Each run must read the current S3 object.
+
+The source contract is: order_id, customer, email, order_date, quantity, unit_price, currency, status. Dates are MM/DD/YYYY; unit_price is in major AUD units. Output exactly these columns in order: order_id,customer,email,order_date,quantity,unit_price,currency,status,total_amount.
+
+Trim surrounding whitespace in all text. Uppercase order_id and currency; lowercase email and status; preserve customer case. Fill missing/blank customer with Unknown. Replace invalid or missing email with an empty string; use the simple pattern ^[^\s@]+@[^\s@]+.[^\s@]+$. Require nonempty order_id, order_date, quantity, unit_price, currency and status. Only AUD and statuses paid/pending are allowed. Parse dates strictly as MM/DD/YYYY and output YYYY-MM-DD; reject invalid dates. Quantity must be positive integer digits. Unit price may have a leading dollar sign and at most two decimal places; reject negative, missing, nonfinite, exponent or comma-containing prices. Remove invalid required-value rows. Deduplicate identical normalized business rows; reject conflicting duplicate order IDs. Sort by order_id ascending.
+
+Calculate total_amount = quantity * unit_price using decimal arithmetic and ROUND_HALF_UP, serialize unit_price and total_amount with two decimal places, and quantity as integer digits. Do not insert processing timestamps into business data. Do not hardcode rows or expected results. Keep transformations general for the contract.
+
+Add and connect a Data Output node for CSV export. The GCS destination connection will be configured next; do not invent credentials or enable a schedule. Explain the resulting transformations and any unsupported rules. Do not merely provide instructions: build the nodes on the canvas.
+
+Copy message
+
+All four nodes are on the canvas. Here's a summary of what was built:
+
+Pipeline updated on the canvas.
+Change	Node	Purpose
+Existing	
+orders.csv
+	S3 input — reads the live 
+orders.csv
+ object on every run; no local copy.
+Added	
+orders_cleaned
+	LLM transformation node — applies every cleaning and validation rule (see detail below).
+Added	
+orders_sorted
+	Sort node — sorts the cleaned rows by order_id ascending.
+Added	
+orders_output
+	Output node — exports to CSV (
+orders_cleaned
+.csv). Ready for a GCS destination to be wired in; no credentials have been set.
+What 
+orders_cleaned
+ does, rule by rule
+Rule	How it's applied
+Trim whitespace	Every string/object column is stripped; purely-whitespace cells become None.
+Case normalisation	order_id → uppercase; currency → uppercase; email → lowercase; status → lowercase; customer case is preserved.
+Fill missing customer	None/blank customer is replaced with "Unknown".
+Email validation	Regex ^[^\s@]+@[^\s@]+\.[^\s@]+$; non-matching or missing → empty string (row is kept).
+Drop rows with missing required fields	Any row with a blank/null order_id, order_date, quantity, unit_price, currency, or status is dropped.
+Currency allow-list	Only AUD rows are kept.
+Status allow-list	Only paid and pending rows are kept.
+Date parsing	datetime.strptime(value, '%m/%d/%Y') — impossible dates (e.g. 02/30/2024) raise and drop the row. Valid dates are reformatted to YYYY-MM-DD.
+Quantity validation	Regex ^[1-9][0-9]*$ — must be a positive integer with no decimals, sign, or leading zeros. Stored as Python int.
+Unit price validation	Optional leading $ stripped; remainder must match ^[0-9]+(\.[0-9]{1,2})?$ — no commas, no exponents. Parsed as decimal.Decimal; zero/negative dropped.
+Deduplication	Exact duplicate rows removed (first kept); then order_id groups with any row-level conflict drop all rows for that ID.
+total_amount calculation	Decimal(str(quantity)) × unit_price_decimal, rounded to 2 d.p. with ROUND_HALF_UP.
+Serialisation	unit_price and total_amount → 2 d.p. strings (e.g. "12.50"); quantity → plain integer.
+Column order	Output is exactly: order_id, customer, email, order_date, quantity, unit_price, currency, status, total_amount.
+Notes on unsupported rules in native transformers
+
+The deduplication-with-conflict-detection logic (drop the entire order_id group if any rows conflict) is not expressible in the built-in remove_duplicate transformer, which only keeps/drops by key equality. It is encoded in the LLM node's Python instruction instead. All other rules are likewise implemented there because they form a tightly coupled validation chain; splitting them across multiple standard nodes would break the "drop row on any field failure" interdependency.
+
+Next step: open the 
+orders_output
+ node, add your GCS destination connection, and set the write mode as needed — no other pipeline changes are required.
+
+Worked for 1m 6s
+Loaded
+skill guidance
+Searched
+for a tool
+Reviewed
+pipeline
+Read
+transformation guidance
+
+Now I'll build the pipeline in stages. The cleaning rules require Python-level logic (regex, decimal arithmetic, date parsing, dedup conflict detection), so I'll use an LM node for the cleaning step, followed by a sort node and an output node.
+
+Stage 1 — Cleaning node
+
+Modified pipeline
+Modified pipeline
++1
+
+Stage 2 — Sort node
+
+Searched
+for a tool
+Retrieved
+transformer spec
+Retrieved
+transformer spec
+Modified pipeline
+Reviewed
+pipeline
+
+The LLM node didn't persist from the prior stage — the pipeline still shows only the input node. I'll compile all three new nodes together in one call.
+
+Modified pipeline
++3
+Modified pipeline
++3
+Copy message

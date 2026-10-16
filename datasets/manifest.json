@@ -1,0 +1,74 @@
+{
+  "baseline": {
+    "input": "baseline.csv",
+    "input_sha256": "5ae93188cc660b26ca260dda268fec0f9df9344fd165c8910bbbb9df8b5eb014",
+    "input_rows": 12,
+    "expected": "expected/baseline.csv",
+    "expected_sha256": "3b3b0920f647e23310ee9d535af461abc97fc44b7b85fc1d03e2c71192349b37",
+    "expected_rows": 7,
+    "status": "not_run"
+  },
+  "schema-drop": {
+    "input": "schema-drop.csv",
+    "input_sha256": "cbe3ef027b459e326b83fd112b9dd3428d9507ff2ec8bca935ba522de02caa6d",
+    "input_rows": 12,
+    "expected": "expected/schema-drop.csv",
+    "expected_sha256": "9bd4a39b39eb0ada07a8b9218c91326f8f52fbca93e6950c555f16731baf1b90",
+    "expected_rows": 7,
+    "status": "not_run"
+  },
+  "schema-rename": {
+    "input": "schema-rename.csv",
+    "input_sha256": "1ea5facc8c0ec98e0cdfdf7954d57ab312e736ac72d462276c0e317c8a8e7d2e",
+    "input_rows": 12,
+    "expected": "expected/schema-rename.csv",
+    "expected_sha256": "3b3b0920f647e23310ee9d535af461abc97fc44b7b85fc1d03e2c71192349b37",
+    "expected_rows": 7,
+    "status": "not_run"
+  },
+  "schema-type": {
+    "input": "schema-type.csv",
+    "input_sha256": "5baee38c559d8e7d64deaeb001d3aca4c47398094781946d1dd76c2295e02217",
+    "input_rows": 12,
+    "expected": "expected/schema-type.csv",
+    "expected_sha256": "3b3b0920f647e23310ee9d535af461abc97fc44b7b85fc1d03e2c71192349b37",
+    "expected_rows": 7,
+    "status": "not_run"
+  },
+  "schema-add": {
+    "input": "schema-add.csv",
+    "input_sha256": "3a7e8a0b8f1fdbd74d559cb48babf7573001d50ee488896f7926d58f0f5fdc00",
+    "input_rows": 12,
+    "expected": "expected/schema-add.csv",
+    "expected_sha256": "3b3b0920f647e23310ee9d535af461abc97fc44b7b85fc1d03e2c71192349b37",
+    "expected_rows": 7,
+    "status": "not_run"
+  },
+  "schema-combined": {
+    "input": "schema-combined.csv",
+    "input_sha256": "cb41de7b30ea253ecd880bd9e90691a8e6f8c6a2dbcb16c6439589b8486bd13b",
+    "input_rows": 12,
+    "expected": "expected/schema-combined.csv",
+    "expected_sha256": "9bd4a39b39eb0ada07a8b9218c91326f8f52fbca93e6950c555f16731baf1b90",
+    "expected_rows": 7,
+    "status": "not_run"
+  },
+  "semantic-cents": {
+    "input": "semantic-cents.csv",
+    "input_sha256": "ae8fd14bcd3c82cc2801a224880ea8f90e8b01637f153040ba0cc480e7d46d9f",
+    "input_rows": 12,
+    "expected": "expected/semantic-cents.csv",
+    "expected_sha256": "3b3b0920f647e23310ee9d535af461abc97fc44b7b85fc1d03e2c71192349b37",
+    "expected_rows": 7,
+    "status": "not_run"
+  },
+  "semantic-dates": {
+    "input": "semantic-dates.csv",
+    "input_sha256": "4521b9c7cb2fc62b789199a6573fb09eca5afba48c83f27939c14cf4c4423b5c",
+    "input_rows": 12,
+    "expected": "expected/semantic-dates.csv",
+    "expected_sha256": "3b3b0920f647e23310ee9d535af461abc97fc44b7b85fc1d03e2c71192349b37",
+    "expected_rows": 7,
+    "status": "not_run"
+  }
+}

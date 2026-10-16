@@ -1,0 +1,13 @@
+order_id,customer,email,order_date,quantity,unit_price,currency,status
+ a001 , Alice Example , ALICE@example.test ,03/04/2026,2 units,$12.50, aud , PAID 
+ a001 , Alice Example , ALICE@example.test ,03/04/2026,2 units,$12.50, aud , PAID 
+A002,,bob@example.test,04/05/2026,3 units,4.20,AUD,paid
+A003,Casey Example,not-an-email,05/06/2026,1 units,20.00,AUD,pending
+A004,Delta Example,delta@example.test,06/07/2026,0 units,5.00,AUD,paid
+A005,Echo Example,echo@example.test,02/30/2026,1 units,8.00,AUD,paid
+A006,Foxtrot Example,fox@example.test,07/08/2026,1 units,-3.00,AUD,paid
+A007,Golf Example,golf@example.test,08/09/2026,2 units,,AUD,paid
+A008,Hotel Example, HOTEL@example.test ,09/10/2026,4 units,0.25,aud,paid
+A009,India Example,india@example.test,10/11/2026,2 units,7.50,AUD, Pending 
+A010,Juliet Example,,11/12/2026,1 units,0.00,AUD,paid
+A011,Kilo Example,kilo@example.test,12/01/2026,5 units,1.10,AUD,paid
