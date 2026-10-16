@@ -1,0 +1,26 @@
+{
+  "scenario": "semantic-dates",
+  "phase": "pre-repair",
+  "trigger": "manual",
+  "started_at": "2026-10-16T20:00:50.553Z",
+  "stage": "capturing-logs",
+  "configuration_verified_before_run": true,
+  "triggered_at": "2026-10-16T20:01:00.792Z",
+  "outputs": [
+    {
+      "name": "orders_cleaned_1792180865177.csv",
+      "generation": "1792180866884738",
+      "size": "528",
+      "timeCreated": "2026-10-16T20:01:06.893Z",
+      "updated": "2026-10-16T20:01:06.893Z",
+      "md5Hash": "4VSR4cooY4NfOXD+4BWWtg==",
+      "crc32c": "PzPOvA==",
+      "sha256": "9e6ca069e9930e97f555b28c8c04e0178a6cbff518b69ae99327ead1d9cb3059",
+      "retrieved_at": "2026-10-16T20:01:22.203526+00:00"
+    }
+  ],
+  "business_values_match": false,
+  "strict_contract_passed": false,
+  "failure": "The actual cloud output must satisfy the frozen contract\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+  "finished_at": "2026-10-16T20:01:22.677Z"
+}

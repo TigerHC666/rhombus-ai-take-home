@@ -1,0 +1,98 @@
+Dashboard
+New Project
+Search
+All Projects (1)
+LLM Observability Assessment
+T
+tiger.cai1116@gmail.com
+Canvas
+Workspace
+Preview
+Executions
+Logs
+Schedule for LLM Observability Assessment
+Export CSV
+Execution
+	
+Started
+	
+Duration
+	
+Status
+	
+Failed Node
+	
+Completed Nodes
+
+
+Execution #18490
+	
+10/17/2026, 7:05:17 AM
+	
+5.0s
+	Success	
+—
+	
+Data Input
+Custom
+Data Output
+Sort Data
+
+
+Execution #18489
+	
+10/17/2026, 7:04:19 AM
+	
+47.5s
+	Success	
+—
+	
+Data Input
+Custom
+Data Output
+Sort Data
+
+
+Execution #18487
+	
+10/17/2026, 7:03:17 AM
+	
+3.8s
+	Failure	
+Custom
+	
+Data Input
+
+
+Execution #18453
+	
+10/17/2026, 6:25:25 AM
+	
+5.6s
+	Success	
+—
+	
+Data Input
+Custom
+Data Output
+Sort Data
+Rows per page
+20
+
+1-4 of 4
+
+AI Builder
+Schedule
+Transform
+Profile
+Schedules
+Manage schedules within this project
+Add Schedule
+Schedule for LLM Observability Assessment
+Inactive
+Custom
+Custom: */1 * * * *
+Skipped 1 time(s) in a row due to unchanged data.
+Facet
+23/50
+Schedule stopped

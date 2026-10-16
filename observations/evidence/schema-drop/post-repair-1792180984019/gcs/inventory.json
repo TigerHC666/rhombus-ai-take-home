@@ -1,0 +1,24 @@
+[
+  {
+    "name": "orders_cleaned_1792181090221.csv",
+    "generation": "1792181092232951",
+    "size": "441",
+    "timeCreated": "2026-10-16T20:04:52.244Z",
+    "updated": "2026-10-16T20:04:52.244Z",
+    "md5Hash": "2SJiHmZt2WrblounaY8ghQ==",
+    "crc32c": "8WSrkA==",
+    "sha256": "3c9fd235b4854fbf340cef70809b12c0a7523436ac8afd03ff54c4e69cae7882",
+    "retrieved_at": "2026-10-16T20:05:08.011199+00:00"
+  },
+  {
+    "name": "orders_cleaned_1792181103219.csv",
+    "generation": "1792181104990316",
+    "size": "441",
+    "timeCreated": "2026-10-16T20:05:04.997Z",
+    "updated": "2026-10-16T20:05:04.997Z",
+    "md5Hash": "2SJiHmZt2WrblounaY8ghQ==",
+    "crc32c": "8WSrkA==",
+    "sha256": "3c9fd235b4854fbf340cef70809b12c0a7523436ac8afd03ff54c4e69cae7882",
+    "retrieved_at": "2026-10-16T20:05:08.811109+00:00"
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "observed_at": "2026-10-16T19:56:08.391Z",
+  "http_status": 200,
+  "fields": [
+    "message",
+    "task_id",
+    "execution_mode"
+  ]
+}

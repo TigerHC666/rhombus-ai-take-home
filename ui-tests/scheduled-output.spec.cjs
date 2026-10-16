@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
+const crypto = require('node:crypto');
 const { promisify } = require('node:util');
 const execFile = promisify(require('node:child_process').execFile);
 const settings = require('../test-support/settings.cjs');
@@ -15,6 +16,25 @@ test('scheduled pipeline produces a fresh independently validated GCS artifact',
   fs.mkdirSync(directory, { recursive: true });
   const python = async args => (await execFile('python', args, { cwd: settings.root, timeout: 60000 })).stdout;
   const routes = observeRoutes(page);
+  const cron = process.env.SCHEDULE_CRON || '*/5 * * * *';
+  if (!['*/1 * * * *', '*/5 * * * *'].includes(cron)) throw new Error('Unsupported supervised schedule interval');
+  let configuration;
+  page.on('response', async response => {
+    const url = new URL(response.url());
+    if (url.origin !== 'https://api.rhombusai.com' || url.pathname !== `/api/dataset/analyzer/v2/projects/${settings.projectId}/nodes` || response.status() !== 200) return;
+    const nodes = await response.json();
+    configuration = nodes.map(node => ({
+      node_id: node.node_id, name: node.name, inputs: node.inputs, outputs: node.outputs,
+      transformation_type: node.transformation_type, prompt: node.params?.prompt,
+      code: node.transformation_type === 'llm' ? node.params?.code : undefined,
+      mode: node.transformation_type === 'llm' ? node.params?.mode : undefined,
+      sort_columns: node.params?.sort_columns, ascending: node.params?.ascending,
+      source_type: node.params?.source_type, dataset_id: node.params?.dataset_id,
+      data_asset_ref: node.params?.data_asset_ref, source_connection_id: node.params?.source_connection_id,
+      destination_id: node.params?.destination_id, format_type: node.params?.format_type,
+      custom_filename: node.params?.custom_filename,
+    }));
+  });
   const manifest = {
     scenario, trigger: 'unverified', observed_after: null,
     started_at: new Date().toISOString(), source: 'source-provenance.json',
@@ -31,9 +51,14 @@ test('scheduled pipeline produces a fresh independently validated GCS artifact',
   manifest.stage = 'schedule_setup';
   persist();
   await openProject(page);
+  await expect.poll(() => configuration?.length || 0).toBeGreaterThan(0);
+  const serializedConfiguration = JSON.stringify(configuration, null, 2);
+  fs.writeFileSync(path.join(directory, 'configuration.json'), serializedConfiguration);
+  manifest.configuration_sha256 = crypto.createHash('sha256').update(serializedConfiguration).digest('hex');
+  manifest.cron = cron;
   await confirmSource(page);
   await page.getByRole('tab', { name: 'Schedule', exact: true }).click();
-  await expect(page.getByRole('complementary')).toContainText('Custom: */5 * * * *');
+  await expect(page.getByRole('complementary')).toContainText(`Custom: ${cron}`);
   const historyButton = () => page.getByRole('complementary').getByRole('button').filter({ has: page.locator('svg.lucide-history') });
   await historyButton().click();
   await expect(page.getByRole('table')).toBeVisible();
@@ -64,7 +89,7 @@ test('scheduled pipeline produces a fresh independently validated GCS artifact',
       manifest.outputs_observed = fresh;
       persist();
       return fresh.length;
-    }, { timeout: 420000, intervals: [15000], message: 'A new GCS generation must appear after schedule observation begins' }).toBeGreaterThan(0);
+    }, { timeout: cron.startsWith('*/1 ') ? 110000 : 420000, intervals: [5000], message: 'A new GCS generation must appear after schedule observation begins' }).toBeGreaterThan(0);
   } catch (error) {
     executionFailure = error;
   } finally {
@@ -90,18 +115,26 @@ test('scheduled pipeline produces a fresh independently validated GCS artifact',
     }
     try { persist(); } catch (error) { failures.push(error); }
   }
-  if (executionFailure || cleanupFailure) {
-    throw new AggregateError([executionFailure, cleanupFailure].filter(Boolean), 'Scheduled execution or cleanup failed');
-  }
+  // Shutdown always comes first. History remains useful even when no export arrives.
   manifest.stage = 'history_verification';
+  let newExecutions = [];
+  let historyFailure;
+  try {
+  fs.writeFileSync(path.join(directory, 'schedule-after-window.txt'), await page.getByRole('complementary').innerText({ timeout: 5000 }));
   await historyButton().click();
   await expect(page.getByRole('table')).toBeVisible();
-  await expect(page.getByRole('row').filter({ hasText: /success|succeeded/i })).not.toHaveCount(0);
   const executions = await page.getByRole('row').filter({ hasText: /Execution #[0-9]+/ }).allTextContents();
-  const newExecutions = executions.filter(row => !priorIds.has(row.match(/Execution #[0-9]+/)[0]));
+  newExecutions = executions.filter(row => !priorIds.has(row.match(/Execution #[0-9]+/)[0]));
   manifest.executions = newExecutions;
   fs.writeFileSync(path.join(directory, 'schedule-history.txt'), await page.locator('body').innerText());
+  } catch (error) {
+    historyFailure = error;
+    manifest.history_error = describe(error);
+  }
   persist();
+  if (executionFailure || cleanupFailure || historyFailure) {
+    throw new AggregateError([executionFailure, cleanupFailure, historyFailure].filter(Boolean), 'Scheduled execution, cleanup, or history capture failed');
+  }
   expect(newExecutions.length, 'Fresh output must correlate with a new scheduled execution').toBeGreaterThan(0);
   expect(newExecutions.length).toBeLessThanOrEqual(3);
   expect(newExecutions.some(row => /success/i.test(row))).toBe(true);
@@ -111,21 +144,38 @@ test('scheduled pipeline produces a fresh independently validated GCS artifact',
   fs.writeFileSync(path.join(directory, 'schedule-history.txt'), await page.locator('body').innerText());
   await page.screenshot({ path: path.join(directory, 'scheduled-run.png') });
   await python(['data-validation/download_gcs.py', '--since', start, '--destination', path.join(directory, 'gcs')]);
+  manifest.outputs = JSON.parse(fs.readFileSync(path.join(directory, 'gcs/inventory.json')));
   await python(['data-validation/source_s3.py', '--scenario', scenario, '--destination', path.join(directory, 'source-after')]);
-  const output = fresh.sort((a, b) => a.timeCreated.localeCompare(b.timeCreated))[0];
-  manifest.output = output;
+  manifest.outputs.sort((a, b) => a.timeCreated.localeCompare(b.timeCreated));
+  manifest.output = manifest.outputs[0];
+  manifest.output_attribution = 'Candidates observed during the schedule window; exact object-to-execution linkage is not established';
   manifest.stage = 'strict_validation';
+  manifest.output_validations = [];
   persist();
-  try {
-    await python(['data-validation/validate.py', '--scenario', scenario, '--source', path.join(directory, 'source.csv'), '--output', path.join(directory, 'gcs', output.name), '--report', path.join(directory, 'validation.json')]);
-  } catch (error) {
-    if (!fs.existsSync(path.join(directory, 'validation.json'))) throw error;
+  for (const [index, output] of manifest.outputs.entries()) {
+    const reportName = `validation-output-${index + 1}.json`;
+    const reportPath = path.join(directory, reportName);
+    try {
+      await python(['data-validation/validate.py', '--scenario', scenario, '--source', path.join(directory, 'source.csv'), '--output', path.join(directory, 'gcs', output.name), '--report', reportPath]);
+    } catch (error) {
+      if (!fs.existsSync(reportPath)) throw error;
+    }
+    const result = JSON.parse(fs.readFileSync(reportPath));
+    if (index === 0) fs.copyFileSync(reportPath, path.join(directory, 'validation.json'));
+    manifest.output_validations.push({ name: output.name, generation: output.generation,
+      sha256: output.sha256, report: reportName,
+      passed: result.passed === true, business_values_match: result.business_values_match === true });
+    persist();
   }
-  const result = JSON.parse(fs.readFileSync(path.join(directory, 'validation.json')));
-  manifest.validation = { report: 'validation.json', passed: result.passed, business_values_match: result.business_values_match };
+  manifest.validation = {
+    report: 'validation.json', report_scope: 'First object only; aggregate below includes every downloaded candidate',
+    output_count: manifest.output_validations.length,
+    passed: manifest.output_validations.length > 0 && manifest.output_validations.every(item => item.passed),
+    business_values_match: manifest.output_validations.length > 0 && manifest.output_validations.every(item => item.business_values_match),
+  };
   persist();
-  expect(result.business_values_match, 'All actual business values must match the independent oracle').toBe(true);
-  expect(result.passed, 'Strict CSV contract, including exact monetary precision').toBe(true);
+  expect(manifest.validation.business_values_match, 'Every output must match the independent business oracle').toBe(true);
+  expect(manifest.validation.passed, 'Every output must satisfy the strict CSV contract, including monetary precision').toBe(true);
   manifest.stage = 'complete';
   } catch (error) {
     failures.push(error);

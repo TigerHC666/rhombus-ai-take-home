@@ -15,7 +15,7 @@ function observeRoutes(page) {
 }
 
 async function openProject(page) {
-  await page.addLocatorHandler(page.getByRole('dialog', { name: 'Ad Blocker Detected', exact: true }), async dialog => {
+  await page.addLocatorHandler(page.getByRole('dialog').filter({ has: page.getByRole('heading', { name: 'Ad Blocker Detected', exact: true }) }), async dialog => {
     await dialog.getByRole('button', { name: 'Continue Anyway', exact: true }).click();
   });
   await page.goto(`/workflow/${settings.projectId}`);
@@ -24,16 +24,16 @@ async function openProject(page) {
 }
 
 async function submitBuilderPrompt(page, prompt, evidenceDirectory) {
+  fs.mkdirSync(evidenceDirectory, { recursive: true });
+  fs.writeFileSync(path.join(evidenceDirectory, 'builder-prompt.txt'), prompt + '\n');
   await page.getByRole('tab', { name: 'AI Builder', exact: true }).click();
   const input = page.getByRole('textbox');
   await expect(input).toHaveCount(1);
   await input.fill(prompt);
   await page.getByRole('button', { name: 'Send message', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Stop generation', exact: true })).toBeVisible();
-  await expect(input).toBeEnabled({ timeout: 300000 });
-  await expect(page.getByRole('button', { name: 'Stop generation', exact: true })).toHaveCount(0);
-  fs.mkdirSync(evidenceDirectory, { recursive: true });
-  fs.writeFileSync(path.join(evidenceDirectory, 'builder-prompt.txt'), prompt + '\n');
+  await expect(page.getByRole('button', { name: 'Stop generation', exact: true })).toHaveCount(0, { timeout: 300000 });
+  await expect(input).toBeEnabled();
   fs.writeFileSync(path.join(evidenceDirectory, 'builder-response.txt'), await page.getByRole('complementary').innerText());
 }
 

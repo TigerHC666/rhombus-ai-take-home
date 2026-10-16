@@ -1,0 +1,9 @@
+{
+  "scenario": "schema-drop",
+  "passed": false,
+  "output_present": false,
+  "source_present": true,
+  "errors": [
+    "No fresh output was observed in the bounded execution window"
+  ]
+}

@@ -15,6 +15,6 @@ module.exports = defineConfig({
     channel: 'chrome',
     trace: 'off',
     screenshot: 'off',
-    video: 'off',
+    video: process.env.RECORD_DEMO === '1' ? { mode: 'on', size: { width: 1280, height: 720 } } : 'off',
   },
 });

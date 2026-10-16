@@ -1,0 +1,138 @@
+Dashboard
+New Project
+Search
+All Projects (1)
+LLM Observability Assessment
+T
+tiger.cai1116@gmail.com
+Canvas
+Workspace
+Preview
+Logs
+Data Input
+Data Input
+Custom
+You are generating Python code for a Rhombus pipeline node. The input DataFrame is input_df_1. Output must be output_df and output_mask. Generate ONLY the following exact Python code. Do not modify, summarise or omit any line: import math import re from datetime import datetime from decimal import Decimal, ROUND_HALF_UP df = input_df_1.copy() def is_null_or_empty(val): try: if pd.isna(val): return True except Exception: pass if isinstance(val, str): return val.strip() == '' return False for col in df.columns: if df[col].dtype == object: df[col] = df[col].apply(lambda x: np.nan if (isinstance(x, str) and x.strip() == '') or (not isinstance(x, str) and is_null_or_empty(x)) else (x.strip() if isinstance(x, str) else x)) df['order_id'] = df['order_id'].apply(lambda x: x.upper() if isinstance(x, str) else x) df['currency'] = df['currency'].apply(lambda x: x.upper() if isinstance(x, str) else x) df['email'] = df['email'].apply(lambda x: x.lower() if isinstance(x, str) else x) df['status'] = df['status'].apply(lambda x: x.lower() if isinstance(x, str) else x) df['customer'] = df['customer'].apply(lambda x: 'Unknown' if is_null_or_empty(x) else x) def validate_email(val): if is_null_or_empty(val) or not isinstance(val, str): return '' return val if re.match(r'^[^\s@]+@[^\s@]+\.[^\s@]+$', val) else '' df['email'] = df['email'].apply(validate_email) for col in ['order_id', 'currency', 'status']: if df[col].dtype == object: df = df[df[col].notna() & (df[col].astype(str).str.strip() != '')] else: df = df[df[col].notna()] df = df[df['order_date'].apply(lambda v: not is_null_or_empty(v) if isinstance(v, str) else pd.notna(v))] df = df[df['quantity'].apply(lambda v: not is_null_or_empty(v) if isinstance(v, str) else pd.notna(v))] df = df[df['unit_price'].apply(lambda v: not is_null_or_empty(v) if isinstance(v, str) else pd.notna(v))] df = df[df['currency'] == 'AUD'] df = df[df['status'].isin(['paid', 'pending'])] def parse_date(val): if val is None: return None try: if pd.isna(val): return None except Exception: pass if hasattr(val, 'strftime') and not isinstance(val, str): return val.strftime('%Y-%m-%d') s = str(val).strip() try: return datetime.strptime(s, '%m/%d/%Y').strftime('%Y-%m-%d') except Exception: pass try: return pd.to_datetime(s, format='%Y-%m-%d', errors='raise').strftime('%Y-%m-%d') except Exception: return None df['order_date'] = df['order_date'].apply(parse_date) df = df[df['order_date'].notna()] def validate_quantity(val): if isinstance(val, str): s = val.strip() return int(s) if re.match(r'^[1-9][0-9]*$', s) else None try: if pd.isna(val) or math.isinf(float(val)): return None except Exception: return None f = float(val) return int(f) if (f == int(f) and int(f) >= 1) else None df['quantity'] = df['quantity'].apply(validate_quantity) df = df[df['quantity'].notna()] def validate_unit_price(val): if isinstance(val, str): s = val.strip().lstrip('$') if re.match(r'^[0-9]+(\.[0-9]{1,2})?$', s): d = Decimal(s) return d if d >= Decimal('0') else None return None try: if pd.isna(val) or math.isinf(float(val)): return None except Exception: return None f = float(val) return Decimal(str(round(f, 10))) if f >= 0.0 else None df['unit_price'] = df['unit_price'].apply(validate_unit_price) df = df[df['unit_price'].notna()] df = df.drop_duplicates(keep='first') def check_conflicting_duplicates(group): if len(group) > 1: first_row = group.iloc[0] for idx, row in group.iloc[1:].iterrows(): if not (first_row == row).all(): return None return group df = df.groupby('order_id', group_keys=False).apply(check_conflicting_duplicates).dropna(subset=['order_id']) def calc_total(row): return (Decimal(str(int(row['quantity']))) * row['unit_price']).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP) df['total_amount'] = df.apply(calc_total, axis=1) df['unit_price'] = df['unit_price'].apply(lambda x: str(x.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP))).astype(pd.StringDtype()) df['total_amount'] = df['total_amount'].apply(lambda x: str(x.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP))).astype(pd.StringDtype()) df['quantity'] = df['quantity'].astype(int) output_df = df[['order_id', 'customer', 'email', 'order_date', 'quantity', 'unit_price', 'currency', 'status', 'total_amount']] output_mask = pd.DataFrame(True, index=output_df.index, columns=output_df.columns)
+Sort Data
+You are generating Python code for a Rhombus pipeline node. The input DataFrame is input_df_1. Output must be output_df and output_mask. Generate ONLY the following exact Python code. Do not modify, summarise or omit any line: import math import re from datetime import datetime from decimal import Decimal, ROUND_HALF_UP df = input_df_1.copy() def is_null_or_empty(val): try: if pd.isna(val): return True except Exception: pass if isinstance(val, str): return val.strip() == '' return False for col in df.columns: if df[col].dtype == object: df[col] = df[col].apply(lambda x: np.nan if (isinstance(x, str) and x.strip() == '') or (not isinstance(x, str) and is_null_or_empty(x)) else (x.strip() if isinstance(x, str) else x)) df['order_id'] = df['order_id'].apply(lambda x: x.upper() if isinstance(x, str) else x) df['currency'] = df['currency'].apply(lambda x: x.upper() if isinstance(x, str) else x) df['email'] = df['email'].apply(lambda x: x.lower() if isinstance(x, str) else x) df['status'] = df['status'].apply(lambda x: x.lower() if isinstance(x, str) else x) df['customer'] = df['customer'].apply(lambda x: 'Unknown' if is_null_or_empty(x) else x) def validate_email(val): if is_null_or_empty(val) or not isinstance(val, str): return '' return val if re.match(r'^[^\s@]+@[^\s@]+\.[^\s@]+$', val) else '' df['email'] = df['email'].apply(validate_email) for col in ['order_id', 'currency', 'status']: if df[col].dtype == object: df = df[df[col].notna() & (df[col].astype(str).str.strip() != '')] else: df = df[df[col].notna()] df = df[df['order_date'].apply(lambda v: not is_null_or_empty(v) if isinstance(v, str) else pd.notna(v))] df = df[df['quantity'].apply(lambda v: not is_null_or_empty(v) if isinstance(v, str) else pd.notna(v))] df = df[df['unit_price'].apply(lambda v: not is_null_or_empty(v) if isinstance(v, str) else pd.notna(v))] df = df[df['currency'] == 'AUD'] df = df[df['status'].isin(['paid', 'pending'])] def parse_date(val): if val is None: return None try: if pd.isna(val): return None except Exception: pass if hasattr(val, 'strftime') and not isinstance(val, str): return val.strftime('%Y-%m-%d') s = str(val).strip() try: return datetime.strptime(s, '%m/%d/%Y').strftime('%Y-%m-%d') except Exception: pass try: return pd.to_datetime(s, format='%Y-%m-%d', errors='raise').strftime('%Y-%m-%d') except Exception: return None df['order_date'] = df['order_date'].apply(parse_date) df = df[df['order_date'].notna()] def validate_quantity(val): if isinstance(val, str): s = val.strip() return int(s) if re.match(r'^[1-9][0-9]*$', s) else None try: if pd.isna(val) or math.isinf(float(val)): return None except Exception: return None f = float(val) return int(f) if (f == int(f) and int(f) >= 1) else None df['quantity'] = df['quantity'].apply(validate_quantity) df = df[df['quantity'].notna()] def validate_unit_price(val): if isinstance(val, str): s = val.strip().lstrip('$') if re.match(r'^[0-9]+(\.[0-9]{1,2})?$', s): d = Decimal(s) return d if d >= Decimal('0') else None return None try: if pd.isna(val) or math.isinf(float(val)): return None except Exception: return None f = float(val) return Decimal(str(round(f, 10))) if f >= 0.0 else None df['unit_price'] = df['unit_price'].apply(validate_unit_price) df = df[df['unit_price'].notna()] df = df.drop_duplicates(keep='first') def check_conflicting_duplicates(group): if len(group) > 1: first_row = group.iloc[0] for idx, row in group.iloc[1:].iterrows(): if not (first_row == row).all(): return None return group df = df.groupby('order_id', group_keys=False).apply(check_conflicting_duplicates).dropna(subset=['order_id']) def calc_total(row): return (Decimal(str(int(row['quantity']))) * row['unit_price']).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP) df['total_amount'] = df.apply(calc_total, axis=1) df['unit_price'] = df['unit_price'].apply(lambda x: str(x.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP))).astype(pd.StringDtype()) df['total_amount'] = df['total_amount'].apply(lambda x: str(x.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP))).astype(pd.StringDtype()) df['quantity'] = df['quantity'].astype(int) output_df = df[['order_id', 'customer', 'email', 'order_date', 'quantity', 'unit_price', 'currency', 'status', 'total_amount']] output_mask = pd.DataFrame(True, index=output_df.index, columns=output_df.columns) → Sort Data
+Data Output
+sort_7172c3fb843a192f4d712dc24ea9e4d4 → Data Output
+Logs
+4 visible
+All
+4
+0
+0
+06:50:10 AM
+
+Applied 2 transformations: Custom: code: "import math import re from datetime import datetime from decimal import Decim..." · mode: "code" · prompt: "You are generating Python code for a Rhombus pipeline node. The input DataFra..." · visualise: false · output_columns: "". Impact: 7 row(s) affected, 63 cell(s) modified | Sort Data: sort by order_id (ascending). Impact: row order updated.
+
+{
+  "kind": "selected_transformations",
+  "status": "success",
+  "selected_transformations": [
+    "Custom",
+    "Sort Data"
+  ],
+  "selected_steps": [
+    {
+      "type": "llm",
+      "title": "Custom",
+      "message": "Custom: code: \"import math\nimport re\nfrom datetime import datetime\nfrom decimal import Decim...\" · mode: \"code\" · prompt: \"You are generating Python code for a Rhombus pipeline node. The input DataFra...\" · visualise: false · output_columns: \"\". Impact: 7 row(s) affected, 63 cell(s) modified.",
+      "params": {
+        "code": "import math\nimport re\nfrom datetime import datetime\nfrom decimal import Decimal, ROUND_HALF_UP\n\ndf = input_df_1.copy()\n\ndef is_null_or_empty(val):\n    try:\n        if pd.isna(val):\n            return True\n    except Exception:\n        pass\n    if isinstance(val, str):\n        return val.strip() == ''\n    return False\n\nfor col in df.columns:\n    if df[col].dtype == object:\n        df[col] = df[col].apply(lambda x: np.nan if (isinstance(x, str) and x.strip() == '') or (not isinstance(x, str) and is_null_or_empty(x)) else (x.strip() if isinstance(x, str) else x))\n\ndf['order_id'] = df['order_id'].apply(lambda x: x.upper() if isinstance(x, str) else x)\ndf['currency'] = df['currency'].apply(lambda x: x.upper() if isinstance(x, str) else x)\ndf['email'] = df['email'].apply(lambda x: x.lower() if isinstance(x, str) else x)\ndf['status'] = df['status'].apply(lambda x: x.lower() if isinstance(x, str) else x)\ndf['customer'] = df['customer'].apply(lambda x: 'Unknown' if is_null_or_empty(x) else x)\n\ndef validate_email(val):\n    if is_null_or_empty(val) or not isinstance(val, str):\n        return ''\n    return val if re.match(r'^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$', val) else ''\n\ndf['email'] = df['email'].apply(validate_email)\n\nfor col in ['order_id', 'currency', 'status']:\n    if df[col].dtype == object:\n        df = df[df[col].notna() & (df[col].astype(str).str.strip() != '')]\n    else:\n        df = df[df[col].notna()]\n\ndf = df[df['order_date'].apply(lambda v: not is_null_or_empty(v) if isinstance(v, str) else pd.notna(v))]\ndf = df[df['quantity'].apply(lambda v: not is_null_or_empty(v) if isinstance(v, str) else pd.notna(v))]\ndf = df[df['unit_price'].apply(lambda v: not is_null_or_empty(v) if isinstance(v, str) else pd.notna(v))]\ndf = df[df['currency'] == 'AUD']\ndf = df[df['status'].isin(['paid', 'pending'])]\n\ndef parse_date(val):\n    if val is None:\n        return None\n    try:\n        if pd.isna(val):\n            return None\n    except Exception:\n        pass\n    if not isinstance(val, str):\n        try:\n            return val.strftime('%Y-%m-%d')\n        except Exception:\n            pass\n    s = str(val).strip()\n    try:\n        return datetime.strptime(s, '%m/%d/%Y').strftime('%Y-%m-%d')\n    except Exception:\n        pass\n    try:\n        return pd.to_datetime(s, format='%Y-%m-%d', errors='raise').strftime('%Y-%m-%d')\n    except Exception:\n        return None\n\ndf['order_date'] = df['order_date'].apply(parse_date)\ndf = df[df['order_date'].notna()]\n\ndef validate_quantity(val):\n    if isinstance(val, str):\n        s = val.strip()\n        return int(s) if re.match(r'^[1-9][0-9]*$', s) else None\n    try:\n        if pd.isna(val) or math.isinf(float(val)):\n            return None\n    except Exception:\n        return None\n    f = float(val)\n    return int(f) if (f == int(f) and int(f) >= 1) else None\n\ndf['quantity'] = df['quantity'].apply(validate_quantity)\ndf = df[df['quantity'].notna()]\n\ndef validate_unit_price(val):\n    if isinstance(val, str):\n        s = val.strip().lstrip('$')\n        if re.match(r'^[0-9]+(\\.[0-9]{1,2})?$', s):\n            d = Decimal(s)\n            return d if d >= Decimal('0') else None\n        return None\n    try:\n        if pd.isna(val) or math.isinf(float(val)):\n            return None\n    except Exception:\n        return None\n    f = float(val)\n    return Decimal(str(round(f, 10))) if f >= 0.0 else None\n\ndf['unit_price'] = df['unit_price'].apply(validate_unit_price)\ndf = df[df['unit_price'].notna()]\n\ndf = df.drop_duplicates(keep='first')\n\ndef check_conflicting_duplicates(group):\n    if len(group) > 1:\n        first_row = group.iloc[0]\n        for idx, row in group.iloc[1:].iterrows():\n            if not (first_row == row).all():\n                return None\n    return group\n\ndf = df.groupby('order_id', group_keys=False).apply(check_conflicting_duplicates).dropna(subset=['order_id'])\n\ndef calc_total(row):\n    return (Decimal(str(int(row['quantity']))) * row['unit_price']).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)\n\ndf['total_amount'] = df.apply(calc_total, axis=1)\ndf['unit_price'] = df['unit_price'].apply(lambda x: str(x.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP))).astype(pd.StringDtype())\ndf['total_amount'] = df['total_amount'].apply(lambda x: str(x.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP))).astype(pd.StringDtype())\ndf['quantity'] = df['quantity'].astype(int)\n\noutput_df = df[['order_id', 'customer', 'email', 'order_date', 'quantity', 'unit_price', 'currency', 'status', 'total_amount']]\noutput_mask = pd.DataFrame(True, index=output_df.index, columns=output_df.columns)",
+        "mode": "code",
+        "prompt": "You are generating Python code for a Rhombus pipeline node. The input DataFrame is input_df_1. Output must be output_df and output_mask. Generate ONLY the following exact Python code. Do not modify, summarise or omit any line: import math import re from datetime import datetime from decimal import Decimal, ROUND_HALF_UP df = input_df_1.copy() def is_null_or_empty(val): try: if pd.isna(val): return True except Exception: pass if isinstance(val, str): return val.strip() == '' return False for col in df.columns: if df[col].dtype == object: df[col] = df[col].apply(lambda x: np.nan if (isinstance(x, str) and x.strip() == '') or (not isinstance(x, str) and is_null_or_empty(x)) else (x.strip() if isinstance(x, str) else x)) df['order_id'] = df['order_id'].apply(lambda x: x.upper() if isinstance(x, str) else x) df['currency'] = df['currency'].apply(lambda x: x.upper() if isinstance(x, str) else x) df['email'] = df['email'].apply(lambda x: x.lower() if isinstance(x, str) else x) df['status'] = df['status'].apply(lambda x: x.lower() if isinstance(x, str) else x) df['customer'] = df['customer'].apply(lambda x: 'Unknown' if is_null_or_empty(x) else x) def validate_email(val): if is_null_or_empty(val) or not isinstance(val, str): return '' return val if re.match(r'^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$', val) else '' df['email'] = df['email'].apply(validate_email) for col in ['order_id', 'currency', 'status']: if df[col].dtype == object: df = df[df[col].notna() & (df[col].astype(str).str.strip() != '')] else: df = df[df[col].notna()] df = df[df['order_date'].apply(lambda v: not is_null_or_empty(v) if isinstance(v, str) else pd.notna(v))] df = df[df['quantity'].apply(lambda v: not is_null_or_empty(v) if isinstance(v, str) else pd.notna(v))] df = df[df['unit_price'].apply(lambda v: not is_null_or_empty(v) if isinstance(v, str) else pd.notna(v))] df = df[df['currency'] == 'AUD'] df = df[df['status'].isin(['paid', 'pending'])] def parse_date(val): if val is None: return None try: if pd.isna(val): return None except Exception: pass if hasattr(val, 'strftime') and not isinstance(val, str): return val.strftime('%Y-%m-%d') s = str(val).strip() try: return datetime.strptime(s, '%m/%d/%Y').strftime('%Y-%m-%d') except Exception: pass try: return pd.to_datetime(s, format='%Y-%m-%d', errors='raise').strftime('%Y-%m-%d') except Exception: return None df['order_date'] = df['order_date'].apply(parse_date) df = df[df['order_date'].notna()] def validate_quantity(val): if isinstance(val, str): s = val.strip() return int(s) if re.match(r'^[1-9][0-9]*$', s) else None try: if pd.isna(val) or math.isinf(float(val)): return None except Exception: return None f = float(val) return int(f) if (f == int(f) and int(f) >= 1) else None df['quantity'] = df['quantity'].apply(validate_quantity) df = df[df['quantity'].notna()] def validate_unit_price(val): if isinstance(val, str): s = val.strip().lstrip('$') if re.match(r'^[0-9]+(\\.[0-9]{1,2})?$', s): d = Decimal(s) return d if d >= Decimal('0') else None return None try: if pd.isna(val) or math.isinf(float(val)): return None except Exception: return None f = float(val) return Decimal(str(round(f, 10))) if f >= 0.0 else None df['unit_price'] = df['unit_price'].apply(validate_unit_price) df = df[df['unit_price'].notna()] df = df.drop_duplicates(keep='first') def check_conflicting_duplicates(group): if len(group) > 1: first_row = group.iloc[0] for idx, row in group.iloc[1:].iterrows(): if not (first_row == row).all(): return None return group df = df.groupby('order_id', group_keys=False).apply(check_conflicting_duplicates).dropna(subset=['order_id']) def calc_total(row): return (Decimal(str(int(row['quantity']))) * row['unit_price']).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP) df['total_amount'] = df.apply(calc_total, axis=1) df['unit_price'] = df['unit_price'].apply(lambda x: str(x.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP))).astype(pd.StringDtype()) df['total_amount'] = df['total_amount'].apply(lambda x: str(x.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP))).astype(pd.StringDtype()) df['quantity'] = df['quantity'].astype(int) output_df = df[['order_id', 'customer', 'email', 'order_date', 'quantity', 'unit_price', 'currency', 'status', 'total_amount']] output_mask = pd.DataFrame(True, index=output_df.index, columns=output_df.columns)",
+        "visualise": false
+      },
+      "metrics": {
+        "modified_cell_count": 63,
+        "affected_row_count": 7,
+        "output_row_count": 7,
+        "records_processed": 7,
+        "output_column_count": 9
+      }
+    },
+    {
+      "type": "sort",
+      "title": "Sort Data",
+      "message": "Sort Data: sort by order_id (ascending). Impact: row order updated.",
+      "params": {
+        "ascending": [
+          true
+        ],
+        "sort_columns": [
+          "order_id"
+        ]
+      },
+      "metrics": {
+        "modified_cell_count": 0,
+        "affected_row_count": 0,
+        "reordered_row_count": 0
+      }
+    }
+  ],
+  "outcome": {
+    "modified_cell_count": 63,
+    "affected_row_count": 7
+  }
+}
+06:50:10 AM
+
+Pipeline completed successfully
+
+{
+  "kind": "pipeline_summary",
+  "status": "success"
+}
+06:50:10 AM
+
+Pipeline execution completed successfully.
+
+06:50:06 AM
+
+Pipeline execution started.
+
+AI Builder
+Schedule
+Transform
+Profile
+Data Profile
+Full report
+Select Column
+quantity
+Overview
+Type
+Numeric
+Distinct
+6 / 12
+Empty
+0 / 12
+Distribution
+0 - 1
+8.3%
+1 - 2
+33.3%
+2 - 3
+33.3%
+3 - 4
+8.3%
+4 - 5
+16.7%
+Statistics
+Min
+0
+Max
+5
+Range
+5
+Mean
+2
+Standard Deviation
+1.41
+Kurtosis
+0.62
+Skewness
+0.93
+Facet
+28/50

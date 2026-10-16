@@ -73,7 +73,6 @@ def main():
             "expected": f"expected/{scenario}.csv",
             "expected_sha256": hashlib.sha256(expected_path.read_bytes()).hexdigest(),
             "expected_rows": len(expected),
-            "status": "not_run",
         }
     (ROOT / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
 

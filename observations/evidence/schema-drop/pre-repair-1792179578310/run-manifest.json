@@ -1,0 +1,12 @@
+{
+  "scenario": "schema-drop",
+  "phase": "pre-repair",
+  "trigger": "manual",
+  "started_at": "2026-10-16T19:39:38.313Z",
+  "stage": "capturing-logs",
+  "triggered_at": "2026-10-16T19:39:50.162Z",
+  "outputs": [],
+  "output_wait_failure": "Fresh GCS export for this source mutation\n\nFresh GCS export for this source mutation\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 150000ms exceeded while waiting on the predicate",
+  "failure": "Pipeline must produce a fresh output; inspect captured failure logs\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+  "finished_at": "2026-10-16T19:42:27.934Z"
+}

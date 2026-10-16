@@ -1,0 +1,16 @@
+{
+  "scenario": "schema-drop",
+  "phase": "post-repair-controlled-repeat",
+  "trigger": "manual",
+  "started_at": "2026-10-16T20:13:12.772Z",
+  "stage": "opening-project",
+  "schedule_checks": [
+    {
+      "label": "before-source",
+      "observed_at": "2026-10-16T20:13:21.059Z",
+      "inactive_verified": true
+    }
+  ],
+  "failure": "locator.innerText: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('complementary')\u001b[22m\n",
+  "finished_at": "2026-10-16T20:13:51.267Z"
+}

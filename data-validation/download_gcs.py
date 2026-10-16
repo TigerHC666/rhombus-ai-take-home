@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import quote
@@ -9,7 +10,7 @@ from urllib.parse import quote
 from google.oauth2 import service_account
 from google.auth.transport.requests import AuthorizedSession
 
-BUCKET = 'rhombus-assessment-output-20261017-hc6'
+BUCKET = os.environ.get('ASSESSMENT_GCS_BUCKET', 'rhombus-assessment-output-20261017-hc6')
 ROOT = Path(__file__).resolve().parents[1]
 
 

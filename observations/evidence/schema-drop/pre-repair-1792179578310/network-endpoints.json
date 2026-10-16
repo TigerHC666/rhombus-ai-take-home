@@ -1,0 +1,142 @@
+[
+  {
+    "method": "GET",
+    "pathname": "/api/accounts/users/privacy-consent",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/accounts/orgs",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "pathname": "/api/internal-ops/config/",
+    "status": 403
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/accounts/users/current-org-role",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/dataset/projects/5348/context",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/dataset/projects/all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/accounts/users/profile",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/dataset/analyzer/v2/projects/5348/datasets",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/accounts/transformations/allowed",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/accounts/users/project-limit",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/accounts/users/subscription",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/accounts/users/schedule-limit",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/dataset/analyzer/v2/projects/5348/nodes",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/accounts/users/credits",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/dataset/analyzer/v2/projects/5348/chat/history",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/projects/5348/data-sources/external-sources/s3/files",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/dataset/analyzer/v2/projects/5348/pipeline/healthcare/last-run",
+    "status": 403
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/accounts/users/upload-size-limit",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/dataset/analyzer/v2/projects/5348/pipeline/schedules",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/dataset/analyzer/v2/projects/5348/datasets/pending",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/accounts/users/connector-limit",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "pathname": "/api/dataset/analyzer/v2/projects/5348/pipeline/process",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/background_jobs/jobs/e10c401a-2ff6-40e3-aacf-05015dbd504c",
+    "status": 301
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/background_jobs/jobs/e10c401a-2ff6-40e3-aacf-05015dbd504c/",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/dataset/analyzer/v2/projects/5348/nodes/summary-download",
+    "status": 202
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/dataset/analyzer/v2/projects/5348/nodes/summary-status/43fae584-1f8c-4f63-bbe4-310bd6456794",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/dataset/analyzer/v2/projects/5348/nodes/output-columns",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/dataset/analyzer/v2/projects/5348/nodes/summary-status/5d9bb830-dcb7-4f21-b521-262f3c39cb32",
+    "status": 200
+  }
+]

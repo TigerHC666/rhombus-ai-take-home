@@ -18,7 +18,9 @@ test('S3 source through AI-built pipeline to a fresh GCS export', async ({ page 
   const routes = observeRoutes(page);
   const jobStates = [];
   let configuration;
+  let processJobId;
   page.on('response', async response => {
+    if (new URL(response.url()).origin !== 'https://api.rhombusai.com') return;
     if (new URL(response.url()).pathname.startsWith('/api/background_jobs/jobs/') && response.status() === 200) {
       const job = await response.json();
       jobStates.push({ observed_at: new Date().toISOString(), status: job.status, state: job.state,
@@ -27,15 +29,22 @@ test('S3 source through AI-built pipeline to a fresh GCS export', async ({ page 
     }
     if (new URL(response.url()).pathname !== `/api/dataset/analyzer/v2/projects/${settings.projectId}/nodes` || response.status() !== 200) return;
     const nodes = await response.json();
+    fs.writeFileSync(path.join(directory, 'node-response-schema.json'), JSON.stringify(nodes.map(node => ({
+      node_id: node.node_id, transformation_type: node.transformation_type,
+      top_level_keys: Object.keys(node),
+      ...(node.transformation_type === 'llm' ? { params_keys: Object.keys(node.params || {}), metadata_keys: Object.keys(node.metadata || {}) } : {}),
+    })), null, 2));
     configuration = nodes.map(node => ({
-      node_id: node.node_id, inputs: node.inputs, outputs: node.outputs,
+      node_id: node.node_id, name: node.name, inputs: node.inputs, outputs: node.outputs,
       transformation_type: node.transformation_type,
       prompt: node.params?.prompt,
       code: node.transformation_type === 'llm' ? node.params?.code : undefined,
       mode: node.transformation_type === 'llm' ? node.params?.mode : undefined,
       sort_columns: node.params?.sort_columns, ascending: node.params?.ascending,
       source_type: node.params?.source_type, data_asset_ref: node.params?.data_asset_ref,
+      dataset_id: node.params?.dataset_id, source_connection_id: node.params?.source_connection_id,
       destination_id: node.params?.destination_id, format_type: node.params?.format_type,
+      custom_filename: node.params?.custom_filename,
     }));
   });
   const manifest = { scenario, phase, trigger: 'manual', started_at: new Date().toISOString() };
@@ -44,30 +53,91 @@ test('S3 source through AI-built pipeline to a fresh GCS export', async ({ page 
     fs.writeFileSync(path.join(directory, 'run-manifest.json'), JSON.stringify(manifest, null, 2));
     console.log(`${scenario}: ${stage}`);
   };
+  const verifyInactiveSchedule = async label => {
+    await page.getByRole('tab', { name: 'Schedule', exact: true }).click();
+    const panel = page.getByRole('complementary');
+    const inactive = page.getByRole('switch', { name: 'Activate schedule', exact: true });
+    try {
+      await expect(panel).toContainText('Schedules');
+      await expect(inactive).toBeVisible();
+      await expect(inactive).not.toBeChecked();
+      await expect(page.getByRole('switch', { name: 'Deactivate schedule', exact: true })).toHaveCount(0);
+      manifest.schedule_checks = [...(manifest.schedule_checks || []), {
+        label, observed_at: new Date().toISOString(), inactive_verified: true,
+      }];
+    } finally {
+      await panel.innerText({ timeout: 5000 }).then(text => fs.writeFileSync(path.join(directory, `schedule-${label}.txt`), text)).catch(error => {
+        manifest.schedule_evidence_error = error.message;
+      });
+    }
+  };
   try {
     checkpoint('opening-project');
     await openProject(page);
-    await page.getByRole('tab', { name: 'Schedule', exact: true }).click();
-    await expect(page.getByRole('complementary')).toContainText('Schedules');
-    await expect(page.getByRole('switch', { name: 'Deactivate schedule', exact: true })).toHaveCount(0);
+    await expect.poll(() => configuration?.length || 0).toBeGreaterThan(0);
+    fs.writeFileSync(path.join(directory, 'configuration-before.json'), JSON.stringify(configuration, null, 2));
+    if (phase === 'pre-repair' || phase.startsWith('restore-after-')) {
+      const frozen = JSON.parse(fs.readFileSync(path.join(settings.root, 'observations/evidence/baseline/configuration-v3.json')));
+      expect(configuration, 'Isolation requires the complete frozen configuration before source mutation').toEqual(frozen);
+      manifest.configuration_verified_before_run = true;
+    }
+    await verifyInactiveSchedule('before-source');
     checkpoint('uploading-source');
     await python(['data-validation/source_s3.py', '--scenario', scenario, '--upload', '--destination', directory]);
     checkpoint('confirming-source');
     await confirmSource(page);
     if (process.env.BUILDER_PROMPT_FILE) {
+      const originalSource = configuration.find(node => node.source_type === 's3');
+      const originalDestination = configuration.find(node => node.transformation_type === 'output');
       await submitBuilderPrompt(page, fs.readFileSync(process.env.BUILDER_PROMPT_FILE, 'utf8'), directory);
+      configuration = undefined;
+      await page.reload();
+      await expect.poll(() => configuration?.length || 0).toBeGreaterThan(0);
+      const source = configuration.find(node => node.source_type === 's3');
+      const destination = configuration.find(node => node.transformation_type === 'output');
+      expect(source?.data_asset_ref, 'Builder must retain the authorized live S3 source').toBe(originalSource?.data_asset_ref);
+      expect(source?.source_connection_id).toBe(originalSource?.source_connection_id);
+      expect(destination?.destination_id, 'Builder must retain the authorized GCS destination').toBe(originalDestination?.destination_id);
+      expect(destination?.custom_filename).toBe(originalDestination?.custom_filename);
+      fs.writeFileSync(path.join(directory, 'configuration-after-builder.json'), JSON.stringify(configuration, null, 2));
     }
+    await verifyInactiveSchedule('before-manual-trigger');
     await page.getByRole('tab', { name: 'Canvas', exact: true }).click();
     manifest.triggered_at = new Date().toISOString();
     checkpoint('triggering-pipeline');
-    await page.getByRole('button').filter({ has: page.locator('svg.lucide-play') }).click();
+    const [processResponse] = await Promise.all([
+      page.waitForResponse(response => {
+        const url = new URL(response.url());
+        return url.origin === 'https://api.rhombusai.com' &&
+          url.pathname === `/api/dataset/analyzer/v2/projects/${settings.projectId}/pipeline/process` &&
+          response.request().method() === 'POST';
+      }),
+      page.getByRole('button').filter({ has: page.locator('svg.lucide-play') }).click(),
+    ]);
+    const processBody = await processResponse.json();
+    processJobId = processBody.task_id || processBody.job_id || processBody.id;
+    const executionMode = processBody.execution_mode;
+    const processEvidence = {
+      observed_at: new Date().toISOString(), http_status: processResponse.status(),
+      job_id: processJobId, fields: Object.keys(processBody),
+      execution_mode: typeof executionMode === 'string' && /^[a-zA-Z0-9_-]{1,64}$/.test(executionMode)
+        ? executionMode : null,
+      execution_mode_type: typeof executionMode,
+    };
+    fs.writeFileSync(path.join(directory, 'process-response.json'), JSON.stringify(processEvidence, null, 2));
+    expect(processResponse.ok(), 'Manual process request must succeed').toBe(true);
+    expect(typeof processJobId === 'string' && processJobId.length > 0, 'Manual process must return a job ID').toBe(true);
+    manifest.process_job_id = processJobId;
+    manifest.execution_mode = processEvidence.execution_mode;
     checkpoint('waiting-for-output');
     let fresh = [];
     let outputTimeout;
     try {
       await expect.poll(async () => {
         fresh = JSON.parse(await python(['data-validation/download_gcs.py', '--list-only', '--since', manifest.triggered_at]));
-        return fresh.length > 0 || jobStates.some(job => job.observed_at >= manifest.triggered_at && job.status === 'FAILED');
+        const ownJobs = jobStates.filter(job => job.job_id === processJobId && job.observed_at >= manifest.triggered_at);
+        return ownJobs.some(job => job.status === 'FAILED') ||
+          (fresh.length > 0 && ownJobs.some(job => job.status === 'SUCCESS'));
       }, { timeout: 150000, intervals: [5000], message: 'Fresh GCS export or an observed terminal pipeline failure' }).toBe(true);
     } catch (error) {
       outputTimeout = error.message;
@@ -86,23 +156,44 @@ test('S3 source through AI-built pipeline to a fresh GCS export', async ({ page 
     fs.writeFileSync(path.join(directory, 'quantity-profile.txt'), await page.getByRole('complementary').innerText());
     await python(['data-validation/source_s3.py', '--scenario', scenario, '--destination', path.join(directory, 'source-after')]);
     if (configuration) fs.writeFileSync(path.join(directory, 'configuration.json'), JSON.stringify(configuration, null, 2));
+    manifest.terminal_job_status = jobStates.filter(job => job.job_id === processJobId).at(-1)?.status;
     if (fresh.length) {
       await python(['data-validation/download_gcs.py', '--since', manifest.triggered_at, '--destination', path.join(directory, 'gcs')]);
       manifest.outputs = JSON.parse(fs.readFileSync(path.join(directory, 'gcs/inventory.json')));
-      const output = manifest.outputs.sort((a,b) => a.timeCreated.localeCompare(b.timeCreated))[0];
-      try {
-        await python(['data-validation/validate.py', '--scenario', scenario, '--source', path.join(directory, 'source.csv'), '--output', path.join(directory, 'gcs', output.name), '--report', path.join(directory, 'validation.json')]);
-      } catch (error) {
-        if (!fs.existsSync(path.join(directory, 'validation.json'))) throw error;
+      manifest.outputs.sort((a,b) => a.timeCreated.localeCompare(b.timeCreated));
+      manifest.output_attribution = 'Objects observed after the manual boundary; exact object-to-job linkage is not established';
+      manifest.output_validations = [];
+      for (const [index, output] of manifest.outputs.entries()) {
+        const reportName = `validation-output-${index + 1}.json`;
+        const reportPath = path.join(directory, reportName);
+        try {
+          await python(['data-validation/validate.py', '--scenario', scenario, '--source', path.join(directory, 'source.csv'), '--output', path.join(directory, 'gcs', output.name), '--report', reportPath]);
+        } catch (error) {
+          if (!fs.existsSync(reportPath)) throw error;
+        }
+        const validation = JSON.parse(fs.readFileSync(reportPath));
+        if (index === 0) fs.copyFileSync(reportPath, path.join(directory, 'validation.json'));
+        manifest.output_validations.push({
+          name: output.name, generation: output.generation, sha256: output.sha256,
+          report: reportName, business_values_match: validation.business_values_match === true,
+          strict_contract_passed: validation.passed === true,
+        });
+        checkpoint('validating-all-outputs');
       }
-      const validation = JSON.parse(fs.readFileSync(path.join(directory, 'validation.json')));
-      manifest.business_values_match = validation.business_values_match;
-      manifest.strict_contract_passed = validation.passed;
-      expect(validation.passed, 'The actual cloud output must satisfy the frozen contract').toBe(true);
+      manifest.validation_compatibility = 'validation.json describes the first object only; manifest aggregates every downloaded object';
+      manifest.business_values_match = manifest.output_validations.length > 0 && manifest.output_validations.every(item => item.business_values_match);
+      manifest.strict_contract_passed = manifest.output_validations.length > 0 && manifest.output_validations.every(item => item.strict_contract_passed);
+      expect(manifest.terminal_job_status, 'The captured manual job must succeed').toBe('SUCCESS');
+      expect(manifest.strict_contract_passed, 'Every actual cloud output must satisfy the frozen contract').toBe(true);
     } else {
       manifest.outputs = [];
       manifest.output_wait_failure = outputTimeout;
-      fs.writeFileSync(path.join(directory, 'validation.json'), JSON.stringify({ scenario, passed: false, output_present: false, source_present: true, errors: ['No fresh output was observed in the bounded execution window'] }, null, 2));
+      try {
+        await python(['data-validation/validate.py', '--scenario', scenario, '--source', path.join(directory, 'source.csv'),
+          '--output', path.join(directory, 'gcs', 'no-fresh-output.csv'), '--report', path.join(directory, 'validation.json')]);
+      } catch (error) {
+        if (!fs.existsSync(path.join(directory, 'validation.json'))) throw error;
+      }
       expect(fresh.length, 'Pipeline must produce a fresh output; inspect captured failure logs').toBeGreaterThan(0);
     }
   } catch (error) {

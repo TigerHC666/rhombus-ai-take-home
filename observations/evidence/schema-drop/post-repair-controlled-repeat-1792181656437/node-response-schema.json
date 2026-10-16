@@ -1,0 +1,79 @@
+[
+  {
+    "node_id": "1792174488846",
+    "transformation_type": "input",
+    "top_level_keys": [
+      "id",
+      "node_id",
+      "name",
+      "inputs",
+      "outputs",
+      "transformer_type",
+      "transformation_type",
+      "params_info",
+      "params",
+      "metadata"
+    ]
+  },
+  {
+    "node_id": "llm_node_4",
+    "transformation_type": "llm",
+    "top_level_keys": [
+      "id",
+      "node_id",
+      "name",
+      "inputs",
+      "outputs",
+      "transformer_type",
+      "transformation_type",
+      "params_info",
+      "params",
+      "metadata"
+    ],
+    "params_keys": [
+      "code",
+      "mode",
+      "prompt",
+      "visualise",
+      "output_columns"
+    ],
+    "metadata_keys": [
+      "node",
+      "edges",
+      "ui_role",
+      "result_tag_candidate"
+    ]
+  },
+  {
+    "node_id": "sort_node_1",
+    "transformation_type": "sort",
+    "top_level_keys": [
+      "id",
+      "node_id",
+      "name",
+      "inputs",
+      "outputs",
+      "transformer_type",
+      "transformation_type",
+      "params_info",
+      "params",
+      "metadata"
+    ]
+  },
+  {
+    "node_id": "output_node_1",
+    "transformation_type": "output",
+    "top_level_keys": [
+      "id",
+      "node_id",
+      "name",
+      "inputs",
+      "outputs",
+      "transformer_type",
+      "transformation_type",
+      "params_info",
+      "params",
+      "metadata"
+    ]
+  }
+]

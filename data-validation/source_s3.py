@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -10,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / '.runtime/vendor'))
 import boto3
 
-BUCKET = 'rhombus-assessment-source-20261017-hc666'
+BUCKET = os.environ.get('ASSESSMENT_S3_BUCKET', 'rhombus-assessment-source-20261017-hc666')
 KEY = 'orders.csv'
 
 
@@ -28,7 +29,7 @@ def main():
     if hashlib.sha256(data).hexdigest() != contract['input_sha256']:
         raise ValueError('Frozen source fixture changed')
     credentials = json.loads(args.credentials.read_text())
-    client = boto3.client('s3', region_name='ap-southeast-2',
+    client = boto3.client('s3', region_name=os.environ.get('ASSESSMENT_S3_REGION', 'ap-southeast-2'),
                          aws_access_key_id=credentials['aws_access_key_id'],
                          aws_secret_access_key=credentials['aws_secret_access_key'])
     if args.upload:

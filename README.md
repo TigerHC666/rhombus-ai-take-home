@@ -4,7 +4,7 @@ Evaluation of an AI-built S3-to-GCS cleaning pipeline under schema and semantic 
 
 ## Status
 
-Work in progress. Synthetic fixtures, independent expected outputs, and a local validator are implemented. Live S3-to-GCS execution has produced four baseline output objects, but these fail the frozen data contract. Public authentication tests, authenticated project-access replay, anonymous access rejection, and live pipeline-binding checks pass. Authenticated UI checks reach the original project and its S3 input. A correct scheduled baseline, drift experiments, full UI journey, and the demonstration recording are the next execution milestones. Local validator tests do not establish platform correctness.
+Live baseline execution and a real scheduled run now retain all seven expected business records, with three identical exported results. Strict monetary serialization still violates the frozen two-decimal contract. All seven structural/semantic drift scenarios have been executed against the unchanged baseline pipeline; a second isolated repetition is in progress. Builder repairs and their scheduled verification are the next milestone. Authentication, project access, pipeline binding, and independent artifact validation are exercised against the real services. See the linked evidence rather than treating local validator tests as platform passes.
 
 ## Contents
 
@@ -34,8 +34,8 @@ Requires Node.js 22 or later:
 
 ```sh
 npm ci
-npm run test:api
 node scripts/capture-session.cjs
+npm run test:api
 ```
 
 The API suite uses routes observed in a dedicated Chrome test browser and covers provider discovery, the CSRF endpoint, and rejection of sign-in without CSRF. [Results](observations/evidence/api-authentication-results.json) are authentication coverage only; they do not replace pipeline API tests. The negative case asserts the observed 302 response, empty body, and `MissingCSRF` redirect without following it into a misleading 200 page.

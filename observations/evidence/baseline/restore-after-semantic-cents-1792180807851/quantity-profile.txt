@@ -1,0 +1,37 @@
+Data Profile
+Full report
+Select Column
+quantity
+Overview
+Type
+Numeric
+Distinct
+6 / 12
+Empty
+0 / 12
+Distribution
+0 - 1
+8.3%
+1 - 2
+33.3%
+2 - 3
+33.3%
+3 - 4
+8.3%
+4 - 5
+16.7%
+Statistics
+Min
+0
+Max
+5
+Range
+5
+Mean
+2
+Standard Deviation
+1.41
+Kurtosis
+0.62
+Skewness
+0.93

@@ -1,0 +1,36 @@
+{
+  "scenario": "schema-drop",
+  "phase": "post-repair",
+  "trigger": "manual",
+  "started_at": "2026-10-16T20:03:04.023Z",
+  "stage": "capturing-logs",
+  "triggered_at": "2026-10-16T20:04:04.354Z",
+  "outputs": [
+    {
+      "name": "orders_cleaned_1792181090221.csv",
+      "generation": "1792181092232951",
+      "size": "441",
+      "timeCreated": "2026-10-16T20:04:52.244Z",
+      "updated": "2026-10-16T20:04:52.244Z",
+      "md5Hash": "2SJiHmZt2WrblounaY8ghQ==",
+      "crc32c": "8WSrkA==",
+      "sha256": "3c9fd235b4854fbf340cef70809b12c0a7523436ac8afd03ff54c4e69cae7882",
+      "retrieved_at": "2026-10-16T20:05:08.011199+00:00"
+    },
+    {
+      "name": "orders_cleaned_1792181103219.csv",
+      "generation": "1792181104990316",
+      "size": "441",
+      "timeCreated": "2026-10-16T20:05:04.997Z",
+      "updated": "2026-10-16T20:05:04.997Z",
+      "md5Hash": "2SJiHmZt2WrblounaY8ghQ==",
+      "crc32c": "8WSrkA==",
+      "sha256": "3c9fd235b4854fbf340cef70809b12c0a7523436ac8afd03ff54c4e69cae7882",
+      "retrieved_at": "2026-10-16T20:05:08.811109+00:00"
+    }
+  ],
+  "business_values_match": true,
+  "strict_contract_passed": false,
+  "failure": "The actual cloud output must satisfy the frozen contract\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+  "finished_at": "2026-10-16T20:05:09.622Z"
+}

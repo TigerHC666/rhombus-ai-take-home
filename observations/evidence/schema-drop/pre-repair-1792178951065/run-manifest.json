@@ -1,0 +1,8 @@
+{
+  "scenario": "schema-drop",
+  "phase": "pre-repair",
+  "trigger": "manual",
+  "started_at": "2026-10-16T19:29:11.068Z",
+  "triggered_at": "2026-10-16T19:29:22.110Z",
+  "finished_at": "2026-10-16T19:39:10.748Z"
+}

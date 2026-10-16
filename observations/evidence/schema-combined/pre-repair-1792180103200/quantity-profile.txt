@@ -1,0 +1,22 @@
+Data Profile
+Full report
+Select Column
+quantity
+Overview
+Type
+Categorical
+Distinct
+6 / 12
+Empty
+0 / 12
+Distribution
+1 units
+33.3%
+2 units
+33.3%
+0 units
+8.3%
+3 units
+8.3%
+4 units
+8.3%

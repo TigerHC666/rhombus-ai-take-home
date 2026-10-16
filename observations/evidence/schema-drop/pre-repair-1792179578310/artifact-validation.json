@@ -1,0 +1,11 @@
+{
+  "scenario": "schema-drop",
+  "passed": false,
+  "evidence_level": "artifact_unavailable_or_invalid; inspect live run evidence",
+  "source_present": true,
+  "output_present": false,
+  "determinism": "not_checked",
+  "errors": [
+    "FileNotFoundError: [Errno 2] No such file or directory: 'observations\\\\evidence\\\\schema-drop\\\\pre-repair-1792179578310\\\\gcs\\\\no-fresh-output.csv'"
+  ]
+}

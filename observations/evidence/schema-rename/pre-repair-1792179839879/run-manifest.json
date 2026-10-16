@@ -1,0 +1,11 @@
+{
+  "scenario": "schema-rename",
+  "phase": "pre-repair",
+  "trigger": "manual",
+  "started_at": "2026-10-16T19:43:59.883Z",
+  "stage": "capturing-logs",
+  "triggered_at": "2026-10-16T19:44:13.179Z",
+  "outputs": [],
+  "failure": "Pipeline must produce a fresh output; inspect captured failure logs\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+  "finished_at": "2026-10-16T19:44:31.736Z"
+}

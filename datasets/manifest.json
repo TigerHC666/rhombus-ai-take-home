@@ -5,8 +5,7 @@
     "input_rows": 12,
     "expected": "expected/baseline.csv",
     "expected_sha256": "3b3b0920f647e23310ee9d535af461abc97fc44b7b85fc1d03e2c71192349b37",
-    "expected_rows": 7,
-    "status": "not_run"
+    "expected_rows": 7
   },
   "schema-drop": {
     "input": "schema-drop.csv",
@@ -14,8 +13,7 @@
     "input_rows": 12,
     "expected": "expected/schema-drop.csv",
     "expected_sha256": "9bd4a39b39eb0ada07a8b9218c91326f8f52fbca93e6950c555f16731baf1b90",
-    "expected_rows": 7,
-    "status": "not_run"
+    "expected_rows": 7
   },
   "schema-rename": {
     "input": "schema-rename.csv",
@@ -23,8 +21,7 @@
     "input_rows": 12,
     "expected": "expected/schema-rename.csv",
     "expected_sha256": "3b3b0920f647e23310ee9d535af461abc97fc44b7b85fc1d03e2c71192349b37",
-    "expected_rows": 7,
-    "status": "not_run"
+    "expected_rows": 7
   },
   "schema-type": {
     "input": "schema-type.csv",
@@ -32,8 +29,7 @@
     "input_rows": 12,
     "expected": "expected/schema-type.csv",
     "expected_sha256": "3b3b0920f647e23310ee9d535af461abc97fc44b7b85fc1d03e2c71192349b37",
-    "expected_rows": 7,
-    "status": "not_run"
+    "expected_rows": 7
   },
   "schema-add": {
     "input": "schema-add.csv",
@@ -41,8 +37,7 @@
     "input_rows": 12,
     "expected": "expected/schema-add.csv",
     "expected_sha256": "3b3b0920f647e23310ee9d535af461abc97fc44b7b85fc1d03e2c71192349b37",
-    "expected_rows": 7,
-    "status": "not_run"
+    "expected_rows": 7
   },
   "schema-combined": {
     "input": "schema-combined.csv",
@@ -50,8 +45,7 @@
     "input_rows": 12,
     "expected": "expected/schema-combined.csv",
     "expected_sha256": "9bd4a39b39eb0ada07a8b9218c91326f8f52fbca93e6950c555f16731baf1b90",
-    "expected_rows": 7,
-    "status": "not_run"
+    "expected_rows": 7
   },
   "semantic-cents": {
     "input": "semantic-cents.csv",
@@ -59,8 +53,7 @@
     "input_rows": 12,
     "expected": "expected/semantic-cents.csv",
     "expected_sha256": "3b3b0920f647e23310ee9d535af461abc97fc44b7b85fc1d03e2c71192349b37",
-    "expected_rows": 7,
-    "status": "not_run"
+    "expected_rows": 7
   },
   "semantic-dates": {
     "input": "semantic-dates.csv",
@@ -68,7 +61,6 @@
     "input_rows": 12,
     "expected": "expected/semantic-dates.csv",
     "expected_sha256": "3b3b0920f647e23310ee9d535af461abc97fc44b7b85fc1d03e2c71192349b37",
-    "expected_rows": 7,
-    "status": "not_run"
+    "expected_rows": 7
   }
 }

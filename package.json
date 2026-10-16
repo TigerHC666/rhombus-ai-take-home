@@ -6,6 +6,9 @@
   "scripts": {
     "test:ui": "playwright test ui-tests",
     "test:api": "playwright test api-tests",
+    "test:manual": "playwright test ui-tests/manual-output.spec.cjs",
+    "test:scheduled": "playwright test ui-tests/scheduled-output.spec.cjs",
+    "auth": "node scripts/capture-session.cjs",
     "test:validator": "python -m unittest discover -s data-validation -p test_*.py -v"
   },
   "devDependencies": { "@playwright/test": "1.64.1" }
