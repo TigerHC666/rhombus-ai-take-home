@@ -10,7 +10,7 @@ const { openProject, confirmSource, observeRoutes, submitBuilderPrompt } = requi
 test.use({ storageState: settings.storageState });
 
 test('S3 source through AI-built pipeline to a fresh GCS export', async ({ page }) => {
-  test.setTimeout(600000);
+  test.setTimeout(900000);
   const scenario = process.env.SCENARIO || 'baseline';
   const phase = process.env.RUN_PHASE || 'unchanged';
   const diagnostic = process.env.DIAGNOSTIC_MODE === 'input-types';
@@ -35,6 +35,13 @@ test('S3 source through AI-built pipeline to a fresh GCS export', async ({ page 
         };
         inspect(job.result);
         fs.writeFileSync(path.join(directory, 'diagnostic-job-error.json'), JSON.stringify({ job_id: processJobId, messages }, null, 2));
+      }
+      if ((job.id || job.job_id) === processJobId && job.result && ['SUCCESS', 'FAILED'].includes(job.status)) {
+        const codeEvidence = {};
+        for (const key of ['llm_codegen_final_code', 'llm_codegen_current_code', 'llm_codegen_code_source']) {
+          if (job.result[key] !== undefined) codeEvidence[key] = job.result[key];
+        }
+        fs.writeFileSync(path.join(directory, 'executed-codegen-evidence.json'), JSON.stringify(codeEvidence, null, 2));
       }
       jobStates.push({ observed_at: new Date().toISOString(), status: job.status, state: job.state,
         job_id: job.id || job.job_id, fields: Object.keys(job) });
@@ -162,7 +169,7 @@ test('S3 source through AI-built pipeline to a fresh GCS export', async ({ page 
         const ownJobs = jobStates.filter(job => job.job_id === processJobId && job.observed_at >= manifest.triggered_at);
         return ownJobs.some(job => job.status === 'FAILED') ||
           (fresh.length > 0 && ownJobs.some(job => job.status === 'SUCCESS'));
-      }, { timeout: 150000, intervals: [5000], message: 'Fresh GCS export or an observed terminal pipeline failure' }).toBe(true);
+      }, { timeout: 360000, intervals: [5000], message: 'Fresh GCS export or an observed terminal pipeline failure' }).toBe(true);
     } catch (error) {
       outputTimeout = error.message;
     }

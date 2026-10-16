@@ -1,0 +1,11 @@
+{
+  "llm_codegen_final_code": {
+    "llm_node_7": "import json\nfrom collections import Counter\n\noutput_df = input_df_1.copy()\noutput_mask = pd.DataFrame(True, index=output_df.index, columns=output_df.columns)\n\nprobe = {}\nfor col in ['quantity', 'order_date']:\n    series = input_df_1[col]\n    dtype_str = str(series.dtype)\n    samples = []\n    for i in range(min(3, len(series))):\n        val = series.iloc[i]\n        tname = pd.api.types.infer_dtype(pd.Series([val]), skipna=False)\n        samples.append({'type': tname, 'repr': str(val)[:30]})\n    type_counts = dict(Counter(\n        pd.api.types.infer_dtype(pd.Series([v]), skipna=False)\n        for v in series\n    ))\n    probe[col] = {'dtype': dtype_str, 'samples': samples, 'type_counts': type_counts}\n\nmsg = 'INPUT_TYPE_PROBE' + json.dumps(probe, separators=(',', ':'))\nmsg = msg[:600]"
+  },
+  "llm_codegen_current_code": {
+    "llm_node_7": "import json\nfrom collections import Counter\n\noutput_df = input_df_1.copy()\noutput_mask = pd.DataFrame(True, index=output_df.index, columns=output_df.columns)\n\nprobe = {}\nfor col in ['quantity', 'order_date']:\n    series = input_df_1[col]\n    dtype_str = str(series.dtype)\n    samples = []\n    for i in range(min(3, len(series))):\n        val = series.iloc[i]\n        tname = pd.api.types.infer_dtype(pd.Series([val]), skipna=False)\n        samples.append({'type': tname, 'repr': str(val)[:30]})\n    type_counts = dict(Counter(\n        pd.api.types.infer_dtype(pd.Series([v]), skipna=False)\n        for v in series\n    ))\n    probe[col] = {'dtype': dtype_str, 'samples': samples, 'type_counts': type_counts}\n\nmsg = 'INPUT_TYPE_PROBE' + json.dumps(probe, separators=(',', ':'))\nmsg = msg[:600]"
+  },
+  "llm_codegen_code_source": {
+    "llm_node_7": "llm_regen"
+  }
+}

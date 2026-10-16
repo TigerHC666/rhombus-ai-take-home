@@ -1,0 +1,35 @@
+[
+  {
+    "observed_at": "2026-10-16T20:46:45.588Z",
+    "job_id": "8825de2a-b27c-4d2e-99ff-ce323564727c",
+    "status": "SUCCESS",
+    "result_type": "object",
+    "result_keys": [
+      "error",
+      "org_id",
+      "params",
+      "status",
+      "messages",
+      "progress",
+      "project_id",
+      "failed_node",
+      "key_results",
+      "tags_by_node",
+      "error_message",
+      "completed_nodes",
+      "runtime_autotag",
+      "has_partial_failure",
+      "key_results_per_node",
+      "node_param_overrides",
+      "llm_codegen_final_code",
+      "llm_codegen_code_source",
+      "llm_codegen_transcripts",
+      "llm_codegen_current_code",
+      "selected_transformations"
+    ],
+    "messages": [
+      "INPUT_TYPE_PROBE{\\\"quantity\\\":{\\\"dtype\\\":\\\"int64\\\",\\\"samples\\\":[{\\\"type\\\":\\\"integer\\\",\\\"repr\\\":\\\"2\\\"},{\\\"type\\\":\\\"integer\\\",\\\"repr\\\":\\\"2\\\"},{\\\"type\\\":\\\"integer\\\",\\\"repr\\\":\\\"3\\\"}],\\\"type_counts\\\":{\\\"integer\\\":12}},\\\"order_date\\\":{\\\"dtype\\\":\\\"datetime64[ns]\\\",\\\"samples\\\":[{\\\"type\\\":\\\"datetime64\\\",\\\"repr\\\":\\\"2026-03-04 00:00:00\\\"},{\\\"type\\\":\\\"datetime64\\\",\\\"repr\\\":\\\"2026-03-04 00:00:00\\\"},{\\\"type\\\":\\\"datetime64\\\",\\\"repr\\\":\\\"2026-04-05 00:00:00\\\"}],\\\"type_counts\\\":{\\\"datetime64\\\":12}}}\\n\", \"message\": \"Validation failed. Revise the code according to the error; the final response must be the exact code that later passes this tool.\"}",
+      "INPUT_TYPE_PROBE{\\\"quantity\\\":{\\\"dtype\\\":\\\"int64\\\",\\\"samples\\\":[{\\\"type\\\":\\\"integer\\\",\\\"repr\\\":\\\"2\\\"},{\\\"type\\\":\\\"integer\\\",\\\"repr\\\":\\\"2\\\"},{\\\"type\\\":\\\"integer\\\",\\\"repr\\\":\\\"3\\\"}],\\\"type_counts\\\":{\\\"integer\\\":12}},\\\"order_date\\\":{\\\"dtype\\\":\\\"datetime64[ns]\\\",\\\"samples\\\":[{\\\"type\\\":\\\"datetime64\\\",\\\"repr\\\":\\\"2026-03-04 00:00:00\\\"},{\\\"type\\\":\\\"datetime64\\\",\\\"repr\\\":\\\"2026-03-04 00:00:00\\\"},{\\\"type\\\":\\\"datetime64\\\",\\\"repr\\\":\\\"2026-04-05 00:00:00\\\"}],\\\"type_counts\\\":{\\\"datetime64\\\":12}}}\\n\", \"message\": \"Validation failed. Revise the code according to the error; the final response must be the exact code that later passes this tool.\"}"
+    ]
+  }
+]

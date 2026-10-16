@@ -1,0 +1,114 @@
+{
+  "scenario": "schema-type",
+  "passed": false,
+  "evidence_level": "local_artifact_validation; provenance requires a live run manifest",
+  "source_sha256": "5baee38c559d8e7d64deaeb001d3aca4c47398094781946d1dd76c2295e02217",
+  "output_sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
+  "source_rows": 12,
+  "output_rows": 7,
+  "business_values_match": true,
+  "determinism": "not_checked",
+  "repeats": [],
+  "errors": [
+    "Output row 1: unit_price must have two decimals",
+    "Output row 1: total_amount must have two decimals",
+    {
+      "row": 1,
+      "differences": {
+        "unit_price": {
+          "expected": "12.50",
+          "actual": "12.5"
+        },
+        "total_amount": {
+          "expected": "25.00",
+          "actual": "25.0"
+        }
+      }
+    },
+    "Output row 2: unit_price must have two decimals",
+    "Output row 2: total_amount must have two decimals",
+    {
+      "row": 2,
+      "differences": {
+        "unit_price": {
+          "expected": "4.20",
+          "actual": "4.2"
+        },
+        "total_amount": {
+          "expected": "12.60",
+          "actual": "12.6"
+        }
+      }
+    },
+    "Output row 3: unit_price must have two decimals",
+    "Output row 3: total_amount must have two decimals",
+    {
+      "row": 3,
+      "differences": {
+        "unit_price": {
+          "expected": "20.00",
+          "actual": "20.0"
+        },
+        "total_amount": {
+          "expected": "20.00",
+          "actual": "20.0"
+        }
+      }
+    },
+    "Output row 4: total_amount must have two decimals",
+    {
+      "row": 4,
+      "differences": {
+        "total_amount": {
+          "expected": "1.00",
+          "actual": "1.0"
+        }
+      }
+    },
+    "Output row 5: unit_price must have two decimals",
+    "Output row 5: total_amount must have two decimals",
+    {
+      "row": 5,
+      "differences": {
+        "unit_price": {
+          "expected": "7.50",
+          "actual": "7.5"
+        },
+        "total_amount": {
+          "expected": "15.00",
+          "actual": "15.0"
+        }
+      }
+    },
+    "Output row 6: unit_price must have two decimals",
+    "Output row 6: total_amount must have two decimals",
+    {
+      "row": 6,
+      "differences": {
+        "unit_price": {
+          "expected": "0.00",
+          "actual": "0.0"
+        },
+        "total_amount": {
+          "expected": "0.00",
+          "actual": "0.0"
+        }
+      }
+    },
+    "Output row 7: unit_price must have two decimals",
+    "Output row 7: total_amount must have two decimals",
+    {
+      "row": 7,
+      "differences": {
+        "unit_price": {
+          "expected": "1.10",
+          "actual": "1.1"
+        },
+        "total_amount": {
+          "expected": "5.50",
+          "actual": "5.5"
+        }
+      }
+    }
+  ]
+}

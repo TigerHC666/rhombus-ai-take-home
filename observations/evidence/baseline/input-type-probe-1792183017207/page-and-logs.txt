@@ -1,0 +1,41 @@
+Dashboard
+New Project
+Search
+All Projects (1)
+LLM Observability Assessment
+T
+tiger.cai1116@gmail.com
+Canvas
+Workspace
+Logs
+Data Input
+Data Input
+Custom
+llm_node_7
+Drop Columns
+column_drop_node_1
+Sort Data
+sort_node_2
+Data Output
+sort_7172c3fb843a192f4d712dc24ea9e4d4 → Data Output
+Logs
+1 visible
+All
+1
+0
+0
+07:38:24 AM
+
+Pipeline execution started.
+
+AI Builder
+Schedule
+Schedules
+Manage schedules within this project
+Add Schedule
+Schedule for LLM Observability Assessment
+Inactive
+Custom
+Custom: */1 * * * *
+Facet
+4,998/50

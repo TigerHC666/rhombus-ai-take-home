@@ -40,7 +40,8 @@ def run(scenario, phase):
     validation = json.loads((directory / 'validation.json').read_text())
     manifest = json.loads((directory / 'run-manifest.json').read_text())
     if result.returncode and not any(message in manifest.get('failure', '') for message in
-                                    ('The actual cloud output must satisfy the frozen contract',
+                                    ('Every actual cloud output must satisfy the frozen contract',
+                                     'The actual cloud output must satisfy the frozen contract',
                                      'Pipeline must produce a fresh output')):
         raise RuntimeError('Unexpected test harness failure; inspect the run manifest')
     if scenario == 'baseline' and not validation.get('business_values_match'):

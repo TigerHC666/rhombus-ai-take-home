@@ -1,0 +1,79 @@
+[
+  {
+    "node_id": "1792174488846",
+    "name": "1792174488846",
+    "inputs": [],
+    "outputs": [
+      "input_845d116c201ceece365adda3310625df_df",
+      "input_845d116c201ceece365adda3310625df_mask"
+    ],
+    "transformation_type": "input",
+    "source_type": "s3",
+    "data_asset_ref": "e789b770-435d-41ad-abd0-487c85fd4cee",
+    "dataset_id": 0,
+    "source_connection_id": "bc0cd1ec-99ab-4e08-b462-314469b30de2"
+  },
+  {
+    "node_id": "llm_node_7",
+    "name": "llm_node_7",
+    "inputs": [
+      "input_845d116c201ceece365adda3310625df_df",
+      "input_845d116c201ceece365adda3310625df_mask"
+    ],
+    "outputs": [
+      "llm_node_7_df",
+      "llm_node_7_mask"
+    ],
+    "transformation_type": "llm",
+    "prompt": "Generate a Python diagnostic that inspects input_df_1 BEFORE any modification. Do the following exactly: import json from collections import Counter output_df = input_df_1.copy() output_mask = pd.DataFrame(True, index=output_df.index, columns=output_df.columns) probe = {} for col in ['quantity', 'order_date']: series = input_df_1[col] dtype_str = str(series.dtype) samples = [] for i in range(min(3, len(series))): val = series.iloc[i] samples.append({'type': type(val).__name__, 'repr': repr(val)[:30]}) type_counts = dict(Counter(type(v).__name__ for v in series)) probe[col] = {'dtype': dtype_str, 'samples': samples, 'type_counts': type_counts} msg = 'INPUT_TYPE_PROBE' + json.dumps(probe, separators=(',', ':')) msg = msg[:600] raise ValueError(msg) Do not hardcode any values, types, or row data. output_df and output_mask must be defined before the raise. No other logic."
+  },
+  {
+    "node_id": "column_drop_node_1",
+    "name": "column_drop_node_1",
+    "inputs": [
+      "llm_node_7_df",
+      "llm_node_7_mask"
+    ],
+    "outputs": [
+      "column_drop_node_1_df",
+      "column_drop_node_1_mask"
+    ],
+    "transformation_type": "column_drop",
+    "columns_to_drop": [
+      "price_per_unit"
+    ]
+  },
+  {
+    "node_id": "sort_node_2",
+    "name": "sort_node_2",
+    "inputs": [
+      "column_drop_node_1_df",
+      "column_drop_node_1_mask"
+    ],
+    "outputs": [
+      "sort_node_2_df",
+      "sort_node_2_mask"
+    ],
+    "transformation_type": "sort",
+    "sort_columns": [
+      "order_id"
+    ],
+    "ascending": true
+  },
+  {
+    "node_id": "output_node_1",
+    "name": "output_node_1",
+    "inputs": [
+      "sort_node_2_df",
+      "sort_node_2_mask"
+    ],
+    "outputs": [
+      "output_fe6570c80f47cdce36f51dcaaefffee4_df",
+      "output_fe6570c80f47cdce36f51dcaaefffee4_mask"
+    ],
+    "transformation_type": "output",
+    "destination_id": 90,
+    "format_type": "csv",
+    "custom_filename": "orders_cleaned"
+  }
+]

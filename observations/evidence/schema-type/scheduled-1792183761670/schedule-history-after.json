@@ -1,0 +1,87 @@
+{
+  "executions": [
+    {
+      "id": 18504,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:50:14.830Z",
+      "completed_at": "2026-10-16T20:50:20.359Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.520596265792847
+    },
+    {
+      "id": 18500,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:36:18.471Z",
+      "completed_at": "2026-10-16T20:36:24.315Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.8336803913116455
+    },
+    {
+      "id": 18496,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:26:19.353Z",
+      "completed_at": "2026-10-16T20:26:24.813Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.450022459030151
+    },
+    {
+      "id": 18494,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:19:16.147Z",
+      "completed_at": "2026-10-16T20:19:21.508Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.348796606063843
+    },
+    {
+      "id": 18490,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:05:17.727Z",
+      "completed_at": "2026-10-16T20:05:22.748Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.011039733886719
+    },
+    {
+      "id": 18489,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:04:19.194Z",
+      "completed_at": "2026-10-16T20:05:06.670Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 47.46637511253357
+    },
+    {
+      "id": 18487,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:03:17.231Z",
+      "completed_at": "2026-10-16T20:03:22.091Z",
+      "success": false,
+      "failed_node": "llm_cb15bd2a03a6e17e230c09e81dedeb16",
+      "total_duration_seconds": 3.756834030151367
+    },
+    {
+      "id": 18453,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T19:25:25.226Z",
+      "completed_at": "2026-10-16T19:25:30.844Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.602298021316528
+    }
+  ],
+  "total": 8,
+  "page": 1,
+  "page_size": 20
+}

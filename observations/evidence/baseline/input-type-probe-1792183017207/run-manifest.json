@@ -1,0 +1,32 @@
+{
+  "scenario": "baseline",
+  "phase": "input-type-probe",
+  "trigger": "manual",
+  "started_at": "2026-10-16T20:36:57.210Z",
+  "harness_sha256": {
+    "ui-tests\\manual-output.spec.cjs": "f79f162eb4cbfdc1f777ab6c7fd5274efd9488f304a3e8feb849960610dd0d18",
+    "test-support\\workflow.cjs": "74bd7ed13340da8e0503a49fb2960e9139153895eac4c0cb8452fc4d7aba7671"
+  },
+  "purpose": "Intentional input-type diagnostic; a marker-bearing failed job is the expected observation",
+  "stage": "capturing-logs",
+  "schedule_checks": [
+    {
+      "label": "before-source",
+      "observed_at": "2026-10-16T20:37:04.056Z",
+      "inactive_verified": true
+    },
+    {
+      "label": "before-manual-trigger",
+      "observed_at": "2026-10-16T20:38:23.339Z",
+      "inactive_verified": true
+    }
+  ],
+  "triggered_at": "2026-10-16T20:38:23.479Z",
+  "process_job_id": "8825de2a-b27c-4d2e-99ff-ce323564727c",
+  "execution_mode": "auto",
+  "terminal_job_status": "RUNNING",
+  "outputs": [],
+  "output_wait_failure": "Fresh GCS export or an observed terminal pipeline failure\n\nFresh GCS export or an observed terminal pipeline failure\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 150000ms exceeded while waiting on the predicate",
+  "failure": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"FAILED\"\u001b[39m\nReceived: \u001b[31m\"RUNNING\"\u001b[39m",
+  "finished_at": "2026-10-16T20:40:58.590Z"
+}

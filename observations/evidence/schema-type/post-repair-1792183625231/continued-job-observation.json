@@ -1,0 +1,32 @@
+[
+  {
+    "observed_at": "2026-10-16T20:51:15.465Z",
+    "job_id": "7261abfc-8b72-4172-9fcc-b0fbc83b300c",
+    "status": "SUCCESS",
+    "result_type": "object",
+    "result_keys": [
+      "error",
+      "org_id",
+      "params",
+      "status",
+      "messages",
+      "progress",
+      "project_id",
+      "failed_node",
+      "key_results",
+      "tags_by_node",
+      "error_message",
+      "completed_nodes",
+      "runtime_autotag",
+      "has_partial_failure",
+      "key_results_per_node",
+      "node_param_overrides",
+      "llm_codegen_final_code",
+      "llm_codegen_code_source",
+      "llm_codegen_transcripts",
+      "llm_codegen_current_code",
+      "selected_transformations"
+    ],
+    "messages": []
+  }
+]
