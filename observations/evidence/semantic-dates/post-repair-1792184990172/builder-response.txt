@@ -1,0 +1,116 @@
+Load Previous History
+
+This is an isolated repair for semantic-cents. Rebuild the active cleaning transformation using the complete original baseline specification below plus ONLY the explicit producer change below. Remove any adaptations from previous scenarios. Use AI Builder to generate executable code, preserve the existing source, ascending order_id sort and GCS destination, and leave scheduling disabled. Do not hardcode records, IDs, expected counts or outputs. Inspect actual current input and logs, diagnose the observed behavior, and distinguish verified evidence from hypotheses. Regenerate the actual executable code; changing only a prompt is insufficient.
+
+Producer change: The schema is unchanged but the producer now encodes unit_price in cents rather than dollars. Divide the parsed Decimal price by exactly 100 before computing total_amount. Output major currency units. Date semantics stay MM/DD/YYYY.
+
+Original baseline specification (apply the explicit producer change above as the only override):
+The source contract is: order_id, customer, email, order_date, quantity, unit_price, currency, status. Dates are MM/DD/YYYY; unit_price is in major AUD units. Output exactly these columns in order: order_id,customer,email,order_date,quantity,unit_price,currency,status,total_amount.
+
+Trim surrounding whitespace in all text. Uppercase order_id and currency; lowercase email and status; preserve customer case. Fill missing/blank customer with Unknown. Replace invalid or missing email with an empty string; use the simple pattern ^[^\s@]+@[^\s@]+.[^\s@]+$. Require nonempty order_id, order_date, quantity, unit_price, currency and status. Only AUD and statuses paid/pending are allowed. Parse dates strictly as MM/DD/YYYY and output YYYY-MM-DD; reject invalid dates. Quantity must be positive integer digits. Unit price may have a leading dollar sign and at most two decimal places; reject negative, missing, nonfinite, exponent or comma-containing prices. Remove invalid required-value rows. Deduplicate identical normalized business rows; reject conflicting duplicate order IDs. Sort by order_id ascending.
+
+Calculate total_amount = quantity * unit_price using decimal arithmetic and ROUND_HALF_UP, serialize unit_price and total_amount with two decimal places, and quantity as integer digits. Do not insert processing timestamps into business data. Do not hardcode rows or expected results. Keep transformations general for the contract.
+
+Zero unit prices are valid. Accommodate native numeric and datetime values inferred by the S3 reader without dropping valid records. Preserve existing S3 source, sort, and GCS destination connections. Generate the cleaning implementation through AI Builder; do not provide instructions only. Keep the schedule disabled.
+
+Do not run the pipeline yourself: the independent runner will trigger it after checking the saved state. Ensure the generated executable code and node output-column contract both select exactly the nine canonical output fields. Remove adaptations from all other scenarios, not only their prompt text. Keep scheduling disabled.
+
+Graph isolation: remove any prior loyalty_tier drop or price alias projection stages because this scenario has only the original source columns. Use a single source-to-cleaner-to-sort-to-output chain with exactly one dataframe and matching mask at each stage; remove obsolete edges. Rebuild a fresh sort node if necessary to avoid duplicate/stale incoming edges. Do not carry missing-email guards, renamed-price aliases, units suffix parsing, or other scenario overrides into this isolated semantic case.
+
+Copy message
+
+Updated the pipeline on the canvas.
+
+Change	Node	Purpose
+Added	orders_cleaned_v11	Fresh LLM node wired directly from 
+orders.csv
+. Contains the semantic-cents producer change: validate_unit_price divides the parsed Decimal by 100 before returning it, converting cents to major AUD units. All other baseline rules unchanged. No missing-email guard, no rename alias, no units-suffix parsing. Exactly 9 canonical output columns.
+Added	
+orders_sorted_v4
+	Fresh sort node, single upstream from orders_cleaned_v11, ascending order_id.
+Rewired	
+orders_output
+	Now takes input from 
+orders_sorted_v4
+. GCS destination, filename unchanged.
+Deleted	loyalty_tier_drop	Removed — not part of this isolated scenario.
+Deleted	orders_cleaned_v10	Previous combined-scenario node removed.
+Deleted	price_per_unit_drop	Removed — not part of this isolated scenario.
+Deleted	orders_sorted_v3	Old sort and its edges removed.
+
+Final chain: 
+orders.csv
+ → orders_cleaned_v11 → 
+orders_sorted_v4
+ → 
+orders_output
+ — exactly 4 nodes, one dataframe/mask pair per edge. Ready for the independent runner.
+
+Worked for 35s
+
+This scenario requires a clean 4-node chain. One compile call: add the new LLM node directly from 
+orders.csv
+, add a fresh sort, rewire output, delete all four intermediate nodes from the previous scenario.
+
+Modified pipeline
++2
+~1
+-4
+Copy message
+
+/pipeline This is an isolated repair for semantic-dates. Rebuild the active cleaning transformation using the complete original baseline specification below plus ONLY the explicit producer change below. Remove any adaptations from previous scenarios. Use AI Builder to generate executable code, preserve the existing source, ascending order_id sort and GCS destination, and leave scheduling disabled. Do not hardcode records, IDs, expected counts or outputs. Inspect actual current input and logs, diagnose the observed behavior, and distinguish verified evidence from hypotheses. Regenerate the actual executable code; changing only a prompt is insufficient.
+
+Producer change: The schema is unchanged but the producer now encodes order_date as DD/MM/YYYY instead of MM/DD/YYYY. Dates are intentionally ambiguous, so use this explicit producer contract rather than inferring semantics. Inspect the input reader representation first. For raw strings parse strictly DD/MM/YYYY. If the reader produced Timestamp values, establish which format it used from the current input before choosing any correction; do not unconditionally swap month and day. Prefer preserving raw source strings and applying the explicit producer format when supported. Price semantics stay major currency units.
+
+Original baseline specification (apply the explicit producer change above as the only override):
+The source contract is: order_id, customer, email, order_date, quantity, unit_price, currency, status. Dates are MM/DD/YYYY; unit_price is in major AUD units. Output exactly these columns in order: order_id,customer,email,order_date,quantity,unit_price,currency,status,total_amount.
+
+Trim surrounding whitespace in all text. Uppercase order_id and currency; lowercase email and status; preserve customer case. Fill missing/blank customer with Unknown. Replace invalid or missing email with an empty string; use the simple pattern ^[^\s@]+@[^\s@]+.[^\s@]+$. Require nonempty order_id, order_date, quantity, unit_price, currency and status. Only AUD and statuses paid/pending are allowed. Parse dates strictly as MM/DD/YYYY and output YYYY-MM-DD; reject invalid dates. Quantity must be positive integer digits. Unit price may have a leading dollar sign and at most two decimal places; reject negative, missing, nonfinite, exponent or comma-containing prices. Remove invalid required-value rows. Deduplicate identical normalized business rows; reject conflicting duplicate order IDs. Sort by order_id ascending.
+
+Calculate total_amount = quantity * unit_price using decimal arithmetic and ROUND_HALF_UP, serialize unit_price and total_amount with two decimal places, and quantity as integer digits. Do not insert processing timestamps into business data. Do not hardcode rows or expected results. Keep transformations general for the contract.
+
+Zero unit prices are valid. Accommodate native numeric and datetime values inferred by the S3 reader without dropping valid records. Preserve existing S3 source, sort, and GCS destination connections. Generate the cleaning implementation through AI Builder; do not provide instructions only. Keep the schedule disabled.
+
+Do not run the pipeline yourself: the independent runner will trigger it after checking the saved state. Ensure the generated executable code and node output-column contract both select exactly the nine canonical output fields. Remove adaptations from all other scenarios, not only their prompt text. Keep scheduling disabled.
+
+Graph isolation: remove any prior loyalty_tier drop or price alias projection stages because this scenario has only the original source columns. Use a single source-to-cleaner-to-sort-to-output chain with exactly one dataframe and matching mask at each stage; remove obsolete edges. Rebuild a fresh sort node if necessary to avoid duplicate/stale incoming edges. Do not carry missing-email guards, renamed-price aliases, units suffix parsing, or other scenario overrides into this isolated semantic case.
+
+Copy message
+
+Updated the pipeline on the canvas.
+
+Change	Node	Purpose
+Added	
+orders_cleaned_v12
+	Fresh LLM node with the semantic-dates producer change. parse_date now parses strictly as DD/MM/YYYY for raw strings. For Timestamp values (S3 reader pre-parsed), it round-trips via strftime('%d/%m/%Y') then re-parses with datetime.strptime(raw, '%d/%m/%Y') — this preserves the calendar day/month stored in the Timestamp rather than unconditionally swapping components. No missing-email guard, no rename alias, no cents division, no units suffix. Exactly 9 canonical output columns.
+Rewired	
+orders_sorted_v4
+	Now takes input from 
+orders_cleaned_v12
+.
+Deleted	orders_cleaned_v11	Semantic-cents node removed.
+
+Final chain: 
+orders.csv
+ → 
+orders_cleaned_v12
+ → 
+orders_sorted_v4
+ → 
+orders_output
+
+Uncertainty note on Timestamp round-trip: When the S3 reader infers a Timestamp from a DD/MM/YYYY string, pandas' default parser may have interpreted the field as MM/DD/YYYY for unambiguous dates (day ≤ 12). The round-trip via strftime('%d/%m/%Y') re-renders the Timestamp's stored day/month fields — so if pandas originally mis-parsed 05/03/2024 as March 5 instead of May 3, that error is preserved. The only fully correct path for such ambiguous dates is to have the S3 reader return raw strings (dtype=str), which is controlled by the platform input node, not the LLM transform. For rows where day > 12, the reader cannot have swapped them and the round-trip is correct. The independent runner's fixture results will indicate whether the Timestamp path is hitting this ambiguity.
+
+Worked for 31s
+Loaded
+skill guidance
+Modified pipeline
+Modified pipeline
++1
+~1
+-1
+Modified pipeline
++1
+~1
+-1
+Copy message

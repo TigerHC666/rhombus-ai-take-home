@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
-const { promisify } = require('node:util');
+const { promisify, isDeepStrictEqual } = require('node:util');
 const execFile = promisify(require('node:child_process').execFile);
 const settings = require('../test-support/settings.cjs');
 const { openProject, confirmSource, observeRoutes } = require('../test-support/workflow.cjs');
@@ -12,7 +12,8 @@ test.use({ storageState: settings.storageState });
 test('scheduled pipeline produces a fresh independently validated GCS artifact', async ({ page, context }) => {
   test.setTimeout(600000);
   const scenario = process.env.SCENARIO || 'baseline';
-  const directory = path.join(settings.root, 'observations/evidence', scenario, `scheduled-${Date.now()}`);
+  const phase = process.env.RUN_PHASE || 'scheduled-followup';
+  const directory = path.join(settings.root, 'observations/evidence', scenario, `${phase === 'scheduled-pre-repair' ? phase : 'scheduled'}-${Date.now()}`);
   fs.mkdirSync(directory, { recursive: true });
   const python = async args => (await execFile('python', args, { cwd: settings.root, timeout: 60000 })).stdout;
   const routes = observeRoutes(page);
@@ -35,9 +36,10 @@ test('scheduled pipeline produces a fresh independently validated GCS artifact',
       destination_id: node.params?.destination_id, format_type: node.params?.format_type,
       custom_filename: node.params?.custom_filename,
     }));
+    configuration = JSON.parse(JSON.stringify(configuration));
   });
   const manifest = {
-    scenario, trigger: 'unverified', observed_after: null,
+    scenario, phase, trigger: 'unverified', observed_after: null,
     started_at: new Date().toISOString(), source: 'source-provenance.json',
     activation_attempted: false, schedule_disabled: null, cleanup_attempted: false,
     status: 'in_progress', stage: 'source_verification', outputs_observed: [], errors: [],
@@ -51,7 +53,9 @@ test('scheduled pipeline produces a fresh independently validated GCS artifact',
   };
   persist();
   try {
-  await python(['data-validation/source_s3.py', '--scenario', scenario, '--destination', directory]);
+  if (process.env.UPLOAD_SOURCE !== '1') {
+    await python(['data-validation/source_s3.py', '--scenario', scenario, '--destination', directory]);
+  }
   manifest.stage = 'schedule_setup';
   persist();
   await openProject(page);
@@ -59,10 +63,22 @@ test('scheduled pipeline produces a fresh independently validated GCS artifact',
   const serializedConfiguration = JSON.stringify(configuration, null, 2);
   fs.writeFileSync(path.join(directory, 'configuration.json'), serializedConfiguration);
   manifest.configuration_sha256 = crypto.createHash('sha256').update(serializedConfiguration).digest('hex');
+  const frozenConfiguration = process.env.FROZEN_CONFIGURATION_FILE
+    ? JSON.parse(fs.readFileSync(path.resolve(settings.root, process.env.FROZEN_CONFIGURATION_FILE), 'utf8')) : null;
+  if (frozenConfiguration) {
+    expect(configuration, 'Saved configuration must match the frozen baseline before activation').toEqual(frozenConfiguration);
+    manifest.frozen_configuration_before_match = true;
+  }
   manifest.cron = cron;
   await confirmSource(page);
   await page.getByRole('tab', { name: 'Schedule', exact: true }).click();
   await expect(page.getByRole('complementary')).toContainText(`Custom: ${cron}`);
+  const inactiveBefore = page.getByRole('switch', { name: 'Activate schedule', exact: true });
+  await expect(inactiveBefore).toBeVisible();
+  await expect(inactiveBefore).not.toBeChecked();
+  manifest.inactive_before_source_verified = true;
+  fs.writeFileSync(path.join(directory, 'schedule-before-source.txt'), await page.getByRole('complementary').innerText());
+
   const historyButton = () => page.getByRole('complementary').getByRole('button').filter({ has: page.locator('svg.lucide-history') });
   const observedHistory = page.waitForRequest(request => {
     const url = new URL(request.url());
@@ -86,6 +102,13 @@ test('scheduled pipeline produces a fresh independently validated GCS artifact',
     return rows;
   };
   const priorExecutions = await readHistory('before');
+  expect(priorExecutions.every(row => Boolean(row.completed_at)), 'No previous scheduled execution may remain active before source mutation').toBe(true);
+  if (process.env.UPLOAD_SOURCE === '1') {
+    await python(['data-validation/source_s3.py', '--scenario', scenario, '--upload', '--destination', directory]);
+    manifest.source_uploaded_before_activation = true;
+    persist();
+  }
+
   await expect(page.getByRole('table')).toBeVisible();
   const priorIds = new Set(priorExecutions.map(row => String(row.id)));
   const start = new Date().toISOString();
@@ -162,13 +185,20 @@ test('scheduled pipeline produces a fresh independently validated GCS artifact',
   failures.push(...[executionFailure, cleanupFailure, historyFailure].filter(Boolean));
   await captureFailure(async () => {
     expect(newExecutions.length, 'Fresh output must correlate with a new schedule-history execution').toBeGreaterThan(0);
-    expect(newExecutions.length).toBeLessThanOrEqual(3);
     // Verified from the observed schedule-history API; not inferred from UI text.
     const expectedTrigger = 'scheduled';
     expect(newExecutions.every(row => row.trigger === expectedTrigger)).toBe(true);
-    expect(newExecutions.some(row => row.success === true)).toBe(true);
     manifest.trigger = 'scheduled';
     manifest.verified_trigger_literal = expectedTrigger;
+    manifest.execution_outcomes = {
+      succeeded: newExecutions.filter(row => row.success === true).map(row => row.id),
+      failed: newExecutions.filter(row => row.success === false).map(row => row.id),
+      completed: newExecutions.filter(row => row.completed_at).map(row => row.id),
+    };
+    persist();
+    // A failed scheduled job still proves the trigger identity, never success.
+    expect(newExecutions.length).toBeLessThanOrEqual(3);
+    expect(newExecutions.some(row => row.success === true)).toBe(true);
   });
   manifest.stage = 'artifact_download';
   persist();
@@ -176,6 +206,31 @@ test('scheduled pipeline produces a fresh independently validated GCS artifact',
     fs.writeFileSync(path.join(directory, 'schedule-history.txt'), await page.locator('body').innerText());
     await page.screenshot({ path: path.join(directory, 'scheduled-run.png') });
   });
+  await captureFailure(async () => {
+    // Capture visible logs after shutdown; these may include older/manual events.
+    // They are supplementary observations, not job-to-object attribution proof.
+    await page.getByRole('tab', { name: 'Canvas', exact: true }).click({ timeout: 10000 });
+    await page.getByRole('button', { name: /^Logs(?: \d+)?$/ }).click({ timeout: 10000 });
+    const collapsed = page.getByRole('button', { name: 'Expand log', exact: true });
+    for (let remaining = Math.min(await collapsed.count(), 20); remaining > 0; remaining--) {
+      if (await collapsed.count() === 0) break;
+      await collapsed.first().click({ timeout: 5000 });
+    }
+    fs.writeFileSync(path.join(directory, 'scheduled-visible-logs.txt'), await page.locator('body').innerText({ timeout: 5000 }));
+    await page.screenshot({ path: path.join(directory, 'scheduled-visible-logs.png') });
+    manifest.logs_scope = 'Visible UI logs after schedule shutdown; not restricted to the observed executions';
+  });
+  if (frozenConfiguration) {
+    await captureFailure(async () => {
+      configuration = undefined;
+      await page.reload();
+      await expect.poll(() => configuration?.length || 0).toBeGreaterThan(0);
+      fs.writeFileSync(path.join(directory, 'configuration-after.json'), JSON.stringify(configuration, null, 2));
+      manifest.frozen_configuration_after_match = isDeepStrictEqual(configuration, frozenConfiguration);
+      persist();
+      expect(configuration, 'Saved configuration must remain frozen after collection').toEqual(frozenConfiguration);
+    });
+  }
   await python(['data-validation/download_gcs.py', '--since', start, '--destination', path.join(directory, 'gcs')]);
   manifest.outputs = JSON.parse(fs.readFileSync(path.join(directory, 'gcs/inventory.json')));
   await captureFailure(() => python(['data-validation/source_s3.py', '--scenario', scenario, '--destination', path.join(directory, 'source-after')]));
@@ -185,6 +240,24 @@ test('scheduled pipeline produces a fresh independently validated GCS artifact',
   manifest.stage = 'strict_validation';
   manifest.output_validations = [];
   persist();
+  if (manifest.outputs.length === 0) {
+    await captureFailure(async () => {
+      const reportPath = path.join(directory, 'validation.json');
+      // Do not manufacture an empty CSV: the validator records actual absence.
+      const missingPath = path.join(directory, 'gcs', 'no-fresh-output.csv');
+      expect(fs.existsSync(missingPath)).toBe(false);
+      try {
+        await python(['data-validation/validate.py', '--scenario', scenario, '--source', path.join(directory, 'source.csv'), '--output', missingPath, '--report', reportPath]);
+      } catch (error) {
+        if (!fs.existsSync(reportPath)) throw error;
+      }
+      const result = JSON.parse(fs.readFileSync(reportPath));
+      expect(result.passed).toBe(false);
+      expect(result.output_present).toBe(false);
+      manifest.missing_output_validation = { report: 'validation.json', passed: false, output_present: false };
+      persist();
+    });
+  }
   for (const [index, output] of manifest.outputs.entries()) {
     await captureFailure(async () => {
     const reportName = `validation-output-${index + 1}.json`;
@@ -203,7 +276,9 @@ test('scheduled pipeline produces a fresh independently validated GCS artifact',
     });
   }
   manifest.validation = {
-    report: 'validation.json', report_scope: 'First object only; aggregate below includes every downloaded candidate',
+    report: 'validation.json', report_scope: manifest.outputs.length
+      ? 'First object only; aggregate below includes every downloaded candidate'
+      : 'No fresh object downloaded; report records unavailable output, not CSV equality',
     output_count: manifest.output_validations.length,
     passed: manifest.output_validations.length > 0 && manifest.output_validations.length === manifest.outputs.length && manifest.output_validations.every(item => item.passed),
     business_values_match: manifest.output_validations.length > 0 && manifest.output_validations.length === manifest.outputs.length && manifest.output_validations.every(item => item.business_values_match),

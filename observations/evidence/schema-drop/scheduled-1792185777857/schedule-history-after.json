@@ -1,0 +1,107 @@
+{
+  "executions": [
+    {
+      "id": 18522,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:24:12.545Z",
+      "completed_at": "2026-10-16T21:24:17.539Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 4.976827144622803
+    },
+    {
+      "id": 18520,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:20:04.681Z",
+      "completed_at": "2026-10-16T21:20:09.675Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 4.978442430496216
+    },
+    {
+      "id": 18517,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:13:09.944Z",
+      "completed_at": "2026-10-16T21:13:14.947Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 4.985821723937988
+    },
+    {
+      "id": 18515,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:09:13.038Z",
+      "completed_at": "2026-10-16T21:09:17.735Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 4.68025279045105
+    },
+    {
+      "id": 18513,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:05:19.496Z",
+      "completed_at": "2026-10-16T21:05:25.574Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 6.057739496231079
+    },
+    {
+      "id": 18511,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:02:19.443Z",
+      "completed_at": "2026-10-16T21:02:25.055Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.585435152053833
+    },
+    {
+      "id": 18508,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:58:16.387Z",
+      "completed_at": "2026-10-16T20:58:21.335Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 4.9372498989105225
+    },
+    {
+      "id": 18506,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:54:21.701Z",
+      "completed_at": "2026-10-16T20:54:27.089Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.3782854080200195
+    },
+    {
+      "id": 18504,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:50:14.830Z",
+      "completed_at": "2026-10-16T20:50:20.359Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.520596265792847
+    },
+    {
+      "id": 18500,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:36:18.471Z",
+      "completed_at": "2026-10-16T20:36:24.315Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.8336803913116455
+    }
+  ],
+  "total": 10,
+  "page": 1,
+  "page_size": 20
+}

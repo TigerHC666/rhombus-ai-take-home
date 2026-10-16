@@ -1,0 +1,198 @@
+{
+  "scenario": "schema-drop",
+  "phase": "post-repair",
+  "trigger": "scheduled",
+  "observed_after": "2026-10-16T21:23:09.787Z",
+  "started_at": "2026-10-16T21:22:57.859Z",
+  "source": "source-provenance.json",
+  "activation_attempted": true,
+  "schedule_disabled": true,
+  "cleanup_attempted": true,
+  "status": "failed",
+  "stage": "strict_validation",
+  "outputs_observed": [
+    {
+      "name": "orders_cleaned_1792185854683.csv",
+      "generation": "1792185856075598",
+      "timeCreated": "2026-10-16T21:24:16.080Z",
+      "size": "441"
+    }
+  ],
+  "errors": [
+    {
+      "name": "Error",
+      "message": "Every output must satisfy the strict CSV contract, including monetary precision\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m"
+    }
+  ],
+  "configuration_sha256": "8b5abcbc3921a0591f3d060c7c04a081b0d97c961ce61c5c3e3e42ec93012906",
+  "cron": "*/1 * * * *",
+  "inactive_before_source_verified": true,
+  "prior_executions": [
+    {
+      "id": 18520,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:20:04.681Z",
+      "completed_at": "2026-10-16T21:20:09.675Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 4.978442430496216
+    },
+    {
+      "id": 18517,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:13:09.944Z",
+      "completed_at": "2026-10-16T21:13:14.947Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 4.985821723937988
+    },
+    {
+      "id": 18515,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:09:13.038Z",
+      "completed_at": "2026-10-16T21:09:17.735Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 4.68025279045105
+    },
+    {
+      "id": 18513,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:05:19.496Z",
+      "completed_at": "2026-10-16T21:05:25.574Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 6.057739496231079
+    },
+    {
+      "id": 18511,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:02:19.443Z",
+      "completed_at": "2026-10-16T21:02:25.055Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.585435152053833
+    },
+    {
+      "id": 18508,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:58:16.387Z",
+      "completed_at": "2026-10-16T20:58:21.335Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 4.9372498989105225
+    },
+    {
+      "id": 18506,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:54:21.701Z",
+      "completed_at": "2026-10-16T20:54:27.089Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.3782854080200195
+    },
+    {
+      "id": 18504,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:50:14.830Z",
+      "completed_at": "2026-10-16T20:50:20.359Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.520596265792847
+    },
+    {
+      "id": 18500,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:36:18.471Z",
+      "completed_at": "2026-10-16T20:36:24.315Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.8336803913116455
+    },
+    {
+      "id": 18496,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:26:19.353Z",
+      "completed_at": "2026-10-16T20:26:24.813Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.450022459030151
+    }
+  ],
+  "executions": [
+    {
+      "id": 18522,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:24:12.545Z",
+      "completed_at": "2026-10-16T21:24:17.539Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 4.976827144622803
+    }
+  ],
+  "verified_trigger_literal": "scheduled",
+  "execution_outcomes": {
+    "succeeded": [
+      18522
+    ],
+    "failed": [],
+    "completed": [
+      18522
+    ]
+  },
+  "logs_scope": "Visible UI logs after schedule shutdown; not restricted to the observed executions",
+  "outputs": [
+    {
+      "name": "orders_cleaned_1792185854683.csv",
+      "generation": "1792185856075598",
+      "size": "441",
+      "timeCreated": "2026-10-16T21:24:16.080Z",
+      "updated": "2026-10-16T21:24:16.080Z",
+      "md5Hash": "2SJiHmZt2WrblounaY8ghQ==",
+      "crc32c": "8WSrkA==",
+      "sha256": "3c9fd235b4854fbf340cef70809b12c0a7523436ac8afd03ff54c4e69cae7882",
+      "retrieved_at": "2026-10-16T21:24:25.045079+00:00"
+    }
+  ],
+  "output": {
+    "name": "orders_cleaned_1792185854683.csv",
+    "generation": "1792185856075598",
+    "size": "441",
+    "timeCreated": "2026-10-16T21:24:16.080Z",
+    "updated": "2026-10-16T21:24:16.080Z",
+    "md5Hash": "2SJiHmZt2WrblounaY8ghQ==",
+    "crc32c": "8WSrkA==",
+    "sha256": "3c9fd235b4854fbf340cef70809b12c0a7523436ac8afd03ff54c4e69cae7882",
+    "retrieved_at": "2026-10-16T21:24:25.045079+00:00"
+  },
+  "output_attribution": "Candidates observed during the schedule window; exact object-to-execution linkage is not established",
+  "output_validations": [
+    {
+      "name": "orders_cleaned_1792185854683.csv",
+      "generation": "1792185856075598",
+      "sha256": "3c9fd235b4854fbf340cef70809b12c0a7523436ac8afd03ff54c4e69cae7882",
+      "report": "validation-output-1.json",
+      "passed": false,
+      "business_values_match": true
+    }
+  ],
+  "validation": {
+    "report": "validation.json",
+    "report_scope": "First object only; aggregate below includes every downloaded candidate",
+    "output_count": 1,
+    "passed": false,
+    "business_values_match": true
+  },
+  "observed_until": "2026-10-16T21:24:27.265Z"
+}

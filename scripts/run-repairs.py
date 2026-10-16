@@ -52,12 +52,13 @@ def execute(scenario, scheduled=False):
     with (EVIDENCE / 'repair-runs.jsonl').open('a', encoding='utf-8') as output:
         output.write(json.dumps(record) + '\n')
     print(json.dumps(record), flush=True)
+    return result.returncode
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('scenario', choices=SCENARIOS)
     args = parser.parse_args()
-    execute(args.scenario)
-    execute(args.scenario, scheduled=True)
+    exits = [execute(args.scenario), execute(args.scenario, scheduled=True)]
     print('Review captured graph, final code and results before starting another scenario.', flush=True)
+    raise SystemExit(1 if any(exits) else 0)

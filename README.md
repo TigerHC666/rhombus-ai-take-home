@@ -4,7 +4,9 @@ Real S3-to-GCS testing of an AI-built cleaning pipeline under structural and sem
 
 ## Current status
 
-Work remains in progress. Baseline business output and scheduled execution have been observed, and all seven drift cases have two real pre-repair observations. The rename repair now produces the correct seven records and nine columns in both manual and scheduled runs. Missing-email repair restores business values in controlled manual execution; its later bounded scheduling attempts produced unchanged-data skip notices. Quantity-suffix repair is also verified manually and on schedule; added-column upstream-drop correction is verified manually and in scheduled #18508. The combined native alias-drop correction is verified manually and in scheduled #18513. Semantic repair/follow-up work remains pending review.
+Work remains in progress. Baseline business output and scheduled execution have been observed, and all seven drift cases have two real manual pre-repair observations. The rename repair now produces the correct seven records and nine columns in both manual and scheduled runs. Missing-email repair is verified in isolated manual execution and scheduled #18522; earlier unchanged-data skips remain documented. Quantity-suffix repair is also verified manually and on schedule; added-column upstream-drop correction is verified manually and in scheduled #18508. The combined native alias-drop correction is verified manually and in scheduled #18513. Cents conversion is verified manually and in scheduled #18515; the conditional date reader correction is verified manually and in scheduled #18520.
+
+All seven case-specific business repairs have successful manual and scheduled evidence. The final baseline reconstruction is still under review: its [UI-journey run](observations/evidence/baseline/final-ui-journey-1792186089018/run-manifest.json) produced two candidates, one business-correct and one with an incorrect missing-customer value. Aggregate validation correctly failed; a Builder null-handling repair is pending verification. Scheduled unrepaired observations under the final frozen baseline and the final demonstration remain pending.
 
 **Strict monetary formatting still fails:** exports such as `12.5` do not satisfy the frozen `12.50` contract. Business correctness, backend success, and strict validation are reported separately. Nonzero integration-test exits can represent observed product defects; they must not be relabeled as passes. No simulation or expected-output fixture is presented as live execution evidence.
 
@@ -14,13 +16,13 @@ The table summarizes reviewed evidence, not the state of an in-progress browser 
 
 | Case and evidence | Pre-repair behavior | Business repair / subsequent scheduling | Strict contract | Severity |
 | --- | --- | --- | --- | --- |
-| [Drop email](observations/schema-drop.md) | FAILED; no fresh output; contradictory success log | Manual repair verified; scheduling attempts skipped, fresh follow-up export unverified | Formatting fails | Medium: reporting ambiguity |
+| [Drop email](observations/schema-drop.md) | FAILED; no fresh output; contradictory success log | Isolated manual and scheduled #18522 business repair verified; earlier skips preserved | Formatting fails | Medium: reporting ambiguity |
 | [Rename price](observations/schema-rename.md) | FAILED on missing `unit_price` | Final native column-drop/fresh-sort repair verified manually and in scheduled #18500; earlier repairs leaked a tenth column | Formatting fails | Medium: failed/incomplete repair |
 | [Quantity suffix/type](observations/schema-type.md) | FAILED with `total_amount` assignment error; profile evidence differs between runs | Suffix repair verified manually and in scheduled #18504 | Formatting fails after repair | Medium: failure diagnosis |
 | [Add column](observations/schema-add.md) | SUCCESS; seven business-correct rows, canonical schema | Reviewer found late-drop dedup risk; corrected upstream drop verified manually and in scheduled #18508 | Formatting fails | Low case-specific impact; baseline defect remains |
 | [Combined changes](observations/schema-combined.md) | FAILED first on missing `email`; no fresh output | Initial alias leak corrected by native drop/fresh sort; manual and scheduled #18513 business-correct | Formatting fails after final repair | Medium: incomplete diagnosis/repair |
-| [Cents semantics](observations/semantic-cents.md) | SUCCESS; six nonzero records inflated 100 times | Repair and scheduled verification pending | Business and formatting fail | High potential downstream impact |
-| [Date semantics](observations/semantic-dates.md) | SUCCESS; all seven accepted dates wrong under the new producer contract | Repair and scheduled verification pending | Business and formatting fail | High potential downstream impact |
+| [Cents semantics](observations/semantic-cents.md) | SUCCESS; six nonzero records inflated 100 times | Explicit cents conversion verified manually and in scheduled #18515; total restored to 79.10 | Formatting fails after repair | High potential downstream impact |
+| [Date semantics](observations/semantic-dates.md) | SUCCESS; all seven accepted dates wrong under the new producer contract | Conditional reader correction verified manually and on scheduled #18520; initial failed repair preserved | Business correct; strict formatting fails | High potential downstream impact |
 
 The two pre-repair outputs are byte-identical for added-column and both semantic cases. The other four cases reproduce FAILED outcomes with no observed fresh CSV; that is failure repeatability, not CSV determinism. Semantic intent was deliberately undisclosed until repair: ambiguous input cannot establish the producer's intended units/date convention by itself.
 
@@ -36,7 +38,7 @@ Use Python 3.12+, Node.js 22+, and installed Google Chrome. Commands below run f
 
 ```powershell
 npm ci
-python -m pip install boto3 google-auth requests
+python -m pip install -r requirements.txt
 npm run test:validator
 ```
 
@@ -73,6 +75,30 @@ The prompt is an initial repair request, not a guarantee of the final successful
 
 `python scripts/run-pre-repair.py <scenario ...>` orchestrates real pre-repair observations and baseline-source restoration against the frozen baseline graph. Its exit-message classifier recognizes both historical and current strict-contract assertion wording; unexpected harness errors still abort the batch. Existing recorded runs remain evidence of the versions captured in their manifests. Never use it against a repaired/diagnostic graph as though the frozen baseline were still active.
 
+## Existing-connection UI journey and frozen scheduled drift
+
+Cloud accounts, bucket permissions, Rhombus connections and interactive authentication must already be provisioned and authorized. `CONFIGURE_CONNECTIONS=1` exercises the existing S3 connection/file browser and dataset selection, applies the existing GCS destination with CSV output, and edits the inactive schedule. It does not create cloud identities or register new integrations. The helper contains this assessment's exact connection labels; adapting bucket environment variables alone does not update those UI selectors.
+
+```powershell
+$env:SCENARIO = 'baseline'
+$env:RUN_PHASE = 'final-ui-journey'
+$env:CONFIGURE_CONNECTIONS = '1'
+$env:BUILDER_PROMPT_FILE = 'prompts/restore-baseline.txt'
+$env:RECORD_DEMO = '1'
+npm run test:manual
+Remove-Item Env:CONFIGURE_CONNECTIONS, Env:BUILDER_PROMPT_FILE, Env:RECORD_DEMO
+```
+
+This is a live Builder reconstruction and must be reviewed against every downloaded output before freezing the result. A successful Builder response or backend job alone does not qualify it as a baseline. The first recorded final journey exposed a null-handling regression, so its snapshot must not be used as the accepted baseline without repair and verification.
+
+After verifying the restored baseline manually and on schedule, use its actual `configuration.json` path below. The placeholder is intentional: the final accepted snapshot and seven scheduled drift results are still pending.
+
+```powershell
+python scripts/run-scheduled-drift.py --frozen path/to/verified-baseline/configuration.json schema-drop schema-rename schema-type schema-add schema-combined semantic-cents semantic-dates
+```
+
+The runner uploads each variant only after the harness verifies the frozen graph, an inactive schedule, and no unfinished execution in observed schedule history. It observes the real one-minute schedule within a 110-second collection bound, disables it, checks fresh history and source provenance, reloads the saved configuration, and validates every candidate or records missing output explicitly. An increased unchanged-data skip count is a documented product observation, not a successful export. Baseline source bytes are restored between accepted observations. Failed guards abort without another source mutation; inspect the evidence and actual schedule/job state before recovery. The runner preserves nonzero assertion exits and does not turn product failures into passes.
+
 ## Independent artifact validation
 
 ```powershell
@@ -104,4 +130,4 @@ Debugging was harder when an error and success message appeared together, when p
 
 Actual-spend authorization is AUD 10, separate from the accepted temporary card hold. [Cost snapshots](observations/cost-control.md) are delayed billing evidence, not an instantaneous cap. Keep schedules disabled outside supervised windows; revoke temporary integration access after evidence collection. Authentication, keys, billing screenshots and raw sensitive metadata remain outside version control.
 
-Design checkpoint is accepted. [Checkpoint 2](CHECKPOINT_2_REVIEW.md) remains open for remaining repairs, scheduled evidence and delivery completeness; final checkpoint 3 has not signed off. All deliverables are English. No submission email has been sent by this repository workflow.
+Design checkpoint is accepted. [Checkpoint 2](CHECKPOINT_2_REVIEW.md) remains open for restored-baseline verification, unrepaired scheduled drift coverage and delivery completeness; final checkpoint 3 has not signed off. All deliverables are English. No submission email has been sent by this repository workflow.

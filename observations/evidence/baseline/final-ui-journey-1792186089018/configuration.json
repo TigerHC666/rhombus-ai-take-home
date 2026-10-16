@@ -1,0 +1,65 @@
+[
+  {
+    "node_id": "1792174488846",
+    "name": "input_845d116c201ceece365adda3310625df",
+    "inputs": [],
+    "outputs": [
+      "input_845d116c201ceece365adda3310625df_df",
+      "input_845d116c201ceece365adda3310625df_mask"
+    ],
+    "transformation_type": "input",
+    "source_type": "s3",
+    "data_asset_ref": "e789b770-435d-41ad-abd0-487c85fd4cee",
+    "dataset_id": 0,
+    "source_connection_id": "bc0cd1ec-99ab-4e08-b462-314469b30de2"
+  },
+  {
+    "node_id": "llm_node_16",
+    "name": "llm_node_16",
+    "inputs": [
+      "input_845d116c201ceece365adda3310625df_df",
+      "input_845d116c201ceece365adda3310625df_mask"
+    ],
+    "outputs": [
+      "llm_node_16_df",
+      "llm_node_16_mask"
+    ],
+    "transformation_type": "llm",
+    "prompt": "Clean the orders DataFrame according to these exact rules: 1. TRIMMING: Strip leading/trailing whitespace from all string columns. 2. CASE NORMALIZATION: Uppercase order_id and currency. Lowercase email and status. Preserve customer casing. 3. MISSING CUSTOMER: If customer is null, NaN, or blank after trimming, set to 'Unknown'. 4. EMAIL VALIDATION: Lowercase email. If blank/null or does not match regex ^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$ set to empty string ''. 5. REQUIRED FIELDS: Drop rows where order_id, currency, or status is null/blank. Drop rows where order_date, quantity, or unit_price is null/blank. 6. CURRENCY FILTER: Keep only rows where currency == 'AUD'. 7. STATUS FILTER: Keep only rows where status is 'paid' or 'pending'. 8. DATE PARSING: Parse order_date strictly as MM/DD/YYYY and convert to YYYY-MM-DD string. If the value is already a datetime/Timestamp object (not a string), call .strftime('%Y-%m-%d') directly. If parsing fails, drop the row. Also accept already-formatted YYYY-MM-DD strings. 9. QUANTITY VALIDATION: Accept positive integers only (digits matching ^[1-9][0-9]*$). Reject zero, negatives, floats with fractional part, strings with non-digit characters, NaN, inf. Store as Python int. 10. UNIT PRICE VALIDATION: Strip optional leading '$'. Accept non-negative numbers with at most 2 decimal places (regex ^[0-9]+(\\.[0-9]{1,2})?$). Zero IS valid. Reject negatives, missing, NaN, inf, exponent notation, comma-formatted numbers. Parse with decimal.Decimal. 11. DEDUPLICATION: First drop exact full-row duplicates (keep first). Then for any order_id that still appears more than once with differing field values, drop ALL rows for that order_id. 12. TOTAL AMOUNT: Compute total_amount = quantity * unit_price using decimal.Decimal arithmetic with ROUND_HALF_UP to 2 decimal places. 13. SERIALIZATION: Serialize unit_price and total_amount as strings with exactly 2 decimal places using pd.StringDtype() to prevent float coercion. quantity must be int dtype. 14. OUTPUT COLUMNS: Return exactly these 9 columns in this order: order_id, customer, email, order_date, quantity, unit_price, currency, status, total_amount. IMPORTANT: Use decimal.Decimal and ROUND_HALF_UP for all monetary arithmetic. Use pd.StringDtype() when assigning unit_price and total_amount string columns. Do not hardcode any rows, expected counts, or test values. Do not add timestamps or extra columns.",
+    "code": "import re\nfrom decimal import Decimal, ROUND_HALF_UP\n\n# Start with input dataframe\ndf = input_df_1.copy()\n\n# Initialize mask for tracking changes\nmask_df = pd.DataFrame(False, index=df.index, columns=df.columns)\n\n# ===== 1. TRIMMING: Strip whitespace from all string columns =====\nfor col in df.columns:\n    if df[col].dtype == 'object':\n        # Strip whitespace and track changes\n        original = df[col].copy()\n        df[col] = df[col].astype(str).str.strip()\n        mask_df[col] = mask_df[col] | (df[col] != original)\n\n# ===== 2. CASE NORMALIZATION =====\n# Uppercase order_id and currency\nif 'order_id' in df.columns:\n    original = df['order_id'].copy()\n    df['order_id'] = df['order_id'].astype(str).str.upper()\n    mask_df['order_id'] = mask_df['order_id'] | (df['order_id'] != original)\n\nif 'currency' in df.columns:\n    original = df['currency'].copy()\n    df['currency'] = df['currency'].astype(str).str.upper()\n    mask_df['currency'] = mask_df['currency'] | (df['currency'] != original)\n\n# Lowercase email and status\nif 'email' in df.columns:\n    original = df['email'].copy()\n    df['email'] = df['email'].astype(str).str.lower()\n    mask_df['email'] = mask_df['email'] | (df['email'] != original)\n\nif 'status' in df.columns:\n    original = df['status'].copy()\n    df['status'] = df['status'].astype(str).str.lower()\n    mask_df['status'] = mask_df['status'] | (df['status'] != original)\n\n# ===== 3. MISSING CUSTOMER: Set null/NaN/blank to 'Unknown' =====\nif 'customer' in df.columns:\n    mask_customer = (df['customer'].isna()) | (df['customer'].astype(str).str.strip() == '')\n    mask_df.loc[mask_customer, 'customer'] = True\n    df.loc[mask_customer, 'customer'] = 'Unknown'\n\n# ===== 4. EMAIL VALIDATION =====\nif 'email' in df.columns:\n    # Email is already lowercased above\n    email_pattern = r'^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$'\n    mask_valid_email = df['email'].astype(str).str.match(email_pattern)\n    mask_invalid = ~mask_valid_email | (df['email'].astype(str).str.strip() == '')\n    mask_df.loc[mask_invalid, 'email'] = True\n    df.loc[mask_invalid, 'email'] = ''\n\n# ===== 5. REQUIRED FIELDS: Drop rows with null/blank values =====\n# Check for null/blank in order_id, currency, status\nfor col in ['order_id', 'currency', 'status']:\n    if col in df.columns:\n        df = df[~((df[col].isna()) | (df[col].astype(str).str.strip() == ''))]\n\n# Check for null/blank in order_date, quantity, unit_price\nfor col in ['order_date', 'quantity', 'unit_price']:\n    if col in df.columns:\n        if col == 'quantity':\n            df = df[df[col].notna()]\n        else:\n            df = df[(df[col].notna())]\n            if col == 'unit_price':\n                df = df[~(df[col].astype(str).str.strip() == '')]\n\n# Update mask index after dropping rows\nmask_df = mask_df.loc[df.index]\n\n# ===== 6. CURRENCY FILTER: Keep only AUD =====\nif 'currency' in df.columns:\n    df = df[df['currency'] == 'AUD']\n    mask_df = mask_df.loc[df.index]\n\n# ===== 7. STATUS FILTER: Keep only 'paid' or 'pending' =====\nif 'status' in df.columns:\n    df = df[df['status'].isin(['paid', 'pending'])]\n    mask_df = mask_df.loc[df.index]\n\n# ===== 8. DATE PARSING =====\ndef parse_date(val):\n    \"\"\"Parse order_date: handle Timestamp objects and strings.\"\"\"\n    if pd.isna(val):\n        return None\n    \n    # Check if it's already a datetime/Timestamp by checking if str(val) contains datetime pattern\n    val_str = str(val).strip()\n    \n    # If it looks like a Timestamp (contains datetime pattern and 00:00:00)\n    if '00:00:00' in val_str:\n        try:\n            dt = pd.to_datetime(val)\n            return dt.strftime('%Y-%m-%d')\n        except:\n            return None\n    \n    if not val_str:\n        return None\n    \n    # Try YYYY-MM-DD first\n    if re.match(r'^\\d{4}-\\d{2}-\\d{2}$', val_str):\n        return val_str\n    \n    # Try MM/DD/YYYY\n    if re.match(r'^\\d{1,2}/\\d{1,2}/\\d{4}$', val_str):\n        try:\n            dt = pd.to_datetime(val_str, format='%m/%d/%Y')\n            return dt.strftime('%Y-%m-%d')\n        except:\n            return None\n    \n    return None\n\nif 'order_date' in df.columns:\n    parsed_dates = df['order_date'].apply(parse_date)\n    valid_mask = parsed_dates.notna()\n    df = df[valid_mask]\n    mask_df = mask_df.loc[df.index]\n    df['order_date'] = parsed_dates[valid_mask].values\n\n# ===== 9. QUANTITY VALIDATION =====\ndef validate_quantity(val):\n    \"\"\"Accept positive integers only: ^[1-9][0-9]*$\"\"\"\n    if pd.isna(val):\n        return None\n    \n    val_str = str(val).strip()\n    \n    # Check if matches pattern for positive integers\n    if re.match(r'^[1-9][0-9]*$', val_str):\n        try:\n            return int(val_str)\n        except:\n            return None\n    \n    return None\n\nif 'quantity' in df.columns:\n    validated_qty = df['quantity'].apply(validate_quantity)\n    valid_mask = validated_qty.notna()\n    df = df[valid_mask]\n    mask_df = mask_df.loc[df.index]\n    df['quantity'] = validated_qty[valid_mask].astype('int64').values\n\n# ===== 10. UNIT PRICE VALIDATION =====\ndef validate_unit_price(val):\n    \"\"\"Accept non-negative numbers with at most 2 decimal places.\"\"\"\n    if pd.isna(val):\n        return None\n    \n    val_str = str(val).strip()\n    if not val_str:\n        return None\n    \n    # Strip optional leading '$'\n    if val_str.startswith('$'):\n        val_str = val_str[1:].strip()\n    \n    # Check regex: ^[0-9]+(\\.[0-9]{1,2})?$\n    if re.match(r'^[0-9]+(\\.[0-9]{1,2})?$', val_str):\n        try:\n            return Decimal(val_str)\n        except:\n            return None\n    \n    return None\n\nif 'unit_price' in df.columns:\n    validated_price = df['unit_price'].apply(validate_unit_price)\n    valid_mask = validated_price.notna()\n    df = df[valid_mask]\n    mask_df = mask_df.loc[df.index]\n    # Store only the valid prices for later use\n    validated_price = validated_price[valid_mask]\n\n# ===== 11. DEDUPLICATION =====\n# First drop exact full-row duplicates (keep first)\ndf = df.drop_duplicates(keep='first')\nmask_df = mask_df.loc[df.index]\nvalidated_price = validated_price.loc[df.index]\n\n# Then drop all rows for order_ids with differing field values\nif 'order_id' in df.columns:\n    # Group by order_id and check if all rows are identical\n    duplicated_order_ids = df.groupby('order_id').size() > 1\n    order_ids_with_conflicts = []\n    \n    for order_id in duplicated_order_ids[duplicated_order_ids].index:\n        group = df[df['order_id'] == order_id]\n        # Check if there are any differing values\n        for col in group.columns:\n            if col != 'order_id':\n                if group[col].nunique() > 1:\n                    order_ids_with_conflicts.append(order_id)\n                    break\n    \n    # Drop all rows for conflicting order_ids\n    if order_ids_with_conflicts:\n        df = df[~df['order_id'].isin(order_ids_with_conflicts)]\n        mask_df = mask_df.loc[df.index]\n        validated_price = validated_price.loc[df.index]\n\n# ===== 12. TOTAL AMOUNT COMPUTATION =====\nif 'quantity' in df.columns and 'unit_price' in df.columns:\n    total_amounts = []\n    for idx, row in df.iterrows():\n        qty = int(row['quantity'])\n        price = validated_price.loc[idx]\n        total = (Decimal(qty) * price).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)\n        total_amounts.append(total)\n    \n    df['total_amount'] = total_amounts\n\n# ===== 13. SERIALIZATION =====\nif 'unit_price' in df.columns:\n    # Convert to strings with exactly 2 decimal places using StringDtype\n    unit_price_strings = [str(p.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)) \n                          for p in validated_price]\n    df['unit_price'] = pd.array(unit_price_strings, dtype=pd.StringDtype())\n\nif 'total_amount' in df.columns:\n    total_amount_strings = [str(ta) for ta in df['total_amount']]\n    df['total_amount'] = pd.array(total_amount_strings, dtype=pd.StringDtype())\n\nif 'quantity' in df.columns:\n    df['quantity'] = df['quantity'].astype('int64')\n\n# ===== 14. OUTPUT COLUMNS: Exact order and columns =====\noutput_columns = ['order_id', 'customer', 'email', 'order_date', 'quantity', \n                  'unit_price', 'currency', 'status', 'total_amount']\n\noutput_df = df[output_columns].reset_index(drop=True)\n\n# Update mask to final output shape\noutput_mask = pd.DataFrame(False, index=output_df.index, columns=output_df.columns)\nfor col in output_columns:\n    if col in mask_df.columns:\n        output_mask[col] = mask_df[col].iloc[:len(output_df)].values\n    elif col == 'total_amount':\n        output_mask[col] = True  # New column\n\noutput_mask = output_mask.astype(bool)",
+    "mode": "code"
+  },
+  {
+    "node_id": "sort_node_4",
+    "name": "sort_node_4",
+    "inputs": [
+      "llm_node_16_df",
+      "llm_node_16_mask"
+    ],
+    "outputs": [
+      "sort_node_4_df",
+      "sort_node_4_mask"
+    ],
+    "transformation_type": "sort",
+    "sort_columns": [
+      "order_id"
+    ],
+    "ascending": true
+  },
+  {
+    "node_id": "output_node_1",
+    "name": "output_fe6570c80f47cdce36f51dcaaefffee4",
+    "inputs": [
+      "sort_node_4_df",
+      "sort_node_4_mask"
+    ],
+    "outputs": [
+      "output_fe6570c80f47cdce36f51dcaaefffee4_df",
+      "output_fe6570c80f47cdce36f51dcaaefffee4_mask"
+    ],
+    "transformation_type": "output",
+    "destination_id": 90,
+    "format_type": "csv",
+    "custom_filename": "orders_cleaned"
+  }
+]

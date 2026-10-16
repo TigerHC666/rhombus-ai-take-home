@@ -1,0 +1,142 @@
+{
+  "scenario": "semantic-dates",
+  "passed": false,
+  "evidence_level": "local_artifact_validation; provenance requires a live run manifest",
+  "source_sha256": "4521b9c7cb2fc62b789199a6573fb09eca5afba48c83f27939c14cf4c4423b5c",
+  "output_sha256": "9e6ca069e9930e97f555b28c8c04e0178a6cbff518b69ae99327ead1d9cb3059",
+  "source_rows": 12,
+  "output_rows": 7,
+  "business_values_match": false,
+  "determinism": "not_checked",
+  "repeats": [],
+  "errors": [
+    "Output row 1: unit_price must have two decimals",
+    "Output row 1: total_amount must have two decimals",
+    {
+      "row": 1,
+      "differences": {
+        "order_date": {
+          "expected": "2026-03-04",
+          "actual": "2026-04-03"
+        },
+        "unit_price": {
+          "expected": "12.50",
+          "actual": "12.5"
+        },
+        "total_amount": {
+          "expected": "25.00",
+          "actual": "25.0"
+        }
+      }
+    },
+    "Output row 2: unit_price must have two decimals",
+    "Output row 2: total_amount must have two decimals",
+    {
+      "row": 2,
+      "differences": {
+        "order_date": {
+          "expected": "2026-04-05",
+          "actual": "2026-05-04"
+        },
+        "unit_price": {
+          "expected": "4.20",
+          "actual": "4.2"
+        },
+        "total_amount": {
+          "expected": "12.60",
+          "actual": "12.6"
+        }
+      }
+    },
+    "Output row 3: unit_price must have two decimals",
+    "Output row 3: total_amount must have two decimals",
+    {
+      "row": 3,
+      "differences": {
+        "order_date": {
+          "expected": "2026-05-06",
+          "actual": "2026-06-05"
+        },
+        "unit_price": {
+          "expected": "20.00",
+          "actual": "20.0"
+        },
+        "total_amount": {
+          "expected": "20.00",
+          "actual": "20.0"
+        }
+      }
+    },
+    "Output row 4: total_amount must have two decimals",
+    {
+      "row": 4,
+      "differences": {
+        "order_date": {
+          "expected": "2026-09-10",
+          "actual": "2026-10-09"
+        },
+        "total_amount": {
+          "expected": "1.00",
+          "actual": "1.0"
+        }
+      }
+    },
+    "Output row 5: unit_price must have two decimals",
+    "Output row 5: total_amount must have two decimals",
+    {
+      "row": 5,
+      "differences": {
+        "order_date": {
+          "expected": "2026-10-11",
+          "actual": "2026-11-10"
+        },
+        "unit_price": {
+          "expected": "7.50",
+          "actual": "7.5"
+        },
+        "total_amount": {
+          "expected": "15.00",
+          "actual": "15.0"
+        }
+      }
+    },
+    "Output row 6: unit_price must have two decimals",
+    "Output row 6: total_amount must have two decimals",
+    {
+      "row": 6,
+      "differences": {
+        "order_date": {
+          "expected": "2026-11-12",
+          "actual": "2026-12-11"
+        },
+        "unit_price": {
+          "expected": "0.00",
+          "actual": "0.0"
+        },
+        "total_amount": {
+          "expected": "0.00",
+          "actual": "0.0"
+        }
+      }
+    },
+    "Output row 7: unit_price must have two decimals",
+    "Output row 7: total_amount must have two decimals",
+    {
+      "row": 7,
+      "differences": {
+        "order_date": {
+          "expected": "2026-12-01",
+          "actual": "2026-01-12"
+        },
+        "unit_price": {
+          "expected": "1.10",
+          "actual": "1.1"
+        },
+        "total_amount": {
+          "expected": "5.50",
+          "actual": "5.5"
+        }
+      }
+    }
+  ]
+}

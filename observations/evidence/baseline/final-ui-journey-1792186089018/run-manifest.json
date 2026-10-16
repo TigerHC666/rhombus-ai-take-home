@@ -1,0 +1,76 @@
+{
+  "scenario": "baseline",
+  "phase": "final-ui-journey",
+  "trigger": "manual",
+  "started_at": "2026-10-16T21:28:09.023Z",
+  "harness_sha256": {
+    "ui-tests\\manual-output.spec.cjs": "bc04863b796abd65f8f2f0aff0ffee431fde147b5b177b2597681c849c2551f8",
+    "test-support\\workflow.cjs": "74bd7ed13340da8e0503a49fb2960e9139153895eac4c0cb8452fc4d7aba7671"
+  },
+  "stage": "validating-all-outputs",
+  "schedule_checks": [
+    {
+      "label": "before-source",
+      "observed_at": "2026-10-16T21:28:16.977Z",
+      "inactive_verified": true
+    },
+    {
+      "label": "before-manual-trigger",
+      "observed_at": "2026-10-16T21:30:13.996Z",
+      "inactive_verified": true
+    }
+  ],
+  "ui_connections_configured": true,
+  "triggered_at": "2026-10-16T21:30:14.231Z",
+  "process_job_id": "0d4488aa-0205-4d9e-856f-6a65b1913096",
+  "execution_mode": "auto",
+  "terminal_job_status": "SUCCESS",
+  "outputs": [
+    {
+      "name": "orders_cleaned_1792186305893.csv",
+      "generation": "1792186307288830",
+      "size": "528",
+      "timeCreated": "2026-10-16T21:31:47.298Z",
+      "updated": "2026-10-16T21:31:47.298Z",
+      "md5Hash": "mK5QZC78JAXpwc7G6+KDNA==",
+      "crc32c": "ak1PeQ==",
+      "sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
+      "retrieved_at": "2026-10-16T21:32:11.386255+00:00"
+    },
+    {
+      "name": "orders_cleaned_1792186311505.csv",
+      "generation": "1792186312949175",
+      "size": "525",
+      "timeCreated": "2026-10-16T21:31:52.955Z",
+      "updated": "2026-10-16T21:31:52.955Z",
+      "md5Hash": "mvW52vpQo1nWtUMRRB8wYA==",
+      "crc32c": "9OyU+Q==",
+      "sha256": "f7096db47512daf76023bb43041049a3d99f3a67b43d2fc925112acff6a957dd",
+      "retrieved_at": "2026-10-16T21:32:11.670254+00:00"
+    }
+  ],
+  "output_attribution": "Objects observed after the manual boundary; exact object-to-job linkage is not established",
+  "output_validations": [
+    {
+      "name": "orders_cleaned_1792186305893.csv",
+      "generation": "1792186307288830",
+      "sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
+      "report": "validation-output-1.json",
+      "business_values_match": true,
+      "strict_contract_passed": false
+    },
+    {
+      "name": "orders_cleaned_1792186311505.csv",
+      "generation": "1792186312949175",
+      "sha256": "f7096db47512daf76023bb43041049a3d99f3a67b43d2fc925112acff6a957dd",
+      "report": "validation-output-2.json",
+      "business_values_match": false,
+      "strict_contract_passed": false
+    }
+  ],
+  "validation_compatibility": "validation.json describes the first object only; manifest aggregates every downloaded object",
+  "business_values_match": false,
+  "strict_contract_passed": false,
+  "failure": "Every actual cloud output must satisfy the frozen contract\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+  "finished_at": "2026-10-16T21:32:14.478Z"
+}

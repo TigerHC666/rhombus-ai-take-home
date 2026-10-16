@@ -1,0 +1,22 @@
+Third Party Data
+
+Dialog content and actions are available below.
+
+rhombus-assessment-source-20261017-hc666/
+Connected
+
+1 supported file loaded · ap-southeast-2
+
+Refresh access
+Disconnect
+Search
+
+s3://rhombus-assessment-source-20261017-hc666/
+
+Name	Size	Modified
+
+orders.csv
+	839 B	Oct 17, 2026
+Back
+Cancel
+Close

@@ -1,6 +1,6 @@
 # Price units changed from dollars to cents
 
-Status: real manual pre-repair execution succeeded operationally but failed independent business validation. Builder repair and scheduled verification pending.
+Status: original manual runs succeeded operationally with 100-times monetary inflation. After explicit producer-contract disclosure, Builder repair and scheduled follow-up restore business amounts; strict monetary formatting still fails.
 
 ## Producer change and expected behavior
 
@@ -27,7 +27,7 @@ Six of seven records have both nonzero monetary values inflated by exactly 100 t
 
 Severity: high business impact if the output is consumed under the new producer contract. This is silent semantic incompatibility under an unchanged configuration, not evidence that the model should infer undisclosed units. The numeric values remain plausible and even retain the original currency notation; without an explicit unit contract or monitoring rule, conversion intent is ambiguous. The captured run demonstrates no built-in alert for this scenario, not that all platform monitoring capabilities are absent.
 
-The frozen [configuration](evidence/semantic-cents/pre-repair-1792180192902/configuration.json) and downloaded input/output support independent detection. The [prepared repair prompt](../prompts/repairs/semantic-cents.txt) explicitly discloses cents and requests Decimal conversion before totals. Chatbot diagnosis, repair correctness and later scheduled behavior remain pending. This first run alone does not establish determinism; the separate comparison below records the second observation.
+The frozen [configuration](evidence/semantic-cents/pre-repair-1792180192902/configuration.json) and downloaded input/output support independent detection. The [prepared repair prompt](../prompts/repairs/semantic-cents.txt) explicitly discloses cents and requests Decimal conversion before totals. Subsequent explicit-contract repair and scheduled results are recorded below. This first run alone does not establish determinism; the separate comparison below records the second observation.
 
 ## Second pre-repair observation and repeatability
 
@@ -37,4 +37,15 @@ Both downloaded S3 reads again match the same scenario fixture hash ([before](ev
 
 The second [raw GCS output](evidence/semantic-cents/pre-repair-1792180768338/gcs/orders_cleaned_1792180786266.csv) has generation `1792180788010218` and SHA-256 `36d148c5a55353811edfb503c6aa8dcdf486bf1cadd731ef57916a8be40ddecb`. Independent byte comparison confirms it is identical to the first run's output. This is two-run output repeatability for the tested input and captured configuration, not proof of correctness or universal determinism. The individual validator reports still say `determinism: not_checked` because repeat files were not passed to those invocations; the comparison here was performed separately. The semantic error and strict monetary-format failure repeat unchanged.
 
-Repair and post-repair scheduled verification are outside these two pre-repair observations and remain pending in this report.
+Repair and post-repair scheduled verification are separate from the pre-repair observations and documented below.
+
+
+## Explicit-contract repair and scheduled verification
+
+After disclosure of the cents contract, the [Builder interaction](evidence/semantic-cents/post-repair-1792184745756/builder-response.txt) created a fresh cleaning graph. Its [final generated code](evidence/semantic-cents/post-repair-1792184745756/executed-codegen-evidence.json) for `llm_node_12` divides parsed prices by `Decimal('100')` in both string and numeric paths before totals. The captured graph is source → cleaning → sort → output, with earlier native drop stages removed and no quantity-suffix, price-alias or day-first adaptation retained in the final cleaning code.
+
+The [manual manifest](evidence/semantic-cents/post-repair-1792184745756/run-manifest.json) records process job `fd0f73fe-c592-416f-bcd8-cfbfbe0a8f97`, terminal SUCCESS, and [business-correct validation](evidence/semantic-cents/post-repair-1792184745756/validation-output-1.json). The seven-row result restores A001 unit price/total to 12.50/25.00 numerically and aggregate total to 79.10, rather than 7,910.00. Serialized trailing zeros still fail the frozen contract.
+
+The [scheduled follow-up](evidence/semantic-cents/scheduled-1792184869120/run-manifest.json) identifies successful scheduled #18515 from 2026-10-16 21:09:13.038 to 21:09:17.735 UTC, with verified inactive cleanup. Its saved configuration exactly matches the manual repair snapshot. The [fresh 528-byte CSV](evidence/semantic-cents/scheduled-1792184869120/gcs/orders_cleaned_1792184954959.csv), generation `1792184956662625`, was created at 21:09:16.669 UTC. Independently verified SHA-256 `c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83` matches the repaired manual output; an independent Decimal sum confirms total 79.10.
+
+[Scheduled validation](evidence/semantic-cents/scheduled-1792184869120/validation-output-1.json) confirms business correctness while strict formatting remains failed. This demonstrates successful repair after the new unit meaning was explicitly supplied, not autonomous discovery of hidden producer intent. Exact output-to-execution foreign-key linkage remains uncaptured.

@@ -1,6 +1,6 @@
 # Ambiguous dates changed from MM/DD to DD/MM
 
-Status: real manual pre-repair execution succeeded operationally but produced seven incorrect business dates. Builder repair and scheduled verification pending.
+Status: conditional reader-format repair restores all seven expected dates in manual execution and scheduled #18520. Strict monetary formatting remains failed; the initial unsuccessful repair is preserved below.
 
 ## Producer change and expected behavior
 
@@ -30,7 +30,7 @@ All seven dates are wrong relative to the producer contract, despite valid ISO f
 
 Severity: high business impact for date-dependent reporting or processing. Ambiguous values cannot reveal an undisclosed producer convention reliably. This result demonstrates why a declared date contract and independent expected values are needed; it does not establish that the model could or should infer the change unaided. No semantic warning appears in this run's captured logs, but broader platform detection capabilities were not exhaustively tested.
 
-The unchanged [configuration](evidence/semantic-dates/pre-repair-1792180290165/configuration.json) supplies the baseline interpretation. The [prepared repair prompt](../prompts/repairs/semantic-dates.txt) discloses DD/MM/YYYY and requires checking the input reader's actual interpretation before adapting already-parsed timestamps. Blindly swapping month/day could corrupt dates that the reader already interpreted correctly. Diagnosis quality, real repaired output and scheduled verification remain pending. Determinism is not claimed from this single observation.
+The unchanged [configuration](evidence/semantic-dates/pre-repair-1792180290165/configuration.json) supplies the baseline interpretation. The [prepared repair prompt](../prompts/repairs/semantic-dates.txt) discloses DD/MM/YYYY and requires checking the input reader's actual interpretation before adapting already-parsed timestamps. Blindly swapping month/day could corrupt dates that the reader already interpreted correctly. Initial and corrective repair evidence are recorded below. The reader-format assumption is limited to this tested integration and producer contract.
 
 ## Second pre-repair observation and repeatability
 
@@ -40,4 +40,26 @@ Both downloaded S3 reads again match the same scenario fixture hash ([before](ev
 
 The second [raw GCS output](evidence/semantic-dates/pre-repair-1792180850550/gcs/orders_cleaned_1792180865177.csv) has generation `1792180866884738` and SHA-256 `9e6ca069e9930e97f555b28c8c04e0178a6cbff518b69ae99327ead1d9cb3059`. Independent byte comparison confirms it is identical to the first run's output. This is two-run output repeatability for the tested input and captured configuration, not proof of correctness or universal determinism. The individual validator reports still say `determinism: not_checked` because repeat files were not passed to those invocations; the comparison here was performed separately. The semantic error and strict monetary-format failure repeat unchanged.
 
-Repair and post-repair scheduled verification are outside these two pre-repair observations and remain pending in this report.
+The first repair and scheduled observations are separate from the pre-repair repetitions and documented below.
+
+
+## First repair preserves the incorrect date interpretation
+
+The [initial repair manifest](evidence/semantic-dates/post-repair-1792184990172/run-manifest.json) records successful manual job `e136fd54-78b5-41e8-b184-c03ed80b6dd5`. The job's [final generated code](evidence/semantic-dates/post-repair-1792184990172/executed-codegen-evidence.json) parses raw strings with DD/MM/YYYY, but its non-string branch formats a Timestamp as DD/MM/YYYY and immediately parses it with that same format. This is an identity for the calendar fields; it cannot correct an earlier month/day misinterpretation.
+
+The [actual export](evidence/semantic-dates/post-repair-1792184990172/gcs/orders_cleaned_1792185097317.csv) has the unchanged pre-repair hash `9e6ca069e9930e97f555b28c8c04e0178a6cbff518b69ae99327ead1d9cb3059`. [Validation](evidence/semantic-dates/post-repair-1792184990172/validation-output-1.json) still rejects all seven dates and monetary formatting. This is consistent with upstream month-first parsing, but runtime dtype was not directly measured by a successful paired probe.
+
+The [scheduled follow-up](evidence/semantic-dates/scheduled-1792185124059/run-manifest.json) identifies successful scheduled #18517 from 2026-10-16 21:13:09.944 to 21:13:14.947 UTC and verified inactive cleanup. The [CSV](evidence/semantic-dates/scheduled-1792185124059/gcs/orders_cleaned_1792185191923.csv), generation `1792185193840852`, was created at 21:13:13.848 UTC with the same erroneous-output hash. [Scheduled validation](evidence/semantic-dates/scheduled-1792185124059/validation-output-1.json) confirms business and strict-contract failure.
+
+The [follow-up prompt](../prompts/repairs/semantic-dates-followup.txt) first requests preserving raw strings or explicitly setting the reader format. If unavailable, it requests a conditional reconstruction using the observed month-first reader interpretation, followed by producer day-first parsing. That fallback is an explicit assessment assumption, not a universal rule to swap arbitrary dates. Mixed-format, differently inferred, or unambiguous day-above-12 inputs require separate verification. The successful follow-up below verifies this conditional repair for the fixed assessment input; it does not establish universal date-format detection.
+
+
+## Conditional reader correction and successful business output
+
+The [follow-up manual manifest](evidence/semantic-dates/post-repair-reader-correction-1792185217533/run-manifest.json) records job `76bd3730-bd52-474e-9395-e33dbbdbacf1`, triggered at 2026-10-16 21:14:41.138 UTC, with terminal `SUCCESS` and positive inactive-schedule checks before source mutation and before execution. Its [final generated code](evidence/semantic-dates/post-repair-reader-correction-1792185217533/executed-codegen-evidence.json) for `llm_node_14` parses raw strings as DD/MM/YYYY. For already-parsed values, it reconstructs the slash string with MM/DD/YYYY before parsing DD/MM/YYYY. This corrects the observed month-first interpretation under the disclosed producer contract. The final code does not dynamically prove that reader assumption; applying it to already-correct timestamps would be unsafe without separate verification.
+
+The [manual CSV](evidence/semantic-dates/post-repair-reader-correction-1792185217533/gcs/orders_cleaned_1792185324207.csv), generation `1792185324874705`, was created at 21:15:24.882 UTC. All seven dates now match the independent oracle, including A001 `2026-03-04` and A011 `2026-12-01`; [validation](evidence/semantic-dates/post-repair-reader-correction-1792185217533/validation-output-1.json) confirms business correctness and rejects only the established monetary serialization differences.
+
+The [final scheduled manifest](evidence/semantic-dates/scheduled-1792185555712/run-manifest.json) identifies successful scheduled #18520 from 21:20:04.681 to 21:20:09.675 UTC. The [scheduled CSV](evidence/semantic-dates/scheduled-1792185555712/gcs/orders_cleaned_1792185606631.csv), generation `1792185608595132`, was created at 21:20:08.603 UTC. Both 528-byte exports independently hash to `c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83`; their captured configurations also match. This establishes repeatability across these manual/scheduled observations, with temporal object attribution rather than an exact object-to-job foreign key.
+
+[Scheduled validation](evidence/semantic-dates/scheduled-1792185555712/validation-output-1.json) is business-correct and strictly failed. Cleanup verifies the schedule inactive. The new [visible log capture](evidence/semantic-dates/scheduled-1792185555712/scheduled-visible-logs.txt) is supplementary UI evidence and may include older events. No runtime dtype measurement or automatic detection of an undisclosed semantic change is claimed.

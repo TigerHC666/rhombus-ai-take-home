@@ -1,0 +1,84 @@
+Load Previous History
+
+The semantic-dates repair was executed and independently checked against the real S3 bytes and GCS CSV. All seven accepted dates remain swapped, with exactly the same output hash as before repair. Your job-reported final code parses raw strings as DD/MM/YYYY but preserves Timestamp calendar fields by formatting and re-parsing the same DD/MM format. Those two operations are an identity, not a correction. This evidence is consistent with the reader having already interpreted these ambiguous source values as MM/DD/YYYY before the transform. For example the raw producer value 04/03/2026 means 4 March, while the exported value is April 3. This example explains the contract; do not hardcode any records or lookup tables.
+
+Use AI Builder to repair the actual pipeline. First inspect supported S3 input settings: if preserving the raw date strings or explicitly parsing DD/MM/YYYY is supported, prefer that. If no such setting exists, use the observed reader interpretation as an explicit assumption for this assessment input: reconstruct the original slash-separated value from a pre-parsed Timestamp using the reader's MM/DD convention, then parse that reconstructed string under the producer DD/MM contract. Raw strings still require strict DD/MM parsing. Reject invalid dates. Explain that this is conditional on the observed reader convention, not a universal rule to swap arbitrary dates. Keep original major-AUD prices and all other baseline cleaning rules; no cents conversion or structural-drift adaptations. Preserve the four-node S3-cleaner-sort-GCS chain and exact nine output columns. Generate a fresh executable cleaning revision, do not run it, and keep the schedule inactive. Do not manufacture expected output rows.
+
+Copy message
+
+Updated the pipeline on the canvas: replaced orders_cleaned_v12 with orders_cleaned_v13.
+
+What changed in parse_date
+
+The prior v12 used val.strftime('%d/%m/%Y') on Timestamps — a no-op round-trip that left the reader's MM/DD interpretation intact. v13 uses val.strftime('%m/%d/%Y') to reconstruct the original producer bytes (e.g. Timestamp for April 3 → '04/03/2026'), then parses that string as %d/%m/%Y → March
+
+Raw strings are still parsed directly as %d/%m/%Y.
+
+Conditionality explicitly encoded in the code comments: This swap is valid only because the assessment's S3 reader has been independently observed to interpret the source as MM/DD/YYYY. It must not be applied universally to Timestamps from other sources or readers.
+
+Chain unchanged: 
+orders.csv
+ → orders_cleaned_v13 → 
+orders_sorted_v4
+ → 
+orders_output
+. Ready for the independent runner.
+
+Worked for 42s
+
+The diagnosis is clear: the S3 reader stored 04/03/2026 as a Timestamp for April 3 (MM/DD). To recover the original producer string I need strftime('%m/%d/%Y') — which reconstructs 04/03/2026 — and then parse that as %d/%m/%Y → March 4. The previous v12 used strftime('%d/%m/%Y') which is an identity on the already-swapped value. New tag orders_cleaned_v13 to force fresh code generation.
+
+Modified pipeline
++1
+~1
+-1
+Copy message
+
+/pipeline This is an isolated repair for schema-drop. Rebuild the active cleaning transformation using the complete original baseline specification below plus ONLY the explicit producer change below. Remove any adaptations from previous scenarios. Use AI Builder to generate executable code, preserve the existing source, ascending order_id sort and GCS destination, and leave scheduling disabled. Do not hardcode records, IDs, expected counts or outputs. Inspect actual current input and logs, diagnose the observed behavior, and distinguish verified evidence from hypotheses. Regenerate the actual executable code; changing only a prompt is insufficient.
+
+Producer change: The producer removed email. Treat an absent email column as an empty string for every row. Preserve all other baseline rules and output the canonical email column.
+
+Original baseline specification (apply the explicit producer change above as the only override):
+The source contract is: order_id, customer, email, order_date, quantity, unit_price, currency, status. Dates are MM/DD/YYYY; unit_price is in major AUD units. Output exactly these columns in order: order_id,customer,email,order_date,quantity,unit_price,currency,status,total_amount.
+
+Trim surrounding whitespace in all text. Uppercase order_id and currency; lowercase email and status; preserve customer case. Fill missing/blank customer with Unknown. Replace invalid or missing email with an empty string; use the simple pattern ^[^\s@]+@[^\s@]+.[^\s@]+$. Require nonempty order_id, order_date, quantity, unit_price, currency and status. Only AUD and statuses paid/pending are allowed. Parse dates strictly as MM/DD/YYYY and output YYYY-MM-DD; reject invalid dates. Quantity must be positive integer digits. Unit price may have a leading dollar sign and at most two decimal places; reject negative, missing, nonfinite, exponent or comma-containing prices. Remove invalid required-value rows. Deduplicate identical normalized business rows; reject conflicting duplicate order IDs. Sort by order_id ascending.
+
+Calculate total_amount = quantity * unit_price using decimal arithmetic and ROUND_HALF_UP, serialize unit_price and total_amount with two decimal places, and quantity as integer digits. Do not insert processing timestamps into business data. Do not hardcode rows or expected results. Keep transformations general for the contract.
+
+Zero unit prices are valid. Accommodate native numeric and datetime values inferred by the S3 reader without dropping valid records. Preserve existing S3 source, sort, and GCS destination connections. Generate the cleaning implementation through AI Builder; do not provide instructions only. Keep the schedule disabled.
+
+Do not run the pipeline yourself: the independent runner will trigger it after checking the saved state. Ensure the generated executable code and node output-column contract both select exactly the nine canonical output fields. Remove adaptations from all other scenarios, not only their prompt text. Keep scheduling disabled.
+
+Copy message
+
+Updated the pipeline on the canvas: replaced orders_cleaned_v13 with 
+orders_cleaned_v14
+.
+
+The only adaptation over the baseline is the absent-email guard (if 'email' not in df.columns: df['email'] = ''). Date parsing is strictly MM/DD/YYYY with Timestamp pass-through — no DD/MM swap, no Timestamp reconstruction. No cents division, no rename alias, no units-suffix parsing. Exactly 9 canonical output columns. Chain: 
+orders.csv
+ → 
+orders_cleaned_v14
+ → 
+orders_sorted_v4
+ → 
+orders_output
+. Ready for the independent runner.
+
+Worked for 25s
+Loaded
+skill guidance
+
+New tag 
+orders_cleaned_v14
+ — baseline rules plus absent-email guard only; no cents, no date swap, no rename alias, no units suffix.
+
+Modified pipeline
++1
+~1
+-1
+Modified pipeline
++1
+~1
+-1
+Copy message

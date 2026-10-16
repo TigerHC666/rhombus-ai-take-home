@@ -1,0 +1,56 @@
+{
+  "scenario": "schema-drop",
+  "phase": "post-repair",
+  "trigger": "manual",
+  "started_at": "2026-10-16T21:20:41.026Z",
+  "harness_sha256": {
+    "ui-tests\\manual-output.spec.cjs": "0b53a3423ca60df5677285558616db66d9c76269a169341459676e0f4d29f7a6",
+    "test-support\\workflow.cjs": "74bd7ed13340da8e0503a49fb2960e9139153895eac4c0cb8452fc4d7aba7671"
+  },
+  "stage": "validating-all-outputs",
+  "schedule_checks": [
+    {
+      "label": "before-source",
+      "observed_at": "2026-10-16T21:20:50.877Z",
+      "inactive_verified": true
+    },
+    {
+      "label": "before-manual-trigger",
+      "observed_at": "2026-10-16T21:21:34.015Z",
+      "inactive_verified": true
+    }
+  ],
+  "triggered_at": "2026-10-16T21:21:34.114Z",
+  "process_job_id": "85a8dce6-9f41-4d4f-ae93-38361864bd26",
+  "execution_mode": "auto",
+  "terminal_job_status": "SUCCESS",
+  "outputs": [
+    {
+      "name": "orders_cleaned_1792185744865.csv",
+      "generation": "1792185746839534",
+      "size": "441",
+      "timeCreated": "2026-10-16T21:22:26.845Z",
+      "updated": "2026-10-16T21:22:26.845Z",
+      "md5Hash": "2SJiHmZt2WrblounaY8ghQ==",
+      "crc32c": "8WSrkA==",
+      "sha256": "3c9fd235b4854fbf340cef70809b12c0a7523436ac8afd03ff54c4e69cae7882",
+      "retrieved_at": "2026-10-16T21:22:45.158580+00:00"
+    }
+  ],
+  "output_attribution": "Objects observed after the manual boundary; exact object-to-job linkage is not established",
+  "output_validations": [
+    {
+      "name": "orders_cleaned_1792185744865.csv",
+      "generation": "1792185746839534",
+      "sha256": "3c9fd235b4854fbf340cef70809b12c0a7523436ac8afd03ff54c4e69cae7882",
+      "report": "validation-output-1.json",
+      "business_values_match": true,
+      "strict_contract_passed": false
+    }
+  ],
+  "validation_compatibility": "validation.json describes the first object only; manifest aggregates every downloaded object",
+  "business_values_match": true,
+  "strict_contract_passed": false,
+  "failure": "Every actual cloud output must satisfy the frozen contract\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+  "finished_at": "2026-10-16T21:22:46.050Z"
+}

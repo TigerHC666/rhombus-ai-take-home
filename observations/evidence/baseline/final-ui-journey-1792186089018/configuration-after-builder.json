@@ -1,0 +1,63 @@
+[
+  {
+    "node_id": "1792174488846",
+    "name": "1792174488846",
+    "inputs": [],
+    "outputs": [
+      "input_845d116c201ceece365adda3310625df_df",
+      "input_845d116c201ceece365adda3310625df_mask"
+    ],
+    "transformation_type": "input",
+    "source_type": "s3",
+    "data_asset_ref": "e789b770-435d-41ad-abd0-487c85fd4cee",
+    "dataset_id": 0,
+    "source_connection_id": "bc0cd1ec-99ab-4e08-b462-314469b30de2"
+  },
+  {
+    "node_id": "llm_node_16",
+    "name": "llm_node_16",
+    "inputs": [
+      "input_845d116c201ceece365adda3310625df_df",
+      "input_845d116c201ceece365adda3310625df_mask"
+    ],
+    "outputs": [
+      "llm_node_16_df",
+      "llm_node_16_mask"
+    ],
+    "transformation_type": "llm",
+    "prompt": "Clean the orders DataFrame according to these exact rules: 1. TRIMMING: Strip leading/trailing whitespace from all string columns. 2. CASE NORMALIZATION: Uppercase order_id and currency. Lowercase email and status. Preserve customer casing. 3. MISSING CUSTOMER: If customer is null, NaN, or blank after trimming, set to 'Unknown'. 4. EMAIL VALIDATION: Lowercase email. If blank/null or does not match regex ^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$ set to empty string ''. 5. REQUIRED FIELDS: Drop rows where order_id, currency, or status is null/blank. Drop rows where order_date, quantity, or unit_price is null/blank. 6. CURRENCY FILTER: Keep only rows where currency == 'AUD'. 7. STATUS FILTER: Keep only rows where status is 'paid' or 'pending'. 8. DATE PARSING: Parse order_date strictly as MM/DD/YYYY and convert to YYYY-MM-DD string. If the value is already a datetime/Timestamp object (not a string), call .strftime('%Y-%m-%d') directly. If parsing fails, drop the row. Also accept already-formatted YYYY-MM-DD strings. 9. QUANTITY VALIDATION: Accept positive integers only (digits matching ^[1-9][0-9]*$). Reject zero, negatives, floats with fractional part, strings with non-digit characters, NaN, inf. Store as Python int. 10. UNIT PRICE VALIDATION: Strip optional leading '$'. Accept non-negative numbers with at most 2 decimal places (regex ^[0-9]+(\\.[0-9]{1,2})?$). Zero IS valid. Reject negatives, missing, NaN, inf, exponent notation, comma-formatted numbers. Parse with decimal.Decimal. 11. DEDUPLICATION: First drop exact full-row duplicates (keep first). Then for any order_id that still appears more than once with differing field values, drop ALL rows for that order_id. 12. TOTAL AMOUNT: Compute total_amount = quantity * unit_price using decimal.Decimal arithmetic with ROUND_HALF_UP to 2 decimal places. 13. SERIALIZATION: Serialize unit_price and total_amount as strings with exactly 2 decimal places using pd.StringDtype() to prevent float coercion. quantity must be int dtype. 14. OUTPUT COLUMNS: Return exactly these 9 columns in this order: order_id, customer, email, order_date, quantity, unit_price, currency, status, total_amount. IMPORTANT: Use decimal.Decimal and ROUND_HALF_UP for all monetary arithmetic. Use pd.StringDtype() when assigning unit_price and total_amount string columns. Do not hardcode any rows, expected counts, or test values. Do not add timestamps or extra columns."
+  },
+  {
+    "node_id": "sort_node_4",
+    "name": "sort_node_4",
+    "inputs": [
+      "llm_node_16_df",
+      "llm_node_16_mask"
+    ],
+    "outputs": [
+      "sort_node_4_df",
+      "sort_node_4_mask"
+    ],
+    "transformation_type": "sort",
+    "sort_columns": [
+      "order_id"
+    ],
+    "ascending": true
+  },
+  {
+    "node_id": "output_node_1",
+    "name": "output_node_1",
+    "inputs": [
+      "sort_node_4_df",
+      "sort_node_4_mask"
+    ],
+    "outputs": [
+      "output_fe6570c80f47cdce36f51dcaaefffee4_df",
+      "output_fe6570c80f47cdce36f51dcaaefffee4_mask"
+    ],
+    "transformation_type": "output",
+    "destination_id": 90,
+    "format_type": "csv",
+    "custom_filename": "orders_cleaned"
+  }
+]

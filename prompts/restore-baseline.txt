@@ -8,3 +8,5 @@ Calculate total_amount = quantity * unit_price using decimal arithmetic and ROUN
 
 
 Zero unit prices are valid. Accommodate native numeric and datetime values inferred by the S3 reader without dropping valid records. Preserve existing S3 source, sort, and GCS destination connections. Generate the cleaning implementation through AI Builder; do not provide instructions only. Keep the schedule disabled.
+
+Restore a clean four-node chain: original S3 source -> new baseline cleaning node -> ascending order_id sort -> existing GCS output. Remove all drift-specific native drop stages, old nodes, and obsolete edges. Preserve source asset/connection and output destination/filename. Remove cents conversion, day-first correction, absent-email guards, renamed-price aliases and units suffix parsing. Zero prices remain valid. Accommodate numeric and datetime values inferred by the reader without losing valid baseline rows. Do not run the pipeline; keep the schedule inactive for the independent runner. Do not hardcode records or expected counts.

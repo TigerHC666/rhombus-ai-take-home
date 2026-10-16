@@ -1,0 +1,191 @@
+Dashboard
+New Project
+Search
+All Projects (1)
+LLM Observability Assessment
+T
+tiger.cai1116@gmail.com
+Canvas
+Workspace
+Preview
+Executions
+Logs
+Schedule for LLM Observability Assessment
+Export CSV
+Execution
+	
+Started
+	
+Duration
+	
+Status
+	
+Failed Node
+	
+Completed Nodes
+
+
+Execution #18517
+	
+10/17/2026, 8:13:09 AM
+	
+5.0s
+	Success	
+—
+	
+Data Input
+Custom
+Data Output
+Sort Data
+
+
+Execution #18515
+	
+10/17/2026, 8:09:13 AM
+	
+4.7s
+	Success	
+—
+	
+Data Input
+Custom
+Data Output
+Sort Data
+
+
+Execution #18513
+	
+10/17/2026, 8:05:19 AM
+	
+6.1s
+	Success	
+—
+	
+Drop Columns
+Drop Columns
+Data Input
+Custom
+Data Output
+Sort Data
+
+
+Execution #18511
+	
+10/17/2026, 8:02:19 AM
+	
+5.6s
+	Success	
+—
+	
+Drop Columns
+Data Input
+Custom
+Data Output
+Sort Data
+
+
+Execution #18508
+	
+10/17/2026, 7:58:16 AM
+	
+4.9s
+	Success	
+—
+	
+Drop Columns
+Data Input
+Custom
+Data Output
+Sort Data
+
+
+Execution #18506
+	
+10/17/2026, 7:54:21 AM
+	
+5.4s
+	Success	
+—
+	
+Drop Columns
+Data Input
+Custom
+Data Output
+Sort Data
+
+
+Execution #18504
+	
+10/17/2026, 7:50:14 AM
+	
+5.5s
+	Success	
+—
+	
+Drop Columns
+Data Input
+Custom
+Data Output
+Sort Data
+
+
+Execution #18500
+	
+10/17/2026, 7:36:18 AM
+	
+5.8s
+	Success	
+—
+	
+Drop Columns
+Data Input
+Custom
+Data Output
+Sort Data
+
+
+Execution #18496
+	
+10/17/2026, 7:26:19 AM
+	
+5.5s
+	Success	
+—
+	
+Data Input
+Custom
+Data Output
+Sort Data
+
+
+Execution #18494
+	
+10/17/2026, 7:19:16 AM
+	
+5.3s
+	Success	
+—
+	
+Data Input
+Custom
+Data Output
+Sort Data
+Rows per page
+20
+
+1-10 of 10
+
+AI Builder
+Schedule
+Transform
+Profile
+Schedules
+Manage schedules within this project
+Add Schedule
+Schedule for LLM Observability Assessment
+Inactive
+Custom
+Custom: */1 * * * *
+Facet
+4,958/50
+Schedule stopped

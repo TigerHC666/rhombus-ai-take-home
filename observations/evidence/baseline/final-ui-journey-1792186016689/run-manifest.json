@@ -1,0 +1,18 @@
+{
+  "scenario": "baseline",
+  "phase": "final-ui-journey",
+  "trigger": "manual",
+  "started_at": "2026-10-16T21:26:56.694Z",
+  "harness_sha256": {
+    "ui-tests\\manual-output.spec.cjs": "6ea9aea4948c73292a9d4425d9fc2e046d12b065dcf349b53fb39b704abb2eca",
+    "test-support\\workflow.cjs": "74bd7ed13340da8e0503a49fb2960e9139153895eac4c0cb8452fc4d7aba7671"
+  },
+  "stage": "configuring-cloud-journey",
+  "schedule_checks": [
+    {
+      "label": "before-source",
+      "observed_at": "2026-10-16T21:27:04.447Z",
+      "inactive_verified": true
+    }
+  ]
+}

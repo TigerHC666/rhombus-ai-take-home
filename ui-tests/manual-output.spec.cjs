@@ -24,7 +24,10 @@ test('S3 source through AI-built pipeline to a fresh GCS export', async ({ page 
   page.on('response', async response => {
     if (new URL(response.url()).origin !== 'https://api.rhombusai.com') return;
     if (new URL(response.url()).pathname.startsWith('/api/background_jobs/jobs/') && response.status() === 200) {
-      const job = await response.json();
+      const job = await response.json().catch(() => null);
+      // Old background responses can lose their body during a deliberate reload.
+      // Required process evidence is still enforced by the matching-job assertions.
+      if (!job) return;
       if (diagnostic && job.status === 'FAILED' && (job.id || job.job_id) === processJobId) {
         const messages = [];
         const inspect = value => {
@@ -48,7 +51,8 @@ test('S3 source through AI-built pipeline to a fresh GCS export', async ({ page 
       fs.writeFileSync(path.join(directory, 'job-states.json'), JSON.stringify(jobStates, null, 2));
     }
     if (new URL(response.url()).pathname !== `/api/dataset/analyzer/v2/projects/${settings.projectId}/nodes` || response.status() !== 200) return;
-    const nodes = await response.json();
+    const nodes = await response.json().catch(() => null);
+    if (!Array.isArray(nodes)) return;
     fs.writeFileSync(path.join(directory, 'llm-output-contract.json'), JSON.stringify(nodes.filter(node => node.transformation_type === 'llm').map(node => ({
       node_id: node.node_id, output_columns: node.params?.output_columns,
     })), null, 2));
@@ -105,10 +109,10 @@ test('S3 source through AI-built pipeline to a fresh GCS export', async ({ page 
     await expect.poll(() => configuration?.length || 0).toBeGreaterThan(0);
     fs.writeFileSync(path.join(directory, 'configuration-before.json'), JSON.stringify(configuration, null, 2));
     if (process.env.FROZEN_CONFIGURATION_FILE) {
-      expect(configuration, 'Controlled diagnostic must retain the same saved configuration').toEqual(JSON.parse(fs.readFileSync(process.env.FROZEN_CONFIGURATION_FILE)));
+      expect(configuration, 'Controlled run must retain the frozen saved configuration').toEqual(JSON.parse(fs.readFileSync(process.env.FROZEN_CONFIGURATION_FILE)));
     }
     if (phase === 'pre-repair' || phase.startsWith('restore-after-')) {
-      const frozen = JSON.parse(fs.readFileSync(path.join(settings.root, 'observations/evidence/baseline/configuration-v3.json')));
+      const frozen = JSON.parse(fs.readFileSync(process.env.FROZEN_CONFIGURATION_FILE || path.join(settings.root, 'observations/evidence/baseline/configuration-v3.json')));
       expect(configuration, 'Isolation requires the complete frozen configuration before source mutation').toEqual(frozen);
       manifest.configuration_verified_before_run = true;
     }
@@ -117,6 +121,14 @@ test('S3 source through AI-built pipeline to a fresh GCS export', async ({ page 
     await python(['data-validation/source_s3.py', '--scenario', scenario, '--upload', '--destination', directory]);
     checkpoint('confirming-source');
     await confirmSource(page);
+    if (process.env.CONFIGURE_CONNECTIONS === '1') {
+      checkpoint('configuring-cloud-journey');
+      await require('../test-support/configure-journey.cjs').configureJourney(page, directory);
+      configuration = undefined;
+      await page.reload();
+      await expect.poll(() => configuration?.length || 0).toBeGreaterThan(0);
+      manifest.ui_connections_configured = true;
+    }
     if (process.env.BUILDER_PROMPT_FILE) {
       checkpoint('repairing-with-builder');
       const originalSource = configuration.find(node => node.source_type === 's3');
@@ -194,7 +206,7 @@ test('S3 source through AI-built pipeline to a fresh GCS export', async ({ page 
     await python(['data-validation/source_s3.py', '--scenario', scenario, '--destination', path.join(directory, 'source-after')]);
     if (configuration) fs.writeFileSync(path.join(directory, 'configuration.json'), JSON.stringify(configuration, null, 2));
     if (process.env.FROZEN_CONFIGURATION_FILE) {
-      expect(configuration, 'Controlled diagnostic saved code must remain identical after execution').toEqual(JSON.parse(fs.readFileSync(process.env.FROZEN_CONFIGURATION_FILE)));
+      expect(configuration, 'Controlled run saved configuration must remain identical after execution').toEqual(JSON.parse(fs.readFileSync(process.env.FROZEN_CONFIGURATION_FILE)));
     }
     manifest.terminal_job_status = jobStates.filter(job => job.job_id === processJobId).at(-1)?.status;
     if (fresh.length) {

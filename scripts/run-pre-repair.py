@@ -9,7 +9,8 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE = ROOT / 'observations/evidence'
-BASELINE = json.loads((EVIDENCE / 'baseline/configuration-v3.json').read_text())
+BASELINE_PATH = Path(os.environ.get('FROZEN_CONFIGURATION_FILE', EVIDENCE / 'baseline/configuration-v3.json'))
+BASELINE = json.loads(BASELINE_PATH.read_text(encoding='utf-8'))
 
 
 def implementation(nodes):

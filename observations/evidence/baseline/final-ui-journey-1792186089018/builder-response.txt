@@ -1,0 +1,88 @@
+Load Previous History
+
+This is an isolated repair for schema-drop. Rebuild the active cleaning transformation using the complete original baseline specification below plus ONLY the explicit producer change below. Remove any adaptations from previous scenarios. Use AI Builder to generate executable code, preserve the existing source, ascending order_id sort and GCS destination, and leave scheduling disabled. Do not hardcode records, IDs, expected counts or outputs. Inspect actual current input and logs, diagnose the observed behavior, and distinguish verified evidence from hypotheses. Regenerate the actual executable code; changing only a prompt is insufficient.
+
+Producer change: The producer removed email. Treat an absent email column as an empty string for every row. Preserve all other baseline rules and output the canonical email column.
+
+Original baseline specification (apply the explicit producer change above as the only override):
+The source contract is: order_id, customer, email, order_date, quantity, unit_price, currency, status. Dates are MM/DD/YYYY; unit_price is in major AUD units. Output exactly these columns in order: order_id,customer,email,order_date,quantity,unit_price,currency,status,total_amount.
+
+Trim surrounding whitespace in all text. Uppercase order_id and currency; lowercase email and status; preserve customer case. Fill missing/blank customer with Unknown. Replace invalid or missing email with an empty string; use the simple pattern ^[^\s@]+@[^\s@]+.[^\s@]+$. Require nonempty order_id, order_date, quantity, unit_price, currency and status. Only AUD and statuses paid/pending are allowed. Parse dates strictly as MM/DD/YYYY and output YYYY-MM-DD; reject invalid dates. Quantity must be positive integer digits. Unit price may have a leading dollar sign and at most two decimal places; reject negative, missing, nonfinite, exponent or comma-containing prices. Remove invalid required-value rows. Deduplicate identical normalized business rows; reject conflicting duplicate order IDs. Sort by order_id ascending.
+
+Calculate total_amount = quantity * unit_price using decimal arithmetic and ROUND_HALF_UP, serialize unit_price and total_amount with two decimal places, and quantity as integer digits. Do not insert processing timestamps into business data. Do not hardcode rows or expected results. Keep transformations general for the contract.
+
+Zero unit prices are valid. Accommodate native numeric and datetime values inferred by the S3 reader without dropping valid records. Preserve existing S3 source, sort, and GCS destination connections. Generate the cleaning implementation through AI Builder; do not provide instructions only. Keep the schedule disabled.
+
+Do not run the pipeline yourself: the independent runner will trigger it after checking the saved state. Ensure the generated executable code and node output-column contract both select exactly the nine canonical output fields. Remove adaptations from all other scenarios, not only their prompt text. Keep scheduling disabled.
+
+Copy message
+
+Updated the pipeline on the canvas: replaced orders_cleaned_v13 with orders_cleaned_v14.
+
+The only adaptation over the baseline is the absent-email guard (if 'email' not in df.columns: df['email'] = ''). Date parsing is strictly MM/DD/YYYY with Timestamp pass-through — no DD/MM swap, no Timestamp reconstruction. No cents division, no rename alias, no units-suffix parsing. Exactly 9 canonical output columns. Chain: 
+orders.csv
+ → orders_cleaned_v14 → 
+orders_sorted_v4
+ → 
+orders_output
+. Ready for the independent runner.
+
+Worked for 28s
+
+New tag orders_cleaned_v14 — baseline rules plus absent-email guard only; no cents, no date swap, no rename alias, no units suffix.
+
+Modified pipeline
++1
+~1
+-1
+Copy message
+
+/pipeline Restore the active cleaning pipeline to this baseline contract. Remove all drift-specific adaptations. Regenerate executable code and preserve all existing connections.
+
+The source contract is: order_id, customer, email, order_date, quantity, unit_price, currency, status. Dates are MM/DD/YYYY; unit_price is in major AUD units. Output exactly these columns in order: order_id,customer,email,order_date,quantity,unit_price,currency,status,total_amount.
+
+Trim surrounding whitespace in all text. Uppercase order_id and currency; lowercase email and status; preserve customer case. Fill missing/blank customer with Unknown. Replace invalid or missing email with an empty string; use the simple pattern ^[^\s@]+@[^\s@]+.[^\s@]+$. Require nonempty order_id, order_date, quantity, unit_price, currency and status. Only AUD and statuses paid/pending are allowed. Parse dates strictly as MM/DD/YYYY and output YYYY-MM-DD; reject invalid dates. Quantity must be positive integer digits. Unit price may have a leading dollar sign and at most two decimal places; reject negative, missing, nonfinite, exponent or comma-containing prices. Remove invalid required-value rows. Deduplicate identical normalized business rows; reject conflicting duplicate order IDs. Sort by order_id ascending.
+
+Calculate total_amount = quantity * unit_price using decimal arithmetic and ROUND_HALF_UP, serialize unit_price and total_amount with two decimal places, and quantity as integer digits. Do not insert processing timestamps into business data. Do not hardcode rows or expected results. Keep transformations general for the contract.
+
+Zero unit prices are valid. Accommodate native numeric and datetime values inferred by the S3 reader without dropping valid records. Preserve existing S3 source, sort, and GCS destination connections. Generate the cleaning implementation through AI Builder; do not provide instructions only. Keep the schedule disabled.
+
+Restore a clean four-node chain: original S3 source -> new baseline cleaning node -> ascending order_id sort -> existing GCS output. Remove all drift-specific native drop stages, old nodes, and obsolete edges. Preserve source asset/connection and output destination/filename. Remove cents conversion, day-first correction, absent-email guards, renamed-price aliases and units suffix parsing. Zero prices remain valid. Accommodate numeric and datetime values inferred by the reader without losing valid baseline rows. Do not run the pipeline; keep the schedule inactive for the independent runner. Do not hardcode records or expected counts.
+
+Copy message
+
+Pipeline restored to pure baseline. The canvas is now a clean 4-node chain:
+
+Change	Node	Purpose
+Added	
+orders_cleaned_v15
+	Fresh AI Builder cleaning node with pure baseline rules — no absent-email guard, no DD/MM swap, no cents conversion, no rename aliases, no units-suffix parsing.
+Rewired	
+orders_sorted_v4
+	Now takes input from 
+orders_cleaned_v15
+.
+Deleted	orders_cleaned_v14	Removed the schema-drop scenario node with the absent-email adaptation.
+
+Chain: 
+orders.csv
+ → 
+orders_cleaned_v15
+ → 
+orders_sorted_v4
+ → 
+orders_output
+ (GCS, orders_cleaned.csv).
+
+Worked for 21s
+Searched
+for a tool
+Modified pipeline
++1
+~1
+-1
+Modified pipeline
++1
+~1
+-1
+Copy message

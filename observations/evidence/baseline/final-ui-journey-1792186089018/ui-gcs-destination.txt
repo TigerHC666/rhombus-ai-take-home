@@ -1,0 +1,23 @@
+Data Output
+Select Destination
+
+Choose where to export your transformed data.
+
+Download Locally
+
+Skip cloud upload and download the node output directly from Rhombus once the pipeline completes.
+
+rhombus-assessment-output-20261017-hc6
+Add New Destination
+Export Configuration
+Export Format
+CSV
+CSV
+Excel (XLSX)
+Custom Filename
+
+Data will be exported automatically when the pipeline runs.
+
+Apply
+Configuration Required
+Please ensure previous nodes are configured

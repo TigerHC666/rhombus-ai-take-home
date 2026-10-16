@@ -1,6 +1,6 @@
 # Missing email column
 
-Status: pre-repair failure reproduced; repair-window outputs restore business correctness but retain strict formatting failures and uncertain individual trigger attribution. Two bounded scheduling attempts produced no fresh output and displayed unchanged-data skips.
+Status: pre-repair failure reproduced; final isolated repair restores business correctness manually and in scheduled #18522. Strict monetary formatting remains failed. Earlier overlapping outputs and unchanged-data skips are preserved separately.
 
 ## Isolated change
 
@@ -26,7 +26,7 @@ The [repair-window manifest](evidence/schema-drop/post-repair-1792180984019/run-
 
 The [process response](evidence/schema-drop/post-repair-1792180984019/process-response.json) identifies manual job `4de934fe-bfb4-4298-bc11-a379d399db74`, observed successful in [job states](evidence/schema-drop/post-repair-1792180984019/job-states.json). Subsequent [API history](evidence/schedule-history-api-20261017.json) independently identifies overlapping execution #18489 as `scheduled`, with earlier #18487 and later #18490 also scheduled. Neither output generation is explicitly linked to a particular job. These are repair-window outputs amid confirmed overlapping scheduled activity, not two proven manual repetitions. The [demo recording](demo/schema-drop-builder-repair.webm) preserves the Builder repair interaction; its existence does not resolve individual output attribution or explain why scheduling was active.
 
-The first [scheduled attempt](evidence/schema-drop/scheduled-1792181295949/run-manifest.json), observing schema-drop input from 20:08:25.291 UTC, found no fresh output during 110 seconds and verified inactive cleanup. Its [notice](evidence/schema-drop/scheduled-1792181295949/schedule-inactive.txt) says the run was skipped due to unchanged data. The second [attempt](evidence/baseline/scheduled-1792181440062/run-manifest.json) followed a verified replacement with baseline source bytes; it also found no fresh output and recorded an increased skip count with inactive cleanup. The second attempt is a baseline-source scheduling diagnostic, not another schema-drop execution. See [scheduling analysis](scheduling.md). A successful post-repair scheduled export remains unverified.
+The first [scheduled attempt](evidence/schema-drop/scheduled-1792181295949/run-manifest.json), observing schema-drop input from 20:08:25.291 UTC, found no fresh output during 110 seconds and verified inactive cleanup. Its [notice](evidence/schema-drop/scheduled-1792181295949/schedule-inactive.txt) says the run was skipped due to unchanged data. The second [attempt](evidence/baseline/scheduled-1792181440062/run-manifest.json) followed a verified replacement with baseline source bytes; it also found no fresh output and recorded an increased skip count with inactive cleanup. The second attempt is a baseline-source scheduling diagnostic, not another schema-drop execution. See [scheduling analysis](scheduling.md). The later isolated scheduled export below closes the successful-follow-up gap without reclassifying these earlier skips.
 
 ## Second pre-repair observation and repeatability
 
@@ -39,3 +39,12 @@ Both downloaded S3 reads again match the same scenario fixture hash ([before](ev
 No fresh output was observed in the second collection window, ending 2026-10-16T19:53:51.087Z. The repeated terminal `FAILED` outcome supports failure reproducibility. There are no CSVs to compare: this is not an output-determinism pass. The second logs retain the failure alongside success wording.
 
 Repair and scheduling evidence are separate from these two pre-repair observations and are documented above; the pre-repair repetitions do not establish repair success or scheduled correctness.
+
+
+## Final isolated repair and scheduled verification
+
+The [final manual manifest](evidence/schema-drop/post-repair-1792185641023/run-manifest.json) records job `85a8dce6-9f41-4d4f-ae93-38361864bd26`, terminal SUCCESS and positive inactive-schedule checks. Its [generated-code evidence](evidence/schema-drop/post-repair-1792185641023/executed-codegen-evidence.json) accompanies the execution. [Validation](evidence/schema-drop/post-repair-1792185641023/validation-output-1.json) confirms seven records, nine canonical columns and blank missing-email defaults. Strict monetary formatting remains failed.
+
+The [scheduled manifest](evidence/schema-drop/scheduled-1792185777857/run-manifest.json) identifies successful scheduled #18522 from 2026-10-16 21:24:12.545 to 21:24:17.539 UTC. Its [CSV](evidence/schema-drop/scheduled-1792185777857/gcs/orders_cleaned_1792185854683.csv), generation `1792185856075598`, was created at 21:24:16.080 UTC and contains 441 bytes. Independent hashing of the final manual and scheduled exports gives the same SHA-256 `3c9fd235b4854fbf340cef70809b12c0a7523436ac8afd03ff54c4e69cae7882`; their captured configurations also match.
+
+[Scheduled validation](evidence/schema-drop/scheduled-1792185777857/validation-output-1.json) confirms business correctness and strict-format failure. Cleanup verifies the schedule inactive. This is a fresh, isolated scheduled recovery observation; exact object-to-job linkage remains temporal rather than an explicit foreign key. It does not erase the earlier overlapping activity or establish the scheduler's undocumented change-detection mechanism.

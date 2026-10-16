@@ -1,0 +1,13 @@
+/pipeline Restore the active cleaning pipeline to this baseline contract. Remove all drift-specific adaptations. Regenerate executable code and preserve all existing connections.
+
+The source contract is: order_id, customer, email, order_date, quantity, unit_price, currency, status. Dates are MM/DD/YYYY; unit_price is in major AUD units. Output exactly these columns in order: order_id,customer,email,order_date,quantity,unit_price,currency,status,total_amount.
+
+Trim surrounding whitespace in all text. Uppercase order_id and currency; lowercase email and status; preserve customer case. Fill missing/blank customer with Unknown. Replace invalid or missing email with an empty string; use the simple pattern ^[^\s@]+@[^\s@]+\.[^\s@]+$. Require nonempty order_id, order_date, quantity, unit_price, currency and status. Only AUD and statuses paid/pending are allowed. Parse dates strictly as MM/DD/YYYY and output YYYY-MM-DD; reject invalid dates. Quantity must be positive integer digits. Unit price may have a leading dollar sign and at most two decimal places; reject negative, missing, nonfinite, exponent or comma-containing prices. Remove invalid required-value rows. Deduplicate identical normalized business rows; reject conflicting duplicate order IDs. Sort by order_id ascending.
+
+Calculate total_amount = quantity * unit_price using decimal arithmetic and ROUND_HALF_UP, serialize unit_price and total_amount with two decimal places, and quantity as integer digits. Do not insert processing timestamps into business data. Do not hardcode rows or expected results. Keep transformations general for the contract.
+
+
+Zero unit prices are valid. Accommodate native numeric and datetime values inferred by the S3 reader without dropping valid records. Preserve existing S3 source, sort, and GCS destination connections. Generate the cleaning implementation through AI Builder; do not provide instructions only. Keep the schedule disabled.
+
+Restore a clean four-node chain: original S3 source -> new baseline cleaning node -> ascending order_id sort -> existing GCS output. Remove all drift-specific native drop stages, old nodes, and obsolete edges. Preserve source asset/connection and output destination/filename. Remove cents conversion, day-first correction, absent-email guards, renamed-price aliases and units suffix parsing. Zero prices remain valid. Accommodate numeric and datetime values inferred by the reader without losing valid baseline rows. Do not run the pipeline; keep the schedule inactive for the independent runner. Do not hardcode records or expected counts.
+
