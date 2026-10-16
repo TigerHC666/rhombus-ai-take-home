@@ -1,0 +1,24 @@
+{
+  "status": "recovered_after_harness_history_race",
+  "original_manifest_preserved": true,
+  "original_manifest": "run-manifest.json",
+  "api_history": "../../schedule-history-api-20261017.json",
+  "recovered_ui_history": "history-recovered.txt",
+  "screenshot": "history-recovered.png",
+  "validation": "validation-recovered.json",
+  "output": {
+    "file": "gcs/orders_cleaned_1792181958370.csv",
+    "generation": "1792181960083707",
+    "sha256": "cdcae50d8e2fe5c094d3e8c3357e1c66e4d0afbe89f0af5d2caa0ca1e46a6ec7",
+    "timeCreated": "2026-10-16T20:19:20.092Z"
+  },
+  "execution": {
+    "id": 18494,
+    "schedule_id": 282,
+    "trigger": "scheduled",
+    "started_at": "2026-10-16T20:19:16.147Z",
+    "completed_at": "2026-10-16T20:19:21.508Z",
+    "success": true
+  },
+  "conclusion": "Scheduled execution confirmed by API; contemporaneous output violates schema and formatting. Exact output-to-execution foreign key not captured. Original test failed on a UI history race, not four newly observed runs."
+}

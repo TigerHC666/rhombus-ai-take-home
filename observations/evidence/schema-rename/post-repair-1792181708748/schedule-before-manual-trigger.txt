@@ -1,0 +1,8 @@
+Schedules
+Manage schedules within this project
+Add Schedule
+Schedule for LLM Observability Assessment
+Inactive
+Custom
+Custom: */1 * * * *
+Skipped 2 time(s) in a row due to unchanged data.

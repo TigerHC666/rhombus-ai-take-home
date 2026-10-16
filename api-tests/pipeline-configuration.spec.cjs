@@ -42,6 +42,7 @@ test('observed pipeline endpoint returns the connected assessment graph', async 
     code: node.transformation_type === 'llm' ? node.params?.code : undefined,
     mode: node.transformation_type === 'llm' ? node.params?.mode : undefined,
     sort_columns: node.params?.sort_columns,
+    columns_to_drop: node.params?.columns_to_drop,
     ascending: node.params?.ascending,
     source_type: node.params?.source_type,
     dataset_id: node.params?.dataset_id,

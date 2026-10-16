@@ -1,0 +1,36 @@
+{
+  "scenario": "schema-rename",
+  "trigger": "unverified",
+  "observed_after": "2026-10-16T20:18:19.098Z",
+  "started_at": "2026-10-16T20:18:08.378Z",
+  "source": "source-provenance.json",
+  "activation_attempted": true,
+  "schedule_disabled": true,
+  "cleanup_attempted": true,
+  "status": "failed",
+  "stage": "history_verification",
+  "outputs_observed": [
+    {
+      "name": "orders_cleaned_1792181958370.csv",
+      "generation": "1792181960083707",
+      "timeCreated": "2026-10-16T20:19:20.092Z",
+      "size": "570"
+    }
+  ],
+  "errors": [
+    {
+      "name": "Error",
+      "message": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m3\u001b[39m\nReceived:    \u001b[31m4\u001b[39m"
+    }
+  ],
+  "configuration_sha256": "dabb9bc4302cc61c56f30cdfe9cd17d992fcff8adb29f6bb2cac870a3714dc8e",
+  "cron": "*/1 * * * *",
+  "prior_executions": [],
+  "executions": [
+    "Execution #1849010/17/2026, 7:05:17 AM5.0sSuccess—Data InputCustomData OutputSort Data",
+    "Execution #1848910/17/2026, 7:04:19 AM47.5sSuccess—Data InputCustomData OutputSort Data",
+    "Execution #1848710/17/2026, 7:03:17 AM3.8sFailureCustomData Input",
+    "Execution #1845310/17/2026, 6:25:25 AM5.6sSuccess—Data InputCustomData OutputSort Data"
+  ],
+  "observed_until": "2026-10-16T20:19:26.332Z"
+}

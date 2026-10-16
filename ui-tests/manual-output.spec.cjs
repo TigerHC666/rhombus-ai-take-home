@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
+const crypto = require('node:crypto');
 const { promisify } = require('node:util');
 const execFile = promisify(require('node:child_process').execFile);
 const settings = require('../test-support/settings.cjs');
@@ -12,6 +13,7 @@ test('S3 source through AI-built pipeline to a fresh GCS export', async ({ page 
   test.setTimeout(600000);
   const scenario = process.env.SCENARIO || 'baseline';
   const phase = process.env.RUN_PHASE || 'unchanged';
+  const diagnostic = process.env.DIAGNOSTIC_MODE === 'input-types';
   const directory = path.join(settings.root, 'observations/evidence', scenario, `${phase}-${Date.now()}`);
   fs.mkdirSync(directory, { recursive: true });
   const python = async args => (await execFile('python', args, { cwd: settings.root, timeout: 60000 })).stdout;
@@ -23,16 +25,31 @@ test('S3 source through AI-built pipeline to a fresh GCS export', async ({ page 
     if (new URL(response.url()).origin !== 'https://api.rhombusai.com') return;
     if (new URL(response.url()).pathname.startsWith('/api/background_jobs/jobs/') && response.status() === 200) {
       const job = await response.json();
+      if (diagnostic && job.status === 'FAILED' && (job.id || job.job_id) === processJobId) {
+        const messages = [];
+        const inspect = value => {
+          if (typeof value === 'string') {
+            const match = value.match(/ValueError:\s*(INPUT_TYPE_PROBE\s*\{[^\r\n]+\})/);
+            if (match) messages.push(match[1].slice(0, 1000));
+          } else if (value && typeof value === 'object') Object.values(value).forEach(inspect);
+        };
+        inspect(job.result);
+        fs.writeFileSync(path.join(directory, 'diagnostic-job-error.json'), JSON.stringify({ job_id: processJobId, messages }, null, 2));
+      }
       jobStates.push({ observed_at: new Date().toISOString(), status: job.status, state: job.state,
         job_id: job.id || job.job_id, fields: Object.keys(job) });
       fs.writeFileSync(path.join(directory, 'job-states.json'), JSON.stringify(jobStates, null, 2));
     }
     if (new URL(response.url()).pathname !== `/api/dataset/analyzer/v2/projects/${settings.projectId}/nodes` || response.status() !== 200) return;
     const nodes = await response.json();
+    fs.writeFileSync(path.join(directory, 'llm-output-contract.json'), JSON.stringify(nodes.filter(node => node.transformation_type === 'llm').map(node => ({
+      node_id: node.node_id, output_columns: node.params?.output_columns,
+    })), null, 2));
     fs.writeFileSync(path.join(directory, 'node-response-schema.json'), JSON.stringify(nodes.map(node => ({
       node_id: node.node_id, transformation_type: node.transformation_type,
       top_level_keys: Object.keys(node),
-      ...(node.transformation_type === 'llm' ? { params_keys: Object.keys(node.params || {}), metadata_keys: Object.keys(node.metadata || {}) } : {}),
+      params_keys: Object.keys(node.params || {}),
+      ...(node.transformation_type === 'llm' ? { metadata_keys: Object.keys(node.metadata || {}) } : {}),
     })), null, 2));
     configuration = nodes.map(node => ({
       node_id: node.node_id, name: node.name, inputs: node.inputs, outputs: node.outputs,
@@ -41,6 +58,7 @@ test('S3 source through AI-built pipeline to a fresh GCS export', async ({ page 
       code: node.transformation_type === 'llm' ? node.params?.code : undefined,
       mode: node.transformation_type === 'llm' ? node.params?.mode : undefined,
       sort_columns: node.params?.sort_columns, ascending: node.params?.ascending,
+      columns_to_drop: node.params?.columns_to_drop,
       source_type: node.params?.source_type, data_asset_ref: node.params?.data_asset_ref,
       dataset_id: node.params?.dataset_id, source_connection_id: node.params?.source_connection_id,
       destination_id: node.params?.destination_id, format_type: node.params?.format_type,
@@ -48,6 +66,9 @@ test('S3 source through AI-built pipeline to a fresh GCS export', async ({ page 
     }));
   });
   const manifest = { scenario, phase, trigger: 'manual', started_at: new Date().toISOString() };
+  manifest.harness_sha256 = Object.fromEntries([__filename, path.join(settings.root, 'test-support/workflow.cjs')].map(file =>
+    [path.relative(settings.root, file), crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex')]));
+  if (diagnostic) manifest.purpose = 'Intentional input-type diagnostic; a marker-bearing failed job is the expected observation';
   const checkpoint = stage => {
     manifest.stage = stage;
     fs.writeFileSync(path.join(directory, 'run-manifest.json'), JSON.stringify(manifest, null, 2));
@@ -76,6 +97,9 @@ test('S3 source through AI-built pipeline to a fresh GCS export', async ({ page 
     await openProject(page);
     await expect.poll(() => configuration?.length || 0).toBeGreaterThan(0);
     fs.writeFileSync(path.join(directory, 'configuration-before.json'), JSON.stringify(configuration, null, 2));
+    if (process.env.FROZEN_CONFIGURATION_FILE) {
+      expect(configuration, 'Controlled diagnostic must retain the same saved configuration').toEqual(JSON.parse(fs.readFileSync(process.env.FROZEN_CONFIGURATION_FILE)));
+    }
     if (phase === 'pre-repair' || phase.startsWith('restore-after-')) {
       const frozen = JSON.parse(fs.readFileSync(path.join(settings.root, 'observations/evidence/baseline/configuration-v3.json')));
       expect(configuration, 'Isolation requires the complete frozen configuration before source mutation').toEqual(frozen);
@@ -148,14 +172,22 @@ test('S3 source through AI-built pipeline to a fresh GCS export', async ({ page 
     for (let count = await collapsedLogs.count(); count > 0; count--) await collapsedLogs.first().click();
     fs.writeFileSync(path.join(directory, 'page-and-logs.txt'), await page.locator('body').innerText());
     await page.screenshot({ path: path.join(directory, 'pipeline-result.png') });
-    await confirmSource(page);
-    await page.getByRole('tab', { name: 'Profile', exact: true }).click();
-    await page.getByRole('complementary').getByRole('combobox').click();
-    await page.getByRole('option', { name: 'quantity', exact: true }).press('Enter');
-    await expect(page.getByRole('complementary')).toContainText('Overview');
-    fs.writeFileSync(path.join(directory, 'quantity-profile.txt'), await page.getByRole('complementary').innerText());
+    try {
+      await confirmSource(page);
+      await page.getByRole('tab', { name: 'Profile', exact: true }).click();
+      await page.getByRole('complementary').getByRole('combobox').click();
+      await page.getByRole('option', { name: 'quantity', exact: true }).press('Enter');
+      await expect(page.getByRole('complementary')).toContainText('Overview');
+      fs.writeFileSync(path.join(directory, 'quantity-profile.txt'), await page.getByRole('complementary').innerText());
+    } catch (error) {
+      // Preserve this UI failure without losing the independently downloadable result.
+      manifest.profile_capture_error = error.message;
+    }
     await python(['data-validation/source_s3.py', '--scenario', scenario, '--destination', path.join(directory, 'source-after')]);
     if (configuration) fs.writeFileSync(path.join(directory, 'configuration.json'), JSON.stringify(configuration, null, 2));
+    if (process.env.FROZEN_CONFIGURATION_FILE) {
+      expect(configuration, 'Controlled diagnostic saved code must remain identical after execution').toEqual(JSON.parse(fs.readFileSync(process.env.FROZEN_CONFIGURATION_FILE)));
+    }
     manifest.terminal_job_status = jobStates.filter(job => job.job_id === processJobId).at(-1)?.status;
     if (fresh.length) {
       await python(['data-validation/download_gcs.py', '--since', manifest.triggered_at, '--destination', path.join(directory, 'gcs')]);
@@ -185,6 +217,7 @@ test('S3 source through AI-built pipeline to a fresh GCS export', async ({ page 
       manifest.strict_contract_passed = manifest.output_validations.length > 0 && manifest.output_validations.every(item => item.strict_contract_passed);
       expect(manifest.terminal_job_status, 'The captured manual job must succeed').toBe('SUCCESS');
       expect(manifest.strict_contract_passed, 'Every actual cloud output must satisfy the frozen contract').toBe(true);
+      expect(manifest.profile_capture_error, 'Source profile capture must succeed').toBeUndefined();
     } else {
       manifest.outputs = [];
       manifest.output_wait_failure = outputTimeout;
@@ -193,6 +226,22 @@ test('S3 source through AI-built pipeline to a fresh GCS export', async ({ page 
           '--output', path.join(directory, 'gcs', 'no-fresh-output.csv'), '--report', path.join(directory, 'validation.json')]);
       } catch (error) {
         if (!fs.existsSync(path.join(directory, 'validation.json'))) throw error;
+      }
+      if (diagnostic) {
+        expect(manifest.terminal_job_status).toBe('FAILED');
+        const captured = JSON.parse(fs.readFileSync(path.join(directory, 'diagnostic-job-error.json'), 'utf8'));
+        expect(captured.job_id).toBe(processJobId);
+        expect(captured.messages.length, 'Computed diagnostic must come from the matching failed job result').toBeGreaterThan(0);
+        const measured = JSON.parse(captured.messages.at(-1).replace(/^INPUT_TYPE_PROBE\s*/, ''));
+        for (const column of ['quantity', 'order_date']) {
+          expect(typeof measured[column].dtype).toBe('string');
+          expect(Array.isArray(measured[column].samples)).toBe(true);
+          expect(measured[column].samples.length).toBe(3);
+        }
+        fs.writeFileSync(path.join(directory, 'input-type-measurement.json'), JSON.stringify(measured, null, 2));
+        manifest.diagnostic_observed = true;
+        checkpoint('intentional-diagnostic-complete');
+        return;
       }
       expect(fresh.length, 'Pipeline must produce a fresh output; inspect captured failure logs').toBeGreaterThan(0);
     }

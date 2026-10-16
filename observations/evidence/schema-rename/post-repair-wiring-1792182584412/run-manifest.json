@@ -1,0 +1,16 @@
+{
+  "scenario": "schema-rename",
+  "phase": "post-repair-wiring",
+  "trigger": "manual",
+  "started_at": "2026-10-16T20:29:44.417Z",
+  "stage": "confirming-source",
+  "schedule_checks": [
+    {
+      "label": "before-source",
+      "observed_at": "2026-10-16T20:29:54.547Z",
+      "inactive_verified": true
+    }
+  ],
+  "failure": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /^Amazon S3 Data Input/ })\u001b[22m\n\u001b[2m    - found getByRole('dialog').filter({ has: getByRole('heading', { name: 'Ad Blocker Detected', exact: true }) }), intercepting action to run the handler\u001b[22m\n\u001b[2m    - locator handler has finished, waiting for getByRole('dialog').filter({ has: getByRole('heading', { name: 'Ad Blocker Detected', exact: true }) }) to be hidden\u001b[22m\n\u001b[2m    3 × locator resolved to visible <div role=\"dialog\" tabindex=\"-1\" id=\"radix-:r68:\" data-state=\"closed\" aria-labelledby=\"radix-:r69:\" aria-describedby=\"radix-:r6a:\" class=\"workflow-dialog-surface !bg-card/72 fixed left-[50%] top-[50%] z-50 w-full translate-x-[-50%] translate-y-[-50%] gap-4 border border-border/60 p-6 text-foreground shadow-[0_24px_80px_hsl(var(--foreground)/0.18),inset_0_1px_0_hsl(var(--background)/0.7)] backdrop-blur-2xl backdrop-saturate-150 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-ou…>…</div>\u001b[22m\n\u001b[2m    - interception handler has finished, continuing\u001b[22m\n",
+  "finished_at": "2026-10-16T20:30:31.892Z"
+}

@@ -2,6 +2,18 @@
 
 Status: **in progress; not signed off**. Checkpoint 1 design/fixture acceptance is complete. Checkpoint 3 final fix verification has not started. This review separates independently inspected artifacts from primary-agent reports and does not certify unfinished live work.
 
+## Latest verification update
+
+Final rename graph follow-up is now verified in `schema-rename/scheduled-1792182925969`: API execution #18500 is scheduled/successful, cleanup is inactive, and the single 528-byte output is business-correct with nine columns. Its SHA-256 was independently checked against inventory and equals the corrected manual export. Strict two-decimal formatting remains failed; only that strict precision assertion fails this scheduled test. The rename business repair and real scheduled follow-up are complete, while other cases remain unfinished.
+
+Controlled schema-drop manual evidence `post-repair-controlled-repeat-1792181656437` verifies both positive inactive checks, captured process job `72e1c928-f486-4d59-a9cb-6b2d3b1fc344`, matching terminal SUCCESS, business-correct output and strict-format failure. The preceding `...1792181592764` attempt has no process job/terminal execution and must remain a harness-aborted attempt. Together with the subsequent rename manual/scheduled runs, these records verify the new normal-path schedule checks, process-ID capture and aggregate validation; they do not test every error/timeout branch.
+
+The reviewer inspected `schema-rename/scheduled-1792182340996/run-manifest.json`: authoritative before/after API history identifies execution #18496 as scheduled, successful and inside the observation window. The single fresh 570-byte export retains the known ten-column defect, per-object/aggregate validation fails appropriately, and cleanup is verified inactive. Thus the API-history race fix, safe trigger evidence, fresh-output validation path, and normal inactive cleanup have now run against the real service. Timeout/cleanup-error paths and exact object-to-job foreign-key linkage are not certified by that successful operational path.
+
+The rename follow-up manual run also records the new positive inactive checks, captured process ID and corresponding successful terminal status. Its new CSV remains identical to the first failed repair output; it is not a successful contract repair. Remaining case repairs and follow-up scheduling are still incomplete. A third rename repair remains in progress.
+
+Diagnostic-mode review found a false-positive risk: searching the entire `page-and-logs.txt` for `INPUT_TYPE_PROBE` can match the Builder prompt or node instruction even when the actual failure is unrelated. Require the marker and measured dtype/type payload in the matched job's real failure/error evidence. Also compare generated diagnostic code after both probe executions; unchanged saved input configuration alone is insufficient. This finding was communicated to the primary agent; no reviewer code edit was made in this update.
+
 ## Evidence established so far
 
 - Eight frozen scenarios and independent expected CSVs exist. Committed fixture hashes and counts were verified; all eight local validator tests passed at the earlier review.

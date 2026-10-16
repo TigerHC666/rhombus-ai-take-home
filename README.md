@@ -4,7 +4,7 @@ Evaluation of an AI-built S3-to-GCS cleaning pipeline under schema and semantic 
 
 ## Status
 
-Live baseline execution and a real scheduled run now retain all seven expected business records, with three identical exported results. Strict monetary serialization still violates the frozen two-decimal contract. All seven structural/semantic drift scenarios have been executed against the unchanged baseline pipeline; a second isolated repetition is in progress. Builder repairs and their scheduled verification are the next milestone. Authentication, project access, pipeline binding, and independent artifact validation are exercised against the real services. See the linked evidence rather than treating local validator tests as platform passes.
+Live baseline execution and a real scheduled run now retain all seven expected business records, with three identical exported results. Strict monetary serialization still violates the frozen two-decimal contract. All seven structural/semantic drift scenarios have been executed against the unchanged baseline pipeline; both isolated repetitions are complete. Builder repair and scheduled verification are in progress. The missing-email repair restores business values; rename repair has exposed an extra-column regression and a graph-wiring failure, all retained as evidence. Authentication, project access, pipeline binding, and independent artifact validation are exercised against the real services. See the linked evidence rather than treating local validator tests as platform passes.
 
 ## Contents
 

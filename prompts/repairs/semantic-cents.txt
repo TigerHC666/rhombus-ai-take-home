@@ -11,3 +11,5 @@ Calculate total_amount = quantity * unit_price using decimal arithmetic and ROUN
 
 
 Zero unit prices are valid. Accommodate native numeric and datetime values inferred by the S3 reader without dropping valid records. Preserve existing S3 source, sort, and GCS destination connections. Generate the cleaning implementation through AI Builder; do not provide instructions only. Keep the schedule disabled.
+
+Do not run the pipeline yourself: the independent runner will trigger it after checking the saved state. Ensure the generated executable code and node output-column contract both select exactly the nine canonical output fields. Remove adaptations from all other scenarios, not only their prompt text. Keep scheduling disabled.

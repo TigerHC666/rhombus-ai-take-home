@@ -1,0 +1,20 @@
+{
+  "scenario": "schema-rename",
+  "phase": "post-repair-wiring",
+  "trigger": "manual",
+  "started_at": "2026-10-16T20:32:23.418Z",
+  "harness_sha256": {
+    "ui-tests\\manual-output.spec.cjs": "6d3728e56ddd5624d32262661e6574dd8fde5d693bb5e183234695b0e6987bc7",
+    "test-support\\workflow.cjs": "f5e40057745d059b2c506d78feb662ccd28fabfe62b977656181f0f73639b169"
+  },
+  "stage": "confirming-source",
+  "schedule_checks": [
+    {
+      "label": "before-source",
+      "observed_at": "2026-10-16T20:32:30.383Z",
+      "inactive_verified": true
+    }
+  ],
+  "failure": "\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('complementary').getByText('orders.csv', { exact: true })\nExpected: visible\nError: strict mode violation: getByRole('complementary').getByText('orders.csv', { exact: true }) resolved to 2 elements:\n    1) <span class=\"min-w-0 truncate\">orders.csv</span> aka locator('span').filter({ hasText: 'orders.csv' })\n    2) <div data-state=\"closed\" class=\"min-w-0 flex-1 select-none truncate text-start transition-colors font-medium text-foreground dark:text-primary-foreground\">orders.csv</div> aka getByRole('list').getByText('orders.csv')\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('complementary').getByText('orders.csv', { exact: true }) with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('complementary').getByText('orders.csv', { exact: true })\u001b[22m\n",
+  "finished_at": "2026-10-16T20:32:36.386Z"
+}

@@ -13,6 +13,7 @@ module.exports = defineConfig({
     navigationTimeout: 60000,
     baseURL: 'https://rhombusai.com',
     channel: 'chrome',
+    viewport: { width: 1920, height: 1080 },
     trace: 'off',
     screenshot: 'off',
     video: process.env.RECORD_DEMO === '1' ? { mode: 'on', size: { width: 1280, height: 720 } } : 'off',

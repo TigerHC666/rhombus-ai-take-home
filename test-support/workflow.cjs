@@ -38,9 +38,16 @@ async function submitBuilderPrompt(page, prompt, evidenceDirectory) {
 }
 
 async function confirmSource(page) {
-  await page.getByRole('button', { name: /^Amazon S3 Data Input/ }).click();
+  const source = page.getByRole('button', { name: /^Amazon S3 Data Input/ });
+  // The canvas virtualizes nodes outside its viewport after Builder graph edits.
+  // The product's layout action makes the source reachable without editing logic.
+  if (await source.count() === 0) {
+    await page.getByRole('button').filter({ has: page.locator('svg.lucide-wrench') }).click();
+    await page.getByRole('button', { name: 'Auto Layout', exact: true }).click();
+  }
+  await source.click();
   await expect(page.getByText('Select Dataset', { exact: true })).toBeVisible();
-  await expect(page.getByRole('complementary').getByText('orders.csv', { exact: true })).toBeVisible();
+  await expect(page.getByRole('complementary').getByText('orders.csv', { exact: true }).filter({ visible: true }).first()).toBeVisible();
 }
 
 module.exports = { observeRoutes, openProject, submitBuilderPrompt, confirmSource };

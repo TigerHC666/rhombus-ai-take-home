@@ -1,0 +1,20 @@
+{
+  "scenario": "schema-rename",
+  "phase": "post-repair-wiring",
+  "trigger": "manual",
+  "started_at": "2026-10-16T20:33:07.864Z",
+  "harness_sha256": {
+    "ui-tests\\manual-output.spec.cjs": "6d3728e56ddd5624d32262661e6574dd8fde5d693bb5e183234695b0e6987bc7",
+    "test-support\\workflow.cjs": "f017c65abb5caf55f11e1a71b62acf39be7cddfbf81da2a58db57545bcac9820"
+  },
+  "stage": "confirming-source",
+  "schedule_checks": [
+    {
+      "label": "before-source",
+      "observed_at": "2026-10-16T20:33:14.821Z",
+      "inactive_verified": true
+    }
+  ],
+  "failure": "\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('complementary').getByText('orders.csv', { exact: true }).first()\nExpected: visible\nReceived: hidden\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('complementary').getByText('orders.csv', { exact: true }).first() with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('complementary').getByText('orders.csv', { exact: true }).first()\u001b[22m\n\u001b[2m    30 × locator resolved to <span class=\"min-w-0 truncate\">orders.csv</span>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n",
+  "finished_at": "2026-10-16T20:33:35.195Z"
+}

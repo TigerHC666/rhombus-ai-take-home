@@ -1,0 +1,136 @@
+{
+  "scenario": "schema-rename",
+  "trigger": "scheduled",
+  "observed_after": "2026-10-16T20:25:54.393Z",
+  "started_at": "2026-10-16T20:25:41.000Z",
+  "source": "source-provenance.json",
+  "activation_attempted": true,
+  "schedule_disabled": true,
+  "cleanup_attempted": true,
+  "status": "failed",
+  "stage": "strict_validation",
+  "outputs_observed": [
+    {
+      "name": "orders_cleaned_1792182381535.csv",
+      "generation": "1792182383374662",
+      "timeCreated": "2026-10-16T20:26:23.383Z",
+      "size": "570"
+    }
+  ],
+  "errors": [
+    {
+      "name": "Error",
+      "message": "Every output must match the independent business oracle\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m"
+    }
+  ],
+  "configuration_sha256": "c433fc9fa89d3902da2c8162db639430eea25ea92f08f0fe72e6e09daadb3a1b",
+  "cron": "*/1 * * * *",
+  "prior_executions": [
+    {
+      "id": 18494,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:19:16.147Z",
+      "completed_at": "2026-10-16T20:19:21.508Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.348796606063843
+    },
+    {
+      "id": 18490,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:05:17.727Z",
+      "completed_at": "2026-10-16T20:05:22.748Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.011039733886719
+    },
+    {
+      "id": 18489,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:04:19.194Z",
+      "completed_at": "2026-10-16T20:05:06.670Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 47.46637511253357
+    },
+    {
+      "id": 18487,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:03:17.231Z",
+      "completed_at": "2026-10-16T20:03:22.091Z",
+      "success": false,
+      "failed_node": "llm_cb15bd2a03a6e17e230c09e81dedeb16",
+      "total_duration_seconds": 3.756834030151367
+    },
+    {
+      "id": 18453,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T19:25:25.226Z",
+      "completed_at": "2026-10-16T19:25:30.844Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.602298021316528
+    }
+  ],
+  "executions": [
+    {
+      "id": 18496,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:26:19.353Z",
+      "completed_at": "2026-10-16T20:26:24.813Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.450022459030151
+    }
+  ],
+  "verified_trigger_literal": "scheduled",
+  "outputs": [
+    {
+      "name": "orders_cleaned_1792182381535.csv",
+      "generation": "1792182383374662",
+      "size": "570",
+      "timeCreated": "2026-10-16T20:26:23.383Z",
+      "updated": "2026-10-16T20:26:23.383Z",
+      "md5Hash": "N6ltOzBfwyIc/+QkinX+jg==",
+      "crc32c": "X7U6jg==",
+      "sha256": "cdcae50d8e2fe5c094d3e8c3357e1c66e4d0afbe89f0af5d2caa0ca1e46a6ec7",
+      "retrieved_at": "2026-10-16T20:26:30.015981+00:00"
+    }
+  ],
+  "output": {
+    "name": "orders_cleaned_1792182381535.csv",
+    "generation": "1792182383374662",
+    "size": "570",
+    "timeCreated": "2026-10-16T20:26:23.383Z",
+    "updated": "2026-10-16T20:26:23.383Z",
+    "md5Hash": "N6ltOzBfwyIc/+QkinX+jg==",
+    "crc32c": "X7U6jg==",
+    "sha256": "cdcae50d8e2fe5c094d3e8c3357e1c66e4d0afbe89f0af5d2caa0ca1e46a6ec7",
+    "retrieved_at": "2026-10-16T20:26:30.015981+00:00"
+  },
+  "output_attribution": "Candidates observed during the schedule window; exact object-to-execution linkage is not established",
+  "output_validations": [
+    {
+      "name": "orders_cleaned_1792182381535.csv",
+      "generation": "1792182383374662",
+      "sha256": "cdcae50d8e2fe5c094d3e8c3357e1c66e4d0afbe89f0af5d2caa0ca1e46a6ec7",
+      "report": "validation-output-1.json",
+      "passed": false,
+      "business_values_match": false
+    }
+  ],
+  "validation": {
+    "report": "validation.json",
+    "report_scope": "First object only; aggregate below includes every downloaded candidate",
+    "output_count": 1,
+    "passed": false,
+    "business_values_match": false
+  },
+  "observed_until": "2026-10-16T20:26:31.245Z"
+}

@@ -1,0 +1,24 @@
+{
+  "scenario": "schema-rename",
+  "phase": "post-repair-projection",
+  "trigger": "manual",
+  "started_at": "2026-10-16T20:26:44.833Z",
+  "stage": "capturing-logs",
+  "schedule_checks": [
+    {
+      "label": "before-source",
+      "observed_at": "2026-10-16T20:26:52.297Z",
+      "inactive_verified": true
+    },
+    {
+      "label": "before-manual-trigger",
+      "observed_at": "2026-10-16T20:27:28.639Z",
+      "inactive_verified": true
+    }
+  ],
+  "triggered_at": "2026-10-16T20:27:28.704Z",
+  "process_job_id": "b464d4ff-b87a-4733-97e5-ca7a98ab2456",
+  "execution_mode": "auto",
+  "failure": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /^Amazon S3 Data Input/ })\u001b[22m\n",
+  "finished_at": "2026-10-16T20:28:11.810Z"
+}

@@ -1,0 +1,16 @@
+{
+  "scenario": "schema-rename",
+  "phase": "post-repair-wiring",
+  "trigger": "manual",
+  "started_at": "2026-10-16T20:31:07.028Z",
+  "stage": "confirming-source",
+  "schedule_checks": [
+    {
+      "label": "before-source",
+      "observed_at": "2026-10-16T20:31:17.118Z",
+      "inactive_verified": true
+    }
+  ],
+  "failure": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /^Amazon S3 Data Input/ })\u001b[22m\n",
+  "finished_at": "2026-10-16T20:31:51.784Z"
+}
