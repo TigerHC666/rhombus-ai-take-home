@@ -1,13 +1,14 @@
+const settings = require('../test-support/settings.cjs');
 const { test, expect } = require('@playwright/test');
 
-test.use({ storageState: '.auth/rhombus.json' });
+test.use({ storageState: settings.storageState });
 
 test('direct backend request returns the authorized assessment project', async ({ page, context }) => {
   const observed = page.waitForRequest(request => {
     const url = new URL(request.url());
     return url.origin === 'https://api.rhombusai.com' && url.pathname === '/api/dataset/projects/all' && request.method() === 'GET';
   });
-  await page.goto('/workflow/5348');
+  await page.goto(`/workflow/${settings.projectId}`);
   // Replay the observed Request in the same authenticated context. Never inspect,
   // print, serialize, or persist its authentication headers.
   const response = await context.request.fetch(await observed);
@@ -15,7 +16,7 @@ test('direct backend request returns the authorized assessment project', async (
   const body = await response.json();
   expect(Array.isArray(body.items)).toBe(true);
   expect(body.items).toEqual(expect.arrayContaining([
-    expect.objectContaining({ id: 5348, name: 'LLM Observability Assessment', visibility: 'restricted' }),
+    expect.objectContaining({ id: settings.projectId, name: settings.projectName, visibility: 'restricted' }),
   ]));
 });
 

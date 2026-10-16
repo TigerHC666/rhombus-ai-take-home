@@ -14,7 +14,7 @@ const path = require('node:path');
     const request = response.request();
     if (!['fetch', 'xhr'].includes(request.resourceType())) return;
     const url = new URL(response.url());
-    if (!url.hostname.endsWith('rhombusai.com')) return;
+    if (url.hostname !== 'rhombusai.com' && !url.hostname.endsWith('.rhombusai.com')) return;
     // Deliberately exclude headers, request bodies, query strings, and responses.
     const item = { method: request.method(), origin: url.origin, pathname: url.pathname, status: response.status() };
     records.set(`${item.method} ${item.origin}${item.pathname} ${item.status}`, item);

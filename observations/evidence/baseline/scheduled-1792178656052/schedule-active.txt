@@ -1,0 +1,8 @@
+Schedules
+Manage schedules within this project
+Add Schedule
+Schedule for LLM Observability Assessment
+Active
+Custom
+Custom: */5 * * * *
+Next run: in 32 secs

@@ -1,0 +1,14 @@
+{
+  "bucket": "rhombus-assessment-source-20261017-hc666",
+  "key": "orders.csv",
+  "scenario": "baseline",
+  "retrieved_at": "2026-10-16T19:22:27.818775+00:00",
+  "last_modified": "2026-10-16T18:21:19+00:00",
+  "etag": "\"a0b79c30153f26a19749377695e758a0\"",
+  "version_id": null,
+  "sha256": "5ae93188cc660b26ca260dda268fec0f9df9344fd165c8910bbbb9df8b5eb014",
+  "expected_sha256": "5ae93188cc660b26ca260dda268fec0f9df9344fd165c8910bbbb9df8b5eb014",
+  "matches_fixture": true,
+  "bytes": 839,
+  "uploaded_this_call": false
+}

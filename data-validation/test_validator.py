@@ -61,6 +61,12 @@ class ValidatorTests(unittest.TestCase):
         output = self.mutate(lambda _, rows: rows[0].__setitem__(8, "NaN"))
         self.assertFalse(validate("baseline", self.source, output)["passed"])
 
+    def test_precision_only_failure_is_not_silent_value_corruption(self):
+        output = self.mutate(lambda _, rows: rows[0].__setitem__(8, "25.0"))
+        result = validate("baseline", self.source, output)
+        self.assertFalse(result["passed"])
+        self.assertTrue(result["business_values_match"])
+
     def test_determinism_difference_fails(self):
         output = self.mutate(lambda _, rows: rows[0].__setitem__(8, "25.01"))
         result = validate("baseline", self.source, self.expected, [output])

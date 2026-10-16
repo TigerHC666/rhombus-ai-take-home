@@ -2,6 +2,7 @@
 
 import argparse
 import csv
+from decimal import Decimal, InvalidOperation
 import hashlib
 import json
 import re
@@ -55,6 +56,20 @@ def validate(scenario, source, output, repeats=()):
             differences = {expected_header[col]: {"expected": expected_rows[index][col], "actual": value}
                            for col, value in enumerate(row) if value != expected_rows[index][col]}
             errors.append({"row": index + 1, "differences": differences})
+    business_values_match = header == expected_header and len(rows) == len(expected_rows)
+    for actual, expected in zip(rows, expected_rows):
+        if len(actual) != len(expected):
+            business_values_match = False
+            continue
+        for column, (value, target) in enumerate(zip(actual, expected)):
+            if column in (5, 8):
+                try:
+                    equal = Decimal(value).is_finite() and Decimal(value) == Decimal(target)
+                except InvalidOperation:
+                    equal = False
+            else:
+                equal = value == target
+            business_values_match = business_values_match and equal
     repeat_results = []
     for path in repeats:
         repeated_header, repeated_rows = read_csv(path)
@@ -70,6 +85,7 @@ def validate(scenario, source, output, repeats=()):
         "output_sha256": digest(output),
         "source_rows": len(source_rows),
         "output_rows": len(rows),
+        "business_values_match": business_values_match,
         "determinism": "checked" if repeats else "not_checked",
         "repeats": repeat_results,
         "errors": errors,

@@ -17,6 +17,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--key', type=Path, default=ROOT / '.secrets/gcs-writer-key.json')
     parser.add_argument('--destination', type=Path, default=ROOT / 'observations/evidence/gcs')
+    parser.add_argument('--since', help='Only objects created at or after this UTC ISO timestamp')
+    parser.add_argument('--list-only', action='store_true', help='Return metadata without downloading CSVs')
     args = parser.parse_args()
     credentials = service_account.Credentials.from_service_account_file(
         args.key, scopes=['https://www.googleapis.com/auth/devstorage.read_only'])
@@ -35,6 +37,12 @@ def main():
         page_token = body.get('nextPageToken')
         if not page_token:
             break
+    if args.since:
+        boundary = datetime.fromisoformat(args.since.replace('Z', '+00:00'))
+        objects = [item for item in objects if datetime.fromisoformat(item['timeCreated'].replace('Z', '+00:00')) >= boundary]
+    if args.list_only:
+        print(json.dumps([{key: item.get(key) for key in ['name', 'generation', 'timeCreated', 'size']} for item in objects]))
+        return
     inventory = []
     for item in objects:
         name = item['name']

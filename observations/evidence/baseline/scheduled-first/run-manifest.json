@@ -1,0 +1,26 @@
+{
+  "scenario": "baseline",
+  "trigger": "scheduled",
+  "execution_id": 18453,
+  "execution_started_at": "2026-10-16T19:25:25Z",
+  "execution_duration_seconds": 5.6,
+  "platform_status": "Success",
+  "configuration": "../configuration-v3.json",
+  "source": "../source/source-provenance.json",
+  "outputs": [
+    {
+      "name": "orders_cleaned_1792178727430.csv",
+      "generation": "1792178729289633",
+      "size": "528",
+      "timeCreated": "2026-10-16T19:25:29.296Z",
+      "updated": "2026-10-16T19:25:29.296Z",
+      "md5Hash": "mK5QZC78JAXpwc7G6+KDNA==",
+      "crc32c": "ak1PeQ==",
+      "sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
+      "retrieved_at": "2026-10-16T19:27:01.789217+00:00"
+    }
+  ],
+  "schedule_state_after": "Inactive",
+  "history": "history.txt",
+  "correlation": "Single active schedule, no manual run during window; object timestamp within the successful scheduled execution window. UI history independently identifies the scheduled execution."
+}

@@ -10,14 +10,19 @@
     "status": 200
   },
   {
-    "method": "GET",
-    "pathname": "/api/accounts/users/profile",
-    "status": 200
-  },
-  {
     "method": "POST",
     "pathname": "/api/internal-ops/config/",
     "status": 403
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/accounts/users/current-org-role",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/accounts/users/profile",
+    "status": 200
   },
   {
     "method": "GET",
@@ -31,17 +36,7 @@
   },
   {
     "method": "GET",
-    "pathname": "/api/accounts/users/current-org-role",
-    "status": 200
-  },
-  {
-    "method": "GET",
     "pathname": "/api/dataset/analyzer/v2/projects/5348/datasets",
-    "status": 200
-  },
-  {
-    "method": "GET",
-    "pathname": "/api/accounts/users/project-limit",
     "status": 200
   },
   {
@@ -51,17 +46,12 @@
   },
   {
     "method": "GET",
+    "pathname": "/api/accounts/users/project-limit",
+    "status": 200
+  },
+  {
+    "method": "GET",
     "pathname": "/api/accounts/users/schedule-limit",
-    "status": 200
-  },
-  {
-    "method": "GET",
-    "pathname": "/api/dataset/analyzer/v2/projects/5348/nodes",
-    "status": 200
-  },
-  {
-    "method": "GET",
-    "pathname": "/api/dataset/analyzer/v2/projects/5348/chat/history",
     "status": 200
   },
   {
@@ -71,12 +61,22 @@
   },
   {
     "method": "GET",
-    "pathname": "/api/projects/5348/data-sources/external-sources/s3/files",
+    "pathname": "/api/dataset/analyzer/v2/projects/5348/nodes",
     "status": 200
   },
   {
     "method": "GET",
     "pathname": "/api/accounts/users/subscription",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/dataset/analyzer/v2/projects/5348/chat/history",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "pathname": "/api/projects/5348/data-sources/external-sources/s3/files",
     "status": 200
   },
   {

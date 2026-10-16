@@ -1,5 +1,28 @@
 # Independent Design Review
 
+## Interim source-helper and scheduled-test review
+
+Read-only review of `source_s3.py`, `scheduled-output.spec.cjs`, `download_gcs.py`, the updated validator, and workflow/settings helpers. No cloud requests, uploads, or schedule changes were performed by the reviewer.
+
+Positive controls: S3 mutations require an explicit `--upload`, target one hardcoded assessment key, verify the frozen fixture hash, reread actual S3 bytes, and preserve hash/ETag/last-modified evidence. GCS downloads pin the listed object generation and preserve checksums. Scheduled-test validation uses a downloaded source instead of substituting the fixture. The test disables scheduling before strict output assertions, and expected decimal-format failures remain failures. Source-role permissions are reported by the primary, not independently inspected here.
+
+### Corrections before unattended or repeated scheduled execution
+
+1. **Cleanup activation race:** `activated` becomes true only after the switch `.check()` resolves. If the server enables the schedule but the UI check times out, `finally` skips cleanup. Set cleanup responsibility before attempting activation and inspect/disable scheduling even when activation throws. Preserve cleanup errors and never declare disabled state unless verified. A process crash or lost browser also defeats `finally`; retain supervised operation and a bounded server-side end/run limit where supported.
+2. **Scheduled provenance is not proven:** the poll accepts any matching-prefix GCS object created after `start`, then hardcodes `trigger: 'scheduled'`. A pending/manual run can satisfy this. Parse and assert a matching successful schedule-history execution with timestamps/run ID and the active configuration; correlate its output generation. If linkage is unavailable, label trigger attribution provisional rather than scheduled. The saved history text alone is not an assertion.
+3. **Disable controls and bounds:** assert the schedule is initially inactive, inspect/save its configured cadence, and do not silently take over an already-active schedule. The seven-minute timeout alone does not enforce the design's maximum three executions if the configured cadence is fast or exports fail. Enforce run count or explicitly revise the supervised bound using observed controls. Record queued/in-flight work after disable.
+4. **Failure manifests:** poll timeouts and cleanup/history errors currently escape before `run-manifest.json` is written. Always emit a failure manifest describing attempted activation, source evidence, observed runs/objects, and independently verified cleanup status, even when no object appears. This complements the validator's improved structured missing-artifact report.
+5. **Exact artifact linkage:** the manifest's `output` comes from the earlier list poll, while a second listing supplies the actual downloads. Select/pin the same object generation and include its final downloaded SHA-256 in the run manifest. Recheck the S3 hash after the window to detect accidental source replacement while testing; unchanged before/after hashes support, but do not alone prove, the engine read that version.
+6. **Helper limits and portability:** reject oversize source fixtures before PUT, not only after downloading; close the S3 response stream. Document boto3 installation rather than relying solely on an ignored vendor directory. Python helpers hardcode bucket/region while JS exposes output-bucket configuration; reconcile these so a customized test cannot silently validate the original author's bucket.
+
+### Proceeding with a known precision defect
+
+It is appropriate to stop repeated AI repair attempts once seven business records are independently correct and the remaining two-decimal serialization defect is reproducible. Execute the required scenario matrix against that frozen baseline revision, explicitly recording **business baseline correct; strict serialization contract failed**. Do not relabel the strict baseline as fully passed or weaken the oracle.
+
+Use separate fields for run success, business-value correctness, strict formatting, drift detection, and repair outcome. Preserve the strict failing test/report; orchestrate subsequent independent cases despite this known failure. Compare new scenario-specific defects against the known baseline formatting defect so it does not conceal data loss or silent semantic corruption. The validator's `business_values_match` is an output-value comparison only: it may be true even when source provenance or determinism fails, so it must not become a standalone overall-pass flag.
+
+The primary reports v2/v3 exports retain A010 with seven business-correct rows but still lose monetary trailing zeros. This review did not independently reopen those new outputs; retain their raw-object validation as the evidence supporting that state. Formal implementation checkpoint 2 remains pending.
+
 ## Interim authenticated-test coverage review
 
 Reviewed `api-tests/project-access.spec.cjs`, `api-tests/authentication.spec.cjs`, `ui-tests/pipeline-state.spec.cjs`, and `ui-tests/session.spec.cjs`. The primary reports passing authenticated/anonymous project API checks and pipeline-state UI execution; this review inspected their code without independently replaying cloud requests.

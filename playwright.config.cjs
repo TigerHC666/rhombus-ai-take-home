@@ -9,6 +9,8 @@ module.exports = defineConfig({
   retries: 0,
   reporter: [['list'], ['json', { outputFile: '.runtime/playwright-results.json' }]],
   use: {
+    actionTimeout: 30000,
+    navigationTimeout: 60000,
     baseURL: 'https://rhombusai.com',
     channel: 'chrome',
     trace: 'off',

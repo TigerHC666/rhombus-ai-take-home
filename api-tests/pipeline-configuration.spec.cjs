@@ -1,15 +1,16 @@
+const settings = require('../test-support/settings.cjs');
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 
-test.use({ storageState: '.auth/rhombus.json' });
+test.use({ storageState: settings.storageState });
 
 test('observed pipeline endpoint returns the connected assessment graph', async ({ page, context }) => {
   const observed = page.waitForRequest(request => {
     const url = new URL(request.url());
     return url.origin === 'https://api.rhombusai.com' &&
-      url.pathname === '/api/dataset/analyzer/v2/projects/5348/nodes' && request.method() === 'GET';
+      url.pathname === `/api/dataset/analyzer/v2/projects/${settings.projectId}/nodes` && request.method() === 'GET';
   });
-  await page.goto('/workflow/5348');
+  await page.goto(`/workflow/${settings.projectId}`);
   const response = await context.request.fetch(await observed);
   expect(response.status()).toBe(200);
   const body = await response.json();
@@ -29,11 +30,17 @@ test('observed pipeline endpoint returns the connected assessment graph', async 
   expect(destination).toBeDefined();
   expect(destination.params.destination_id).toBeGreaterThan(0);
   expect(destination.inputs.length).toBeGreaterThan(0);
+  const outputs = new Set(body.flatMap(node => node.outputs));
+  for (const node of body) {
+    for (const input of node.inputs) expect(outputs.has(input), `Unbound input for ${node.node_id}`).toBe(true);
+  }
   // Strict allowlist: never serialize output-node credentials or full metadata.
   const configuration = body.map(node => ({
     node_id: node.node_id, name: node.name, inputs: node.inputs, outputs: node.outputs,
     transformation_type: node.transformation_type,
     prompt: node.params?.prompt,
+    code: node.transformation_type === 'llm' ? node.params?.code : undefined,
+    mode: node.transformation_type === 'llm' ? node.params?.mode : undefined,
     sort_columns: node.params?.sort_columns,
     ascending: node.params?.ascending,
     source_type: node.params?.source_type,
