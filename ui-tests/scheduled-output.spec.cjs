@@ -23,7 +23,8 @@ test('scheduled pipeline produces a fresh independently validated GCS artifact',
   page.on('response', async response => {
     const url = new URL(response.url());
     if (url.origin !== 'https://api.rhombusai.com' || url.pathname !== `/api/dataset/analyzer/v2/projects/${settings.projectId}/nodes` || response.status() !== 200) return;
-    const nodes = await response.json();
+    const nodes = await response.json().catch(() => null);
+    if (!Array.isArray(nodes)) return;
     configuration = nodes.map(node => ({
       node_id: node.node_id, name: node.name, inputs: node.inputs, outputs: node.outputs,
       transformation_type: node.transformation_type, prompt: node.params?.prompt,

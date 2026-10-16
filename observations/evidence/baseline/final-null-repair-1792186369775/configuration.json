@@ -1,0 +1,63 @@
+[
+  {
+    "node_id": "1792174488846",
+    "name": "input_845d116c201ceece365adda3310625df",
+    "inputs": [],
+    "outputs": [
+      "input_845d116c201ceece365adda3310625df_df",
+      "input_845d116c201ceece365adda3310625df_mask"
+    ],
+    "transformation_type": "input",
+    "source_type": "s3",
+    "data_asset_ref": "e789b770-435d-41ad-abd0-487c85fd4cee",
+    "dataset_id": 0,
+    "source_connection_id": "bc0cd1ec-99ab-4e08-b462-314469b30de2"
+  },
+  {
+    "node_id": "llm_node_17",
+    "name": "llm_node_17",
+    "inputs": [
+      "input_845d116c201ceece365adda3310625df_df",
+      "input_845d116c201ceece365adda3310625df_mask"
+    ],
+    "outputs": [
+      "llm_node_17_df",
+      "llm_node_17_mask"
+    ],
+    "transformation_type": "llm",
+    "prompt": "Clean the orders DataFrame. Follow every rule below exactly. Critical null-safety requirement: NEVER call .astype(str) on a Series before checking for null/NaN/pd.NA. Calling .astype(str) converts None to 'None', NaN to 'nan', pd.NA to '<NA>' — these are non-null strings that will silently bypass all null checks. Use null-safe helpers (shown below) for every string operation. Null-safe helpers to define at the top: def safe_strip(series): \"\"\"Strip whitespace only from non-null string cells; leave nulls as NaN.\"\"\" return series.where(series.isna(), series.apply(lambda v: v.strip() if isinstance(v, str) else v)) def safe_upper(series): return series.where(series.isna(), series.apply(lambda v: v.upper() if isinstance(v, str) else v)) def safe_lower(series): return series.where(series.isna(), series.apply(lambda v: v.lower() if isinstance(v, str) else v)) def is_blank(series): \"\"\"True where cell is null OR is a string that is empty after stripping.\"\"\" null_mask = series.isna() str_blank = series.apply(lambda v: isinstance(v, str) and v.strip() == '') return null_mask | str_blank Rules: 1. TRIMMING: Apply safe_strip to every object-dtype column. 2. CASE NORMALIZATION: Apply safe_upper to order_id and currency. Apply safe_lower to email and status. Leave customer unchanged here. 3. MISSING CUSTOMER: After trimming, use is_blank(df['customer']) to detect null/NaN/blank. Set those cells to 'Unknown'. Do NOT use astype(str) here. 4. EMAIL VALIDATION: After safe_lower, validate with regex ^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$. If null, blank, or no match, set to empty string ''. Use is_blank() for the blank check — do not use astype(str). 5. REQUIRED FIELDS: Drop rows where order_id, currency, or status is null or blank (use is_blank). Drop rows where order_date, quantity, or unit_price is null or blank (use is_blank). 6. CURRENCY FILTER: Keep only rows where currency == 'AUD'. 7. STATUS FILTER: Keep only rows where status is 'paid' or 'pending'. 8. DATE PARSING: For each order_date value: - If it is a datetime/Timestamp object (hasattr(val, 'strftime') and not isinstance(val, str)), call val.strftime('%Y-%m-%d'). - If it is a string matching YYYY-MM-DD, keep as-is. - If it is a string matching MM/DD/YYYY, parse with datetime.strptime(s, '%m/%d/%Y').strftime('%Y-%m-%d'). - Otherwise return None and drop that row. - Never use pd.isna on a raw value without a try/except because Timestamps can raise. 9. QUANTITY VALIDATION: Accept only strings/values matching ^[1-9][0-9]*$ (positive integer digits only). Convert to int. Reject zero, negatives, floats with fractional part, NaN, inf, strings with non-digit characters. Use pd.isna-safe check: wrap in try/except. 10. UNIT PRICE VALIDATION: Strip optional leading '$'. Accept values matching ^[0-9]+(\\.[0-9]{1,2})?$ (zero IS valid). Parse with decimal.Decimal. Reject negatives, NaN, inf, exponent notation, comma-formatted. Use pd.isna-safe check. 11. DEDUPLICATION: First drop exact full-row duplicates (keep='first'). Then, for any order_id that still appears more than once with ANY differing field value, drop ALL rows for that order_id. 12. TOTAL AMOUNT: Compute quantity * unit_price using decimal.Decimal with ROUND_HALF_UP to 2 decimal places. 13. SERIALIZATION: Store unit_price and total_amount as pd.array(..., dtype=pd.StringDtype()) with exactly 2 decimal places. Store quantity as int64. 14. OUTPUT: Return exactly these 9 columns in this order: order_id, customer, email, order_date, quantity, unit_price, currency, status, total_amount. Do not hardcode any rows, order IDs, expected counts, or test values. Do not add timestamps or extra columns."
+  },
+  {
+    "node_id": "sort_node_4",
+    "name": "sort_node_4",
+    "inputs": [
+      "llm_node_17_df",
+      "llm_node_17_mask"
+    ],
+    "outputs": [
+      "sort_node_4_df",
+      "sort_node_4_mask"
+    ],
+    "transformation_type": "sort",
+    "sort_columns": [
+      "order_id"
+    ],
+    "ascending": true
+  },
+  {
+    "node_id": "output_node_1",
+    "name": "output_fe6570c80f47cdce36f51dcaaefffee4",
+    "inputs": [
+      "sort_node_4_df",
+      "sort_node_4_mask"
+    ],
+    "outputs": [
+      "output_fe6570c80f47cdce36f51dcaaefffee4_df",
+      "output_fe6570c80f47cdce36f51dcaaefffee4_mask"
+    ],
+    "transformation_type": "output",
+    "destination_id": 90,
+    "format_type": "csv",
+    "custom_filename": "orders_cleaned"
+  }
+]

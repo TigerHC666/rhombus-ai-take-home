@@ -38,12 +38,23 @@ async function submitBuilderPrompt(page, prompt, evidenceDirectory) {
 }
 
 async function confirmSource(page) {
-  const source = page.getByRole('button', { name: /^Amazon S3 Data Input/ });
+  // After graph regeneration the input can retain its generic display label.
+  // Callers verify the saved S3 binding separately; the panel must show orders.csv.
+  const source = page.getByRole('button', { name: /^(?:Amazon S3 )?Data Input/ });
+  // Node configuration can arrive before the canvas finishes rendering labels.
+  // Wait for the actual source before treating absence as viewport virtualization.
+  try {
+    await source.waitFor({ state: 'visible', timeout: 15000 });
+  } catch (error) {
+    if (error.name !== 'TimeoutError') throw error;
+  }
   // The canvas virtualizes nodes outside its viewport after Builder graph edits.
   // The product's layout action makes the source reachable without editing logic.
   if (await source.count() === 0) {
     await page.getByRole('button').filter({ has: page.locator('svg.lucide-wrench') }).click();
-    await page.getByRole('button', { name: 'Auto Layout', exact: true }).click();
+    const layout = page.getByRole('button', { name: 'Auto Layout', exact: true });
+    await expect(layout).toBeEnabled({ timeout: 60000 });
+    await layout.click();
   }
   await source.click();
   await expect(page.getByText('Select Dataset', { exact: true })).toBeVisible();

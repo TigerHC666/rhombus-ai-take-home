@@ -1,0 +1,35 @@
+[
+  {
+    "name": "orders_cleaned_1792186980631.csv",
+    "generation": "1792186982090280",
+    "size": "528",
+    "timeCreated": "2026-10-16T21:43:02.095Z",
+    "updated": "2026-10-16T21:43:02.095Z",
+    "md5Hash": "mK5QZC78JAXpwc7G6+KDNA==",
+    "crc32c": "ak1PeQ==",
+    "sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
+    "retrieved_at": "2026-10-16T21:43:25.060091+00:00"
+  },
+  {
+    "name": "orders_cleaned_1792186984951.csv",
+    "generation": "1792186987150063",
+    "size": "528",
+    "timeCreated": "2026-10-16T21:43:07.155Z",
+    "updated": "2026-10-16T21:43:07.155Z",
+    "md5Hash": "mK5QZC78JAXpwc7G6+KDNA==",
+    "crc32c": "ak1PeQ==",
+    "sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
+    "retrieved_at": "2026-10-16T21:43:25.582646+00:00"
+  },
+  {
+    "name": "orders_cleaned_1792186997483.csv",
+    "generation": "1792186999440628",
+    "size": "528",
+    "timeCreated": "2026-10-16T21:43:19.446Z",
+    "updated": "2026-10-16T21:43:19.446Z",
+    "md5Hash": "mK5QZC78JAXpwc7G6+KDNA==",
+    "crc32c": "ak1PeQ==",
+    "sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
+    "retrieved_at": "2026-10-16T21:43:26.489969+00:00"
+  }
+]

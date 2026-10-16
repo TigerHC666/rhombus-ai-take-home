@@ -6,7 +6,7 @@ Real S3-to-GCS testing of an AI-built cleaning pipeline under structural and sem
 
 Work remains in progress. Baseline business output and scheduled execution have been observed, and all seven drift cases have two real manual pre-repair observations. The rename repair now produces the correct seven records and nine columns in both manual and scheduled runs. Missing-email repair is verified in isolated manual execution and scheduled #18522; earlier unchanged-data skips remain documented. Quantity-suffix repair is also verified manually and on schedule; added-column upstream-drop correction is verified manually and in scheduled #18508. The combined native alias-drop correction is verified manually and in scheduled #18513. Cents conversion is verified manually and in scheduled #18515; the conditional date reader correction is verified manually and in scheduled #18520.
 
-All seven case-specific business repairs have successful manual and scheduled evidence. The final baseline reconstruction is still under review: its [UI-journey run](observations/evidence/baseline/final-ui-journey-1792186089018/run-manifest.json) produced two candidates, one business-correct and one with an incorrect missing-customer value. Aggregate validation correctly failed; a Builder null-handling repair is pending verification. Scheduled unrepaired observations under the final frozen baseline and the final demonstration remain pending.
+All seven case-specific business repairs have successful manual and scheduled evidence. The final baseline reconstruction is still under review: its [UI-journey run](observations/evidence/baseline/final-ui-journey-1792186089018/run-manifest.json) produced two candidates, one business-correct and one with an incorrect missing-customer value. Aggregate validation correctly failed. A subsequent [Builder recovery](observations/final-baseline.md#recovered-business-baseline) produced three business-correct candidates with identical hashes; strict formatting still fails. Frozen scheduled observation verified unchanged configuration and inactive cleanup but produced no fresh output, with an unchanged-data skip; prior API history identifies overlapping scheduled successes during recovery. Scheduled unrepaired observations under the final frozen baseline and the final demonstration remain pending.
 
 **Strict monetary formatting still fails:** exports such as `12.5` do not satisfy the frozen `12.50` contract. Business correctness, backend success, and strict validation are reported separately. Nonzero integration-test exits can represent observed product defects; they must not be relabeled as passes. No simulation or expected-output fixture is presented as live execution evidence.
 
@@ -91,7 +91,7 @@ Remove-Item Env:CONFIGURE_CONNECTIONS, Env:BUILDER_PROMPT_FILE, Env:RECORD_DEMO
 
 This is a live Builder reconstruction and must be reviewed against every downloaded output before freezing the result. A successful Builder response or backend job alone does not qualify it as a baseline. The first recorded final journey exposed a null-handling regression, so its snapshot must not be used as the accepted baseline without repair and verification.
 
-After verifying the restored baseline manually and on schedule, use its actual `configuration.json` path below. The placeholder is intentional: the final accepted snapshot and seven scheduled drift results are still pending.
+After verifying the restored baseline manually and on schedule, use its actual `configuration.json` path below. The placeholder is intentional: the recovered snapshot passed before/after frozen comparison during a no-output scheduled skip; seven scheduled drift results remain pending.
 
 ```powershell
 python scripts/run-scheduled-drift.py --frozen path/to/verified-baseline/configuration.json schema-drop schema-rename schema-type schema-add schema-combined semantic-cents semantic-dates
@@ -113,12 +113,14 @@ Immutable inputs/oracles and hashes are in `datasets/`; `generate_variants.py` r
 
 ## Demonstration recordings
 
-These are actual raw test-browser recordings, not a narrated final walkthrough. Private-repository access is required; download the WebM if the repository viewer does not play it.
+[Watch or download the 2 minute 47 second walkthrough](observations/demo/walkthrough.mp4) · [Chapter guide and evidence links](observations/demo/README.md). It combines actual browser footage at 2x speed with explicitly labeled recorded result cards: seven API tests and nine local validator tests passed; the recovered artifact is business-correct but fails strict money formatting. The footage preserves the earlier null-handling regression rather than pretending it is the recovered run. The primary agent fully decoded the MP4 and visually checked three representative frames.
+
+The raw recordings below are supplementary. Repository access is required while private; download the media if the repository viewer does not offer playback.
 
 - [Missing-email Builder repair recording](observations/demo/schema-drop-builder-repair.webm): repair interaction; individual exports from that earlier window have ambiguous manual/scheduled attribution.
 - [Rename follow-up recording](observations/demo/schema-rename-followup.webm): unsuccessful intermediate repair, not the final corrected graph.
 
-A concise final demonstration and viewer-access check remain outstanding. Recording presence is not proof that every claimed test or final state appears in the clip.
+Final reviewer/recruiter repository access remains pending. Recording presence is not proof that every claimed test or final state appears in the clip.
 
 ## Usability feedback
 

@@ -1,0 +1,103 @@
+Dashboard
+New Project
+Search
+All Projects (1)
+LLM Observability Assessment
+T
+tiger.cai1116@gmail.com
+Canvas
+Workspace
+Preview
+Logs
+1
+Data Input
+Data Input
+Custom
+llm_node_18
+Sort Data
+sort_node_4
+Data Output
+Export to rhombus-assessment-output-20261017-hc6 (csv)
+Logs
+3 visible
+1
+All
+2
+0
+1
+08:40:08 AM
+
+Pipeline failed at orders_sorted_v4: DataFrame should not be empty.
+
+Ask Chatbot
+{
+  "kind": "pipeline_summary",
+  "status": "error",
+  "failure": {
+    "message": "Pipeline failed at orders_sorted_v4: DataFrame should not be empty.",
+    "reason": "DataFrame should not be empty.",
+    "nodeId": "sort_node_4",
+    "nodeLabel": "orders_sorted_v4",
+    "nodeRef": "sort_node_4"
+  },
+  "nodeId": "sort_node_4",
+  "nodeName": "orders_sorted_v4"
+}
+08:40:08 AM
+
+Pipeline execution completed successfully.
+
+08:38:40 AM
+
+Pipeline execution started.
+
+AI Builder
+Schedule
+Transform
+Profile
+Data Profile
+Full report
+Select Column
+quantity
+Overview
+Type
+Numeric
+Distinct
+6 / 12
+Empty
+0 / 12
+Distribution
+0 - 1
+8.3%
+1 - 2
+33.3%
+2 - 3
+33.3%
+3 - 4
+8.3%
+4 - 5
+16.7%
+Statistics
+Min
+0
+Max
+5
+Range
+5
+Mean
+2
+Standard Deviation
+1.41
+Kurtosis
+0.62
+Skewness
+0.93
+Facet
+4,938/50
+orders_cleaned_v17
+
+No results found after applying this LLM transformation.
+
+Focus
+
+If there is an issue, consider undoing the last step.

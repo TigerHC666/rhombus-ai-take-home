@@ -1,0 +1,24 @@
+{
+  "scenario": "schema-drop",
+  "phase": "scheduled-pre-repair",
+  "trigger": "unverified",
+  "observed_after": null,
+  "started_at": "2026-10-16T21:48:11.218Z",
+  "source": "source-provenance.json",
+  "activation_attempted": false,
+  "schedule_disabled": null,
+  "cleanup_attempted": false,
+  "status": "failed",
+  "stage": "schedule_setup",
+  "outputs_observed": [],
+  "errors": [
+    {
+      "name": "TimeoutError",
+      "message": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Auto Layout', exact: true })\u001b[22m\n\u001b[2m    - locator resolved to <button data-testid=\"auto-layout\" class=\"workflow-focus-visible-glow inline-flex items-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 h-9 px-3 w-full justify-start gap-2 rounded-xl workflow-canvas-glass-button\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 bg-background/48 dark:bg-background/62 backdrop-blur-sm\"></div> intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - found getByRole('dialog').filter({ has: getByRole('heading', { name: 'Ad Blocker Detected', exact: true }) }), intercepting action to run the handler\u001b[22m\n\u001b[2m    - locator handler has finished, waiting for getByRole('dialog').filter({ has: getByRole('heading', { name: 'Ad Blocker Detected', exact: true }) }) to be hidden\u001b[22m\n\u001b[2m    5 × locator resolved to visible <div role=\"dialog\" tabindex=\"-1\" id=\"radix-:r53:\" data-state=\"closed\" aria-labelledby=\"radix-:r54:\" aria-describedby=\"radix-:r55:\" class=\"workflow-dialog-surface !bg-card/72 fixed left-[50%] top-[50%] z-50 w-full translate-x-[-50%] translate-y-[-50%] gap-4 border border-border/60 p-6 text-foreground shadow-[0_24px_80px_hsl(var(--foreground)/0.18),inset_0_1px_0_hsl(var(--background)/0.7)] backdrop-blur-2xl backdrop-saturate-150 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-ou…>…</div>\u001b[22m\n\u001b[2m    - interception handler has finished, continuing\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m  - element was detached from the DOM, retrying\u001b[22m\n"
+    }
+  ],
+  "configuration_sha256": "f6f40ae051777d18334352d1592a5926ae1325545c3cfc2fb9e2e92201826458",
+  "frozen_configuration_before_match": true,
+  "cron": "*/1 * * * *",
+  "observed_until": "2026-10-16T21:48:50.018Z"
+}

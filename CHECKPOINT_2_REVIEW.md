@@ -6,11 +6,19 @@ Status: **in progress; not signed off**. Checkpoint 1 design/fixture acceptance 
 
 Business-correct Builder repairs and real scheduled follow-ups are now documented for rename (#18500), type (#18504), added column (#18508), combined (#18513), cents (#18515), and dates (#18520). Each final scheduled report retains strict monetary-format failure and verified inactive cleanup. The date follow-up's raw manual/scheduled outputs were independently hashed and match; its saved configurations also match. Its Timestamp reconstruction depends on the observed reader interpretation, not dynamically measured dtype or universal semantic inference.
 
-Controlled drop manual evidence `post-repair-controlled-repeat-1792181656437` verifies both positive inactive checks, process job `72e1c928-f486-4d59-a9cb-6b2d3b1fc344`, matching terminal SUCCESS, business-correct output and strict-format failure. Its earlier ambiguous repair and unchanged-data scheduling attempts remain historical evidence. A fresh isolated drop repair/schedule is pending review.
+Controlled drop manual evidence `post-repair-controlled-repeat-1792181656437` verifies both positive inactive checks, process job `72e1c928-f486-4d59-a9cb-6b2d3b1fc344`, matching terminal SUCCESS, business-correct output and strict-format failure. Its earlier ambiguous repair and unchanged-data scheduling attempts remain historical evidence. The fresh isolated drop manual `post-repair-1792185641023` and scheduled `scheduled-1792185777857` are now reviewed: scheduled #18522 succeeds, manual/scheduled hashes and saved configurations match, business values are correct, strict formatting fails and cleanup is inactive.
 
 Normal-path process-ID filtering, inactive checks, every-candidate validation, authoritative API schedule history and shutdown are exercised by subsequent real runs. Date scheduled `1792185555712` also exercises explicit execution outcome fields and post-shutdown visible-log capture. It does not exercise the newly added no-output validator report or frozen pre/post scheduled configuration comparison. Those branches require forthcoming runtime evidence.
 
 The diagnostic marker finding was mitigated by matched-job payload checks, but the actual probe's final generated code removed the deliberate exception and the job succeeded as pass-through. Code-generation-stage markers cannot certify final runtime measurements; see the diagnostic finding retained with the probe evidence.
+
+## Latest regression and remaining baseline gate
+
+[Recorded regression](observations/final-regression.json), 2026-10-16 21:41:18.760 to 21:42:02.192 UTC: seven direct API tests passed, with zero failed/skipped/flaky and exit code zero. Test names cover provider discovery, CSRF handling, negative sign-in, connected pipeline graph, authorized project access, anonymous rejection and schedule history. [Local validator regression](observations/validator-regression.txt) records nine passing tests and exit code zero. These verify the API assertions and local checker, not pipeline business correctness.
+
+The actual final UI journey reached existing S3/GCS/schedule configuration and Builder interaction, but a fresh export regressed missing-customer handling. Two subsequent repairs failed with empty results. See [final baseline progression](observations/final-baseline.md). A newly restored baseline must be validated before its graph can be frozen for the seven scheduled unrepaired cases. Historical successful case repairs remain valid historical observations; they do not certify the current graph.
+
+Checkpoint 2 remains open for final baseline recovery and scheduled verification, all seven frozen scheduled unrepaired observations, final demo playback/access and updated reports. Checkpoint 3 must still verify final fixes and cleanup/security/delivery state.
 
 ## Evidence established so far
 
@@ -33,7 +41,7 @@ The diagnostic marker finding was mitigated by matched-job payload checks, but t
 | Strict monetary-format failure could hide scenario outcomes | Preserve strict failures while reporting business values, execution state and repair result separately | Approach accepted; final summaries must remain consistent |
 | Scheduler still reports unchanged after source byte replacement | Record both source hashes, skip notices, observed windows and cleanup; investigate supported refresh semantics | Actual behavior established; cause unknown |
 | Scheduled unrepaired drift coverage | All seven original frozen pre-repair observations are manual; mutate S3 before bounded scheduled runs under a restored frozen baseline | Outstanding; do not substitute manual evidence |
-| Isolated drop scheduled recovery | Fresh controlled repair and scheduled follow-up | In progress |
+| Isolated drop scheduled recovery | Fresh controlled repair and scheduled follow-up | Reviewed; scheduled #18522 business-correct, strict formatting failed |
 | UI pipeline journey | Automate existing authorized S3/GCS connection selection/configuration and schedule setup; cloud account signup is outside this pre-provisioned boundary | Final baseline/demo implementation pending verification |
 | Submission artifacts incomplete | Final README commands/scenario table/top findings/usability feedback; usable demo link; dependency and permission setup; repository access | Outstanding |
 

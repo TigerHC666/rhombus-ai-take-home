@@ -1,0 +1,14 @@
+test_detects_silent_cents_corruption (test_validator.ValidatorTests.test_detects_silent_cents_corruption) ... ok
+test_detects_silent_date_corruption (test_validator.ValidatorTests.test_detects_silent_date_corruption) ... ok
+test_determinism_difference_fails (test_validator.ValidatorTests.test_determinism_difference_fails) ... ok
+test_hand_authored_baseline_and_unchecked_determinism (test_validator.ValidatorTests.test_hand_authored_baseline_and_unchecked_determinism) ... ok
+test_missing_row_and_extra_column_fail (test_validator.ValidatorTests.test_missing_row_and_extra_column_fail) ... ok
+test_nonfinite_amount_fails (test_validator.ValidatorTests.test_nonfinite_amount_fails) ... ok
+test_precision_only_failure_is_not_silent_value_corruption (test_validator.ValidatorTests.test_precision_only_failure_is_not_silent_value_corruption) ... ok
+test_reordered_rows_remain_a_defect (test_validator.ValidatorTests.test_reordered_rows_remain_a_defect) ... ok
+test_wrong_source_cannot_pass_with_correct_output (test_validator.ValidatorTests.test_wrong_source_cannot_pass_with_correct_output) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.083s
+
+OK

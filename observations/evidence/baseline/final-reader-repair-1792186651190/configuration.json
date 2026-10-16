@@ -1,0 +1,63 @@
+[
+  {
+    "node_id": "1792174488846",
+    "name": "input_845d116c201ceece365adda3310625df",
+    "inputs": [],
+    "outputs": [
+      "input_845d116c201ceece365adda3310625df_df",
+      "input_845d116c201ceece365adda3310625df_mask"
+    ],
+    "transformation_type": "input",
+    "source_type": "s3",
+    "data_asset_ref": "e789b770-435d-41ad-abd0-487c85fd4cee",
+    "dataset_id": 0,
+    "source_connection_id": "bc0cd1ec-99ab-4e08-b462-314469b30de2"
+  },
+  {
+    "node_id": "llm_node_18",
+    "name": "llm_node_18",
+    "inputs": [
+      "input_845d116c201ceece365adda3310625df_df",
+      "input_845d116c201ceece365adda3310625df_mask"
+    ],
+    "outputs": [
+      "llm_node_18_df",
+      "llm_node_18_mask"
+    ],
+    "transformation_type": "llm",
+    "prompt": "Clean the orders DataFrame. Follow every rule below exactly. NULL-SAFETY REQUIREMENT: Never call .astype(str) on a whole Series before checking for null. Use the helpers below exclusively for all string operations and null detection. Define these helpers at the top of the script: def safe_strip(series): \"\"\"Strip whitespace only from non-null string cells; preserve nulls.\"\"\" return series.where(series.isna(), series.apply(lambda v: v.strip() if isinstance(v, str) else v)) def safe_upper(series): return series.where(series.isna(), series.apply(lambda v: v.upper() if isinstance(v, str) else v)) def safe_lower(series): return series.where(series.isna(), series.apply(lambda v: v.lower() if isinstance(v, str) else v)) def is_blank(series): \"\"\"True where cell is null OR is a whitespace-only string.\"\"\" null_mask = series.isna() str_blank = series.apply(lambda v: isinstance(v, str) and v.strip() == '') return null_mask | str_blank RULES: 1. TRIMMING: Apply safe_strip to every object-dtype column. 2. CASE NORMALIZATION: Apply safe_upper to order_id and currency. Apply safe_lower to email and status. Leave customer unchanged. 3. MISSING CUSTOMER: Use is_blank(df['customer']). Set those cells to 'Unknown'. Do not use astype(str). 4. EMAIL VALIDATION: Use is_blank() for blank detection. Validate with regex ^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$. If blank, null, or no match, set to empty string ''. 5. REQUIRED FIELDS: Use is_blank() to drop rows where order_id, currency, status, order_date, quantity, or unit_price is null or blank. 6. CURRENCY FILTER: Keep only rows where currency == 'AUD'. 7. STATUS FILTER: Keep only rows where status is 'paid' or 'pending'. 8. DATE PARSING: Each order_date value must be parsed with this function: def parse_order_date(val): import re from datetime import datetime try: # Native datetime/Timestamp: call strftime directly if hasattr(val, 'strftime') and not isinstance(val, str): return val.strftime('%Y-%m-%d') if not isinstance(val, str): return None s = val.strip() if not s: return None # Already YYYY-MM-DD if re.match(r'^\\d{4}-\\d{2}-\\d{2}$', s): return s # ISO datetime string with time component: YYYY-MM-DD HH:MM:SS or YYYY-MM-DDTHH:MM:SS m = re.match(r'^(\\d{4}-\\d{2}-\\d{2})[T ](\\d{2}:\\d{2}:\\d{2})', s) if m: return m.group(1) # MM/DD/YYYY if re.match(r'^\\d{1,2}/\\d{1,2}/\\d{4}$', s): return datetime.strptime(s, '%m/%d/%Y').strftime('%Y-%m-%d') return None except: return None Apply parse_order_date to df['order_date']. Drop rows where result is None or blank. 9. QUANTITY VALIDATION: Use this function: def validate_quantity(val): import re, math try: # Null check if val is None: return None try: if pd.isna(val): return None except Exception: pass # Native numeric: accept finite positive integers (int, np.integer, or float with no fractional part) if isinstance(val, (int, float)) and not isinstance(val, bool): if math.isnan(val) or math.isinf(val): return None if val != int(val) or int(val) < 1: return None return int(val) # numpy integer types if hasattr(val, 'item') and hasattr(val, '__int__'): iv = int(val) if iv < 1: return None return iv # String: require exactly ^[1-9][0-9]*$ (no decimal point) if isinstance(val, str): s = val.strip() if re.match(r'^[1-9][0-9]*$', s): return int(s) return None return None except: return None Apply validate_quantity to df['quantity']. Drop rows where result is None. 10. UNIT PRICE VALIDATION: Use this function: def validate_unit_price(val): import re, math from decimal import Decimal try: if val is None: return None try: if pd.isna(val): return None except Exception: pass # Native numeric: accept non-negative finite values; convert to Decimal via rounded string if isinstance(val, (int, float)) and not isinstance(val, bool): if math.isnan(val) or math.isinf(val): return None if val < 0: return None # Round to 2dp to get canonical Decimal; reject if it had >2dp in original string representation return Decimal(str(round(val, 10))).quantize(Decimal('0.01')) if hasattr(val, 'item'): return validate_unit_price(val.item()) # String: strip optional $, require ^[0-9]+(\\.[0-9]{1,2})?$ if isinstance(val, str): s = val.strip().lstrip('$').strip() if re.match(r'^[0-9]+(\\.[0-9]{1,2})?$', s): return Decimal(s) return None return None except: return None Apply validate_unit_price to df['unit_price']. Store valid Decimal results. Drop rows where result is None. 11. DEDUPLICATION: First drop exact full-row duplicates (keep='first'). Then for any order_id that appears more than once with ANY differing field value, drop ALL rows for that order_id. 12. TOTAL AMOUNT: Compute quantity * unit_price using decimal.Decimal with ROUND_HALF_UP to 2 decimal places. 13. SERIALIZATION: - unit_price: convert each Decimal to string with exactly 2 decimal places using .quantize(Decimal('0.01'), rounding=ROUND_HALF_UP), then pd.array(..., dtype=pd.StringDtype()) - total_amount: same - quantity: astype('int64') 14. OUTPUT: Return exactly these 9 columns in this order: order_id, customer, email, order_date, quantity, unit_price, currency, status, total_amount. Do not hardcode any rows, order IDs, expected counts, or test values. Do not add timestamps or extra columns."
+  },
+  {
+    "node_id": "sort_node_4",
+    "name": "sort_node_4",
+    "inputs": [
+      "llm_node_18_df",
+      "llm_node_18_mask"
+    ],
+    "outputs": [
+      "sort_node_4_df",
+      "sort_node_4_mask"
+    ],
+    "transformation_type": "sort",
+    "sort_columns": [
+      "order_id"
+    ],
+    "ascending": true
+  },
+  {
+    "node_id": "output_node_1",
+    "name": "output_fe6570c80f47cdce36f51dcaaefffee4",
+    "inputs": [
+      "sort_node_4_df",
+      "sort_node_4_mask"
+    ],
+    "outputs": [
+      "output_fe6570c80f47cdce36f51dcaaefffee4_df",
+      "output_fe6570c80f47cdce36f51dcaaefffee4_mask"
+    ],
+    "transformation_type": "output",
+    "destination_id": 90,
+    "format_type": "csv",
+    "custom_filename": "orders_cleaned"
+  }
+]

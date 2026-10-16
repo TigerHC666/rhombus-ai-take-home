@@ -1,0 +1,11 @@
+{
+  "scenario": "baseline",
+  "passed": false,
+  "evidence_level": "artifact_unavailable_or_invalid; inspect live run evidence",
+  "source_present": true,
+  "output_present": false,
+  "determinism": "not_checked",
+  "errors": [
+    "FileNotFoundError: [Errno 2] No such file or directory: 'D:\\\\codex_work\\\\ai test take home asm\\\\observations\\\\evidence\\\\baseline\\\\final-reader-repair-1792186651190\\\\gcs\\\\no-fresh-output.csv'"
+  ]
+}

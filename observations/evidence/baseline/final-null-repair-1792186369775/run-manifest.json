@@ -1,0 +1,30 @@
+{
+  "scenario": "baseline",
+  "phase": "final-null-repair",
+  "trigger": "manual",
+  "started_at": "2026-10-16T21:32:49.779Z",
+  "harness_sha256": {
+    "ui-tests\\manual-output.spec.cjs": "bc04863b796abd65f8f2f0aff0ffee431fde147b5b177b2597681c849c2551f8",
+    "test-support\\workflow.cjs": "74bd7ed13340da8e0503a49fb2960e9139153895eac4c0cb8452fc4d7aba7671"
+  },
+  "stage": "capturing-logs",
+  "schedule_checks": [
+    {
+      "label": "before-source",
+      "observed_at": "2026-10-16T21:32:57.214Z",
+      "inactive_verified": true
+    },
+    {
+      "label": "before-manual-trigger",
+      "observed_at": "2026-10-16T21:33:56.142Z",
+      "inactive_verified": true
+    }
+  ],
+  "triggered_at": "2026-10-16T21:33:56.359Z",
+  "process_job_id": "2bccf573-bafb-4d72-a7d9-0253517e8f33",
+  "execution_mode": "auto",
+  "terminal_job_status": "FAILED",
+  "outputs": [],
+  "failure": "Pipeline must produce a fresh output; inspect captured failure logs\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+  "finished_at": "2026-10-16T21:36:42.413Z"
+}

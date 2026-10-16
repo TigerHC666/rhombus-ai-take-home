@@ -1,0 +1,96 @@
+Load Previous History
+
+Repair the current baseline cleaning node through AI Builder. The latest actual GCS export contains the literal customer string None instead of Unknown for a missing customer. Inspect the generated executable code: astype(str) before missing-value handling can destroy null identity. Preserve nulls when trimming and normalizing text; handle actual None/NaN/pd.NA before any string conversion. Treat missing or whitespace-only customers as Unknown. Do not hardcode any order IDs, records or expected counts. Keep every other existing baseline rule, exact nine-column schema, Decimal arithmetic, zero-price acceptance, ascending order_id sort, source and GCS destination unchanged. Regenerate executable code, not only the prompt. Do not run the pipeline; keep scheduling inactive for the independent runner. Ensure the final node contracts and actual code agree.
+
+Copy message
+
+Pipeline updated. Here's what changed and why:
+
+Root cause confirmed: The old orders_cleaned_v15 code called df[col].astype(str).str.strip() in the global trim loop before any null checks. This silently coerced None → 'None', NaN → 'nan', pd.NA → '<NA>'. By step 3, df['customer'].isna() returned False for these cells (they were now non-null strings), so the Unknown branch was never reached and the literal string 'None' passed through to GCS.
+
+Fix applied — orders_cleaned_v16: The new node instruction mandates null-safe helper functions (safe_strip, safe_upper, safe_lower, is_blank) that use .where(series.isna(), ...) and isinstance(v, str) checks, preserving actual null identity throughout. No .astype(str) is called before null detection anywhere in the pipeline. The is_blank helper correctly identifies both genuinely null cells and whitespace-only string cells, so Unknown substitution fires correctly.
+
+Change	Node	Purpose
+Added	orders_cleaned_v16	Null-safe cleaning node; preserves NaN/None identity through trimming/normalization before any blank/missing checks fire.
+Rewired	
+orders_sorted_v4
+	Now reads from orders_cleaned_v16.
+Deleted	orders_cleaned_v15	Removed the astype(str)-first node that caused None → 'None' leakage.
+
+Chain remains: 
+orders.csv
+ → orders_cleaned_v16 → 
+orders_sorted_v4
+ → 
+orders_output
+ (GCS, orders_cleaned.csv). All other baseline rules, Decimal arithmetic, zero-price acceptance, 9-column schema, and destination are unchanged.
+
+Worked for 43s
+Searching
+for a tool
+Reviewed
+pipeline
+
+The bug is confirmed in last_executed_code. The global trim loop at step 1 does df[col].astype(str).strip() unconditionally — this converts None/NaN/pd.NA into the literal strings 'None'/'nan'/'<NA>'. By the time step 3 checks df['customer'].isna(), the cell is already the string 'None' — isna() returns False, the Unknown branch is never taken, and 'None' passes through to GCS.
+
+Fix: new node tag (orders_cleaned_v16) to wipe the code cache, with an instruction that explicitly guards null identity before any string operation.
+
+Modified pipeline
++1
+~1
+-1
+Copy message
+
+The null-safe baseline repair now fails at the sort node with 'DataFrame should not be empty' and no actual export. Inspect the current generated cleaning code and actual source/profile. Repair through AI Builder without hardcoding rows or counts. Preserve null handling before string conversion. Accommodate reader-inferred representations: positive finite native integer or integral numeric quantities are valid, while raw fractional or suffix strings remain invalid under the baseline contract. Dates may arrive as native datetime/Timestamp or a reader-normalized ISO date/time string including midnight, in addition to original MM/DD/YYYY strings. Parse those valid representations explicitly without day/month swapping. Do not silently reject all valid records merely because the reader converted their dtype or representation. Keep zero unit prices valid, Decimal arithmetic, exactly nine canonical columns, all original baseline filtering/deduplication rules, ascending order_id sort and GCS destination. Diagnose rather than weakening the contract or returning pass-through data. Regenerate executable code and node contracts. Keep the schedule inactive and do not run the pipeline; the independent runner will test it.
+
+Copy message
+
+Pipeline updated. Here's the diagnosis and what changed:
+
+Two rejection bugs found in orders_cleaned_v16
+Bug	Location	Cause	Effect
+Float quantity rejected	validate_quantity	str(5.0) → '5.0' fails ^[1-9][0-9]*$ regex	All reader-inferred integer columns stored as float64 (e.g. 5.0) dropped entirely → empty frame
+ISO datetime string rejected	parse_order_date	'2026-01-15 00:00:00' and '2026-01-15T00:00:00' match neither YYYY-MM-DD nor MM/DD/YYYY	All dates the S3 reader normalised to ISO datetime strings produced None → rows dropped
+Fixes in 
+orders_cleaned_v17
+validate_quantity: Added a native-numeric branch before the string path. For int, float, and numpy integer types: checks math.isfinite, verifies val == int(val) (no fractional part), and requires >= 1. 5.0 → 5, 5.5 → rejected, 0.0 → rejected.
+parse_order_date: Added explicit regex match for YYYY-MM-DD HH:MM:SS and YYYY-MM-DDTHH:MM:SS formats (ISO strings with time component) — extracts just the date prefix. Chain: Timestamp → ISO datetime string → bare YYYY-MM-DD → MM/DD/YYYY → None.
+validate_unit_price: Added native-numeric branch for reader-inferred floats (e.g. 12.5 → Decimal('12.50')), including zero.
+
+All null-safe helpers, Decimal arithmetic, 9-column schema, deduplication, pd.StringDtype() serialisation, ascending sort, and GCS destination are unchanged.
+
+Chain: 
+orders.csv
+ → 
+orders_cleaned_v17
+ → 
+orders_sorted_v4
+ → 
+orders_output
+.
+
+Worked for 44s
+Searched
+for a tool
+Reviewed
+pipeline
+
+The code is visible. Two concrete rejection bugs:
+
+Quantity: validate_quantity always calls str(val).strip() then matches ^[1-9][0-9]*$. A reader-inferred integer 5 serialises to '5' (fine), but a reader-inferred float 5.0 serialises to '5.0' — fails the regex and drops the row. Fix: check for finite positive integral numeric types first, before the string path.
+
+Dates: parse_order_date accepts Timestamp objects, bare YYYY-MM-DD strings, and MM/DD/YYYY strings — but not ISO datetime strings with a time component like '2026-01-15 00:00:00' or '2026-01-15T00:00:00'. These are reader-normalised representations. Neither of the two string patterns matches them, so they return None and every such row is dropped, leaving an empty frame.
+
+New node 
+orders_cleaned_v17
+ fixes both:
+
+Modified pipeline
++1
+~1
+-1
+Modified pipeline
++1
+~1
+-1
+Copy message

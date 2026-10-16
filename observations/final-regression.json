@@ -1,0 +1,96 @@
+{
+  "started_at": "2026-10-16T21:41:18.760168+00:00",
+  "finished_at": "2026-10-16T21:42:02.191698+00:00",
+  "api_exit_code": 0,
+  "validator_exit_code": 0,
+  "passed": 7,
+  "failed": 0,
+  "skipped": 0,
+  "flaky": 0,
+  "tests": [
+    {
+      "title": "provider discovery returns the configured OIDC provider",
+      "file": "api-tests/authentication.spec.cjs",
+      "expected_status": "passed",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration_ms": 957
+        }
+      ]
+    },
+    {
+      "title": "CSRF endpoint provides a nonempty token without exposing it in artifacts",
+      "file": "api-tests/authentication.spec.cjs",
+      "expected_status": "passed",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration_ms": 146
+        }
+      ]
+    },
+    {
+      "title": "sign-in without CSRF is rejected before provider authentication",
+      "file": "api-tests/authentication.spec.cjs",
+      "expected_status": "passed",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration_ms": 101
+        }
+      ]
+    },
+    {
+      "title": "observed pipeline endpoint returns the connected assessment graph",
+      "file": "api-tests/pipeline-configuration.spec.cjs",
+      "expected_status": "passed",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration_ms": 11581
+        }
+      ]
+    },
+    {
+      "title": "direct backend request returns the authorized assessment project",
+      "file": "api-tests/project-access.spec.cjs",
+      "expected_status": "passed",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration_ms": 6482
+        }
+      ]
+    },
+    {
+      "title": "project inventory rejects an unauthenticated direct backend request",
+      "file": "api-tests/project-access.spec.cjs",
+      "expected_status": "passed",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration_ms": 70
+        }
+      ]
+    },
+    {
+      "title": "observed schedule history API returns execution records",
+      "file": "api-tests/schedule-history.spec.cjs",
+      "expected_status": "passed",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration_ms": 13150
+        }
+      ]
+    }
+  ]
+}
