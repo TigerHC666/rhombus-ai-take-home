@@ -1,0 +1,46 @@
+[
+  {
+    "name": "orders_cleaned_1792175743381.csv",
+    "generation": "1792175745107798",
+    "size": "477",
+    "timeCreated": "2026-10-16T18:35:45.114Z",
+    "updated": "2026-10-16T18:35:45.114Z",
+    "md5Hash": "CK5EmSLbhKD4o6cHZpnYkw==",
+    "crc32c": "gawlTw==",
+    "sha256": "1b0583dad21a144c63e4d5562cb5320db42ad2ff8e5468ed4817f2fb934efbe7",
+    "retrieved_at": "2026-10-16T18:57:16.428551+00:00"
+  },
+  {
+    "name": "orders_cleaned_1792176584009.csv",
+    "generation": "1792176585133691",
+    "size": "477",
+    "timeCreated": "2026-10-16T18:49:45.139Z",
+    "updated": "2026-10-16T18:49:45.139Z",
+    "md5Hash": "CK5EmSLbhKD4o6cHZpnYkw==",
+    "crc32c": "gawlTw==",
+    "sha256": "1b0583dad21a144c63e4d5562cb5320db42ad2ff8e5468ed4817f2fb934efbe7",
+    "retrieved_at": "2026-10-16T18:57:17.174388+00:00"
+  },
+  {
+    "name": "orders_cleaned_1792176606648.csv",
+    "generation": "1792176608375854",
+    "size": "477",
+    "timeCreated": "2026-10-16T18:50:08.382Z",
+    "updated": "2026-10-16T18:50:08.382Z",
+    "md5Hash": "CK5EmSLbhKD4o6cHZpnYkw==",
+    "crc32c": "gawlTw==",
+    "sha256": "1b0583dad21a144c63e4d5562cb5320db42ad2ff8e5468ed4817f2fb934efbe7",
+    "retrieved_at": "2026-10-16T18:57:17.584057+00:00"
+  },
+  {
+    "name": "orders_cleaned_1792176848575.csv",
+    "generation": "1792176850290532",
+    "size": "477",
+    "timeCreated": "2026-10-16T18:54:10.297Z",
+    "updated": "2026-10-16T18:54:10.297Z",
+    "md5Hash": "CK5EmSLbhKD4o6cHZpnYkw==",
+    "crc32c": "gawlTw==",
+    "sha256": "1b0583dad21a144c63e4d5562cb5320db42ad2ff8e5468ed4817f2fb934efbe7",
+    "retrieved_at": "2026-10-16T18:57:18.410909+00:00"
+  }
+]

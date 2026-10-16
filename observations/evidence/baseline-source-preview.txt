@@ -1,0 +1,369 @@
+- alert
+- button "Rhombus AI Logo":
+  - img "Rhombus AI Logo"
+- button:
+- button "Dashboard":
+  - generic: Dashboard
+- button "New Project":
+  - generic: New Project
+- button "Search":
+  - generic: Search
+- generic: All Projects (1)
+- link "LLM Observability Assessment":
+  - /url: /workflow/5348
+  - generic: LLM Observability Assessment
+  - button:
+- generic: T
+- generic: tiger.cai1116@gmail.com
+- tablist:
+  - tab "Canvas":
+    - generic: Canvas
+  - tab "Workspace":
+    - generic: Workspace
+  - tab "Preview" [selected]:
+    - generic: Preview
+- button "Logs":
+  - generic: Logs
+- button:
+- heading "Dataset Preview" [level=2]
+- button "Single Line":
+  - generic: Single Line
+- button "Attach to Chat":
+  - generic: Attach to Chat
+- table:
+  - rowgroup:
+    - row "# order_id Text customer Text email Text order_date DateTime quantity Numeric unit_price Text currency Categorical status Categorical":
+      - columnheader "#":
+        - generic: "#"
+      - columnheader "order_id Text":
+        - button "order_id":
+          - generic: order_id
+        - button "Text"
+      - columnheader "customer Text":
+        - button "customer":
+          - generic: customer
+        - button "Text"
+      - columnheader "email Text":
+        - button "email":
+          - generic: email
+        - button "Text"
+      - columnheader "order_date DateTime":
+        - button "order_date":
+          - generic: order_date
+        - button "DateTime"
+      - columnheader "quantity Numeric":
+        - button "quantity":
+          - generic: quantity
+        - button "Numeric"
+      - columnheader "unit_price Text":
+        - button "unit_price":
+          - generic: unit_price
+        - button "Text"
+      - columnheader "currency Categorical":
+        - button "currency":
+          - generic: currency
+        - button "Categorical"
+      - columnheader "status Categorical":
+        - button "status":
+          - generic: status
+        - button "Categorical"
+  - rowgroup:
+    - row "1 a001 Alice Example ALICE@example.test 2026-03-04T00:00:00 2 $12.50 aud PAID":
+      - cell "1":
+        - generic: "1"
+      - cell "a001":
+        - generic: a001
+      - cell "Alice Example":
+        - generic: Alice Example
+      - cell "ALICE@example.test":
+        - generic: ALICE@example.test
+      - cell "2026-03-04T00:00:00":
+        - generic: 2026-03-04T00:00:00
+      - cell "2":
+        - generic: "2"
+      - cell "$12.50":
+        - generic: $12.50
+      - cell "aud":
+        - generic: aud
+      - cell "PAID":
+        - generic: PAID
+    - row "2 a001 Alice Example ALICE@example.test 2026-03-04T00:00:00 2 $12.50 aud PAID":
+      - cell "2":
+        - generic: "2"
+      - cell "a001":
+        - generic: a001
+      - cell "Alice Example":
+        - generic: Alice Example
+      - cell "ALICE@example.test":
+        - generic: ALICE@example.test
+      - cell "2026-03-04T00:00:00":
+        - generic: 2026-03-04T00:00:00
+      - cell "2":
+        - generic: "2"
+      - cell "$12.50":
+        - generic: $12.50
+      - cell "aud":
+        - generic: aud
+      - cell "PAID":
+        - generic: PAID
+    - row "3 A002 null bob@example.test 2026-04-05T00:00:00 3 4.20 AUD paid":
+      - cell "3":
+        - generic: "3"
+      - cell "A002":
+        - generic: A002
+      - cell "null":
+        - generic: "null"
+      - cell "bob@example.test":
+        - generic: bob@example.test
+      - cell "2026-04-05T00:00:00":
+        - generic: 2026-04-05T00:00:00
+      - cell "3":
+        - generic: "3"
+      - cell "4.20":
+        - generic: "4.20"
+      - cell "AUD":
+        - generic: AUD
+      - cell "paid":
+        - generic: paid
+    - row "4 A003 Casey Example not-an-email 2026-05-06T00:00:00 1 20.00 AUD pending":
+      - cell "4":
+        - generic: "4"
+      - cell "A003":
+        - generic: A003
+      - cell "Casey Example":
+        - generic: Casey Example
+      - cell "not-an-email":
+        - generic: not-an-email
+      - cell "2026-05-06T00:00:00":
+        - generic: 2026-05-06T00:00:00
+      - cell "1":
+        - generic: "1"
+      - cell "20.00":
+        - generic: "20.00"
+      - cell "AUD":
+        - generic: AUD
+      - cell "pending":
+        - generic: pending
+    - row "5 A004 Delta Example delta@example.test 2026-06-07T00:00:00 0 5.00 AUD paid":
+      - cell "5":
+        - generic: "5"
+      - cell "A004":
+        - generic: A004
+      - cell "Delta Example":
+        - generic: Delta Example
+      - cell "delta@example.test":
+        - generic: delta@example.test
+      - cell "2026-06-07T00:00:00":
+        - generic: 2026-06-07T00:00:00
+      - cell "0":
+        - generic: "0"
+      - cell "5.00":
+        - generic: "5.00"
+      - cell "AUD":
+        - generic: AUD
+      - cell "paid":
+        - generic: paid
+    - row "6 A005 Echo Example echo@example.test null 1 8.00 AUD paid":
+      - cell "6":
+        - generic: "6"
+      - cell "A005":
+        - generic: A005
+      - cell "Echo Example":
+        - generic: Echo Example
+      - cell "echo@example.test":
+        - generic: echo@example.test
+      - cell "null":
+        - generic: "null"
+      - cell "1":
+        - generic: "1"
+      - cell "8.00":
+        - generic: "8.00"
+      - cell "AUD":
+        - generic: AUD
+      - cell "paid":
+        - generic: paid
+    - row "7 A006 Foxtrot Example fox@example.test 2026-07-08T00:00:00 1 -3.00 AUD paid":
+      - cell "7":
+        - generic: "7"
+      - cell "A006":
+        - generic: A006
+      - cell "Foxtrot Example":
+        - generic: Foxtrot Example
+      - cell "fox@example.test":
+        - generic: fox@example.test
+      - cell "2026-07-08T00:00:00":
+        - generic: 2026-07-08T00:00:00
+      - cell "1":
+        - generic: "1"
+      - cell "-3.00":
+        - generic: "-3.00"
+      - cell "AUD":
+        - generic: AUD
+      - cell "paid":
+        - generic: paid
+    - row "8 A007 Golf Example golf@example.test 2026-08-09T00:00:00 2 null AUD paid":
+      - cell "8":
+        - generic: "8"
+      - cell "A007":
+        - generic: A007
+      - cell "Golf Example":
+        - generic: Golf Example
+      - cell "golf@example.test":
+        - generic: golf@example.test
+      - cell "2026-08-09T00:00:00":
+        - generic: 2026-08-09T00:00:00
+      - cell "2":
+        - generic: "2"
+      - cell "null":
+        - generic: "null"
+      - cell "AUD":
+        - generic: AUD
+      - cell "paid":
+        - generic: paid
+    - row "9 A008 Hotel Example HOTEL@example.test 2026-09-10T00:00:00 4 0.25 aud paid":
+      - cell "9":
+        - generic: "9"
+      - cell "A008":
+        - generic: A008
+      - cell "Hotel Example":
+        - generic: Hotel Example
+      - cell "HOTEL@example.test":
+        - generic: HOTEL@example.test
+      - cell "2026-09-10T00:00:00":
+        - generic: 2026-09-10T00:00:00
+      - cell "4":
+        - generic: "4"
+      - cell "0.25":
+        - generic: "0.25"
+      - cell "aud":
+        - generic: aud
+      - cell "paid":
+        - generic: paid
+    - row "10 A009 India Example india@example.test 2026-10-11T00:00:00 2 7.50 AUD Pending":
+      - cell "10":
+        - generic: "10"
+      - cell "A009":
+        - generic: A009
+      - cell "India Example":
+        - generic: India Example
+      - cell "india@example.test":
+        - generic: india@example.test
+      - cell "2026-10-11T00:00:00":
+        - generic: 2026-10-11T00:00:00
+      - cell "2":
+        - generic: "2"
+      - cell "7.50":
+        - generic: "7.50"
+      - cell "AUD":
+        - generic: AUD
+      - cell "Pending":
+        - generic: Pending
+    - row "11 A010 Juliet Example null 2026-11-12T00:00:00 1 0.00 AUD paid":
+      - cell "11":
+        - generic: "11"
+      - cell "A010":
+        - generic: A010
+      - cell "Juliet Example":
+        - generic: Juliet Example
+      - cell "null":
+        - generic: "null"
+      - cell "2026-11-12T00:00:00":
+        - generic: 2026-11-12T00:00:00
+      - cell "1":
+        - generic: "1"
+      - cell "0.00":
+        - generic: "0.00"
+      - cell "AUD":
+        - generic: AUD
+      - cell "paid":
+        - generic: paid
+    - row "12 A011 Kilo Example kilo@example.test 2026-12-01T00:00:00 5 1.10 AUD paid":
+      - cell "12":
+        - generic: "12"
+      - cell "A011":
+        - generic: A011
+      - cell "Kilo Example":
+        - generic: Kilo Example
+      - cell "kilo@example.test":
+        - generic: kilo@example.test
+      - cell "2026-12-01T00:00:00":
+        - generic: 2026-12-01T00:00:00
+      - cell "5":
+        - generic: "5"
+      - cell "1.10":
+        - generic: "1.10"
+      - cell "AUD":
+        - generic: AUD
+      - cell "paid":
+        - generic: paid
+- paragraph: Rows per page
+- combobox:
+  - generic: "20"
+- generic: Page
+- spinbutton: "1"
+- generic: of 1
+- button "Go to first page" [disabled]:
+  - generic: Go to first page
+- button "Go to previous page" [disabled]:
+  - generic: Go to previous page
+- button "Go to next page" [disabled]:
+  - generic: Go to next page
+- button "Go to last page" [disabled]:
+  - generic: Go to last page
+- tablist:
+  - tab "AI Builder":
+    - generic: AI Builder
+  - tab "Schedule":
+    - generic: Schedule
+  - tab "Profile":
+    - generic: Profile
+- button:
+- complementary:
+  - generic: Data Input
+  - generic: Select Dataset
+  - paragraph: Click on the dataset below to select the pipeline input.
+  - list:
+    - img "CSV"
+    - generic: orders.csv
+    - button "Preview dataset" [active]:
+    - generic "Amazon S3":
+  - generic: Upload Data
+  - button "From Device":
+    - generic: From Device
+  - button "From Web URL":
+    - generic: From Web URL
+  - button "Third Party Sources":
+    - generic: Third Party Sources
+  - generic: Data Sampling
+  - paragraph: Sampling is enabled by default to prevent full data downloads. Adjust the sample size or disable if needed.
+  - generic: Sampling Configuration
+  - button "Guide":
+    - text: Guide
+  - paragraph: Sampling (100,000 rows) and streaming are always enabled to prevent full data downloads. You can adjust the sample size and method below.
+  - generic: Enable Sampling
+  - switch "Enable Sampling" [checked] [disabled]
+  - checkbox [checked] [disabled]
+  - generic: Sampling Method
+  - button "Learn about each sampling method":
+  - combobox "Sampling Method":
+    - generic: Head (First N rows)
+  - combobox
+  - paragraph: Fast. Takes the first N rows from the dataset.
+  - generic: Sample Size (rows)
+  - button "Learn about sample size & percentage":
+  - spinbutton "Sample Size (rows)": "100000"
+  - text: Or Percentage (%)
+  - spinbutton "Or Percentage (%)"
+  - generic: Memory-Safe Streaming Mode
+  - button "Learn about streaming mode":
+  - paragraph: Processes data in chunks to prevent full data downloads
+  - switch "Memory-Safe Streaming Mode" [checked] [disabled]
+  - checkbox [checked] [disabled]
+  - button "Apply" [disabled]
+- textbox
+- button:
+- button "Facet":
+  - generic: Facet
+- generic "45 credits remaining out of 50":
+  - text: 45/50
+- button "Send message" [disabled]:

@@ -4,7 +4,7 @@ Evaluation of an AI-built S3-to-GCS cleaning pipeline under schema and semantic 
 
 ## Status
 
-Work in progress. Synthetic fixtures, independent expected outputs, and a local validator are implemented. Live pipeline execution, scheduled baseline, drift experiments, UI/API suites, and the demonstration recording are not yet complete. Local validator tests do not establish platform correctness.
+Work in progress. Synthetic fixtures, independent expected outputs, and a local validator are implemented. Live S3-to-GCS execution has produced four baseline output objects, but these fail the frozen data contract. Public authentication tests, authenticated project-access replay, anonymous access rejection, and live pipeline-binding checks pass. Authenticated UI checks reach the original project and its S3 input. A correct scheduled baseline, drift experiments, full UI journey, and the demonstration recording are the next execution milestones. Local validator tests do not establish platform correctness.
 
 ## Contents
 
@@ -14,6 +14,7 @@ Work in progress. Synthetic fixtures, independent expected outputs, and a local 
 - `datasets/`: baseline, seven variants, expected outputs, and checksums.
 - `data-validation/`: standard-library Python validator and regression tests.
 - `observations/evidence/`: recorded builder prompts and responses.
+- [Baseline repair-verification finding](observations/baseline-builder-cache.md): the builder's repair claim differs from observed output.
 
 ## Local validation
 
@@ -26,6 +27,22 @@ python data-validation/validate.py --scenario baseline --source path/to/download
 ```
 
 Use actual downloaded cloud artifacts for integration validation; expected fixtures are an oracle, not evidence of a successful pipeline run. Add `--repeat path/to/repeated-output.csv` for each identical-input repeat.
+
+## API tests and authentication
+
+Requires Node.js 22 or later:
+
+```sh
+npm ci
+npm run test:api
+node scripts/capture-session.cjs
+```
+
+The API suite uses routes observed in a dedicated Chrome test browser and covers provider discovery, the CSRF endpoint, and rejection of sign-in without CSRF. [Results](observations/evidence/api-authentication-results.json) are authentication coverage only; they do not replace pipeline API tests. The negative case asserts the observed 302 response, empty body, and `MissingCSRF` redirect without following it into a misleading 200 page.
+
+The session helper opens an isolated Chrome window for interactive sign-in, stores authentication only in ignored `.auth/`, and records route/method/status metadata without tokens or request/response bodies. Google refused sign-in in the automated browser; the user subsequently completed sign-in and the saved session was verified against the original project. Do not disable browser security or copy an unrelated browser profile to circumvent this restriction.
+
+For approved GCS artifact downloads, install `google-auth` and `requests`, provide the bucket-scoped key under `.secrets/`, and run `python data-validation/download_gcs.py`. [Object inventory](observations/evidence/gcs/inventory.json) records immutable generations, timestamps, and hashes. Credentials are never included in that inventory.
 
 ## Credentials and cloud resources
 

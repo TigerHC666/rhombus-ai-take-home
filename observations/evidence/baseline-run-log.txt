@@ -1,0 +1,131 @@
+- alert
+- button "Rhombus AI Logo":
+  - img "Rhombus AI Logo"
+- button:
+- button "Dashboard":
+  - generic: Dashboard
+- button "New Project":
+  - generic: New Project
+- button "Search":
+  - generic: Search
+- generic: All Projects (1)
+- link "LLM Observability Assessment":
+  - /url: /workflow/5348
+  - generic: LLM Observability Assessment
+  - button:
+- generic: T
+- generic: tiger.cai1116@gmail.com
+- tablist:
+  - tab "Canvas" [selected]:
+    - generic: Canvas
+  - tab "Workspace":
+    - generic: Workspace
+  - tab "Preview":
+    - generic: Preview
+- button "Logs" [active]:
+  - generic: Logs
+- button:
+- button:
+  - img "Sort Data"
+  - generic: Sort Data
+  - generic: "Clean and validate the orders DataFrame according to the following contract. The input columns are: order_id, customer, email, order_date, quantity, unit_price, currency, status. IMPORTANT: Do not hardcode any rows or expected results. All logic must be general. Step 1 - Trim whitespace. For every column that holds string/object dtype values, strip leading and trailing whitespace from every cell. Replace any cell that is purely whitespace (or an empty string after stripping) with None/NaN for subsequent checks. Columns that are already non-string dtype (e.g. datetime64, int64, float64) are left untouched by this step. Step 2 - Case normalisation. - order_id: if string, uppercase. - currency: if string, uppercase. - email: if string, lowercase. - status: if string, lowercase. - customer: preserve original case (do not change). Step 3 - Fill missing customer. If customer is None/NaN/empty string after stripping, set it to the string Unknown. Step 4 - Email validation. For each email value: if it is None/NaN/empty, replace with an empty string. Otherwise test against the pattern ^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$. If the value does NOT match, replace with an empty string. Valid emails keep their (already lowercased) value. Step 5 - Drop rows missing required fields. Required columns: order_id, order_date, quantity, unit_price, currency, status. After steps 1-4, if any of these six columns is None/NaN/NaT/empty string in a row, drop that row entirely. For order_date, treat pandas NaT as missing. For unit_price when numeric, treat NaN as missing but 0 is NOT missing (zero is a valid price). Step 6 - Currency filter. Only keep rows where currency == AUD. Drop all others. Step 7 - Status filter. Only keep rows where status is paid or pending. Drop all others. Step 8 - Date parsing. The order_date column may arrive as datetime64 (already parsed by the engine) or as a plain string. Handle both: - If a cell is already a pandas Timestamp or datetime object (i.e. not a string and not NaT), format it directly as YYYY-MM-DD using strftime('%Y-%m-%d'). Preserve it; do not re-parse. - If a cell is a string, parse it strictly as MM/DD/YYYY using datetime.strptime(value, '%m/%d/%Y') inside a try/except. If parsing raises any exception (invalid date, wrong format, impossible date), drop the row. On success, replace with strftime('%Y-%m-%d'). - If a cell is NaT or None/NaN, the row was already dropped in Step 5. If any survive, drop them here. Step 9 - Quantity validation. The quantity column may arrive as a numeric dtype (int64/float64) or as a string. Handle both: - If the value is already a numeric type (not a string): it must be finite, a whole number, and >= 1. Check using pd.notna(val) and not math.isinf(float(val)) and float(val) == int(float(val)) and int(float(val)) >= 1. Rows failing this are dropped. Store as Python int. - If the value is a string: strip it, then apply the regex ^[1-9][0-9]*$ (no decimal point, no sign, no leading zero, value >= 1). Rows failing this check are dropped. Convert accepted values to Python int. Step 10 - Unit price validation and parsing. Unit price may optionally begin with a single dollar sign character (string case) or arrive as a numeric dtype. Handle both: - If the value is already a numeric type (not a string): it must be finite and >= 0 (zero is valid; negative is not). Check using pd.notna(val) and not math.isinf(float(val)) and float(val) >= 0. Rows failing this are dropped. Store as decimal.Decimal(str(round(float(val), 10))). - If the value is a string: strip it. Remove a leading dollar sign if present. The remaining string must match the regex ^[0-9]+(\\.[0-9]{1,2})?$ (no commas, no exponent notation, no negative sign, one to two optional decimal places). Rows failing the regex are dropped. Parse accepted values with decimal.Decimal. If the resulting Decimal is strictly less than 0, drop the row. Zero is accepted. Step 11 - Deduplication. First, identify fully identical rows across all columns currently in the DataFrame (after all prior cleaning). Remove exact duplicates, keeping only the first occurrence. Second, among remaining rows, group by order_id. If any order_id appears more than once and the rows in that group are NOT all identical (i.e. they differ in at least one column value), drop ALL rows with that order_id (conflicting duplicates). Step 12 - Calculate total_amount. Import Decimal and ROUND_HALF_UP from the decimal module. Import math. total_amount = Decimal(str(quantity)) * unit_price_decimal (where unit_price_decimal is the Decimal stored in Step 10). Round total_amount to 2 decimal places using ROUND_HALF_UP: total_amount.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP). Step 13 - Serialise numeric columns. - unit_price: format as a string with exactly 2 decimal places (e.g. 0.00 for zero, 12.50 for 12.5). Store this string in the unit_price column. - total_amount: format as a string with exactly 2 decimal places. Store in a new total_amount column. - quantity: store as a plain integer (Python int, not float). Step 14 - Select and order output columns. Return a DataFrame with exactly these columns in this order: order_id, customer, email, order_date, quantity, unit_price, currency, status, total_amount. Do not add any timestamp, processing date, row-number, or metadata column. Do not modify any column not listed in these steps. → Sort Data"
+  - button:
+  - button:
+  - button:
+- button "Data Output Data Output Export to rhombus-assessment-output-20261017-hc6 (csv)":
+  - img "Data Output"
+  - generic: Data Output
+  - generic: Export to rhombus-assessment-output-20261017-hc6 (csv)
+  - button:
+  - button:
+  - button:
+- button:
+- button:
+- button:
+- generic: Logs
+- generic: 12 visible
+- button:
+- button "All"
+- button "12":
+  - text: "12"
+- button "0":
+  - text: "0"
+- button "0":
+  - text: "0"
+- button:
+- text: 05:50:03 AM
+- button "Expand log":
+- paragraph: Pipeline execution started.
+- text: 05:49:46 AM
+- button "Expand log":
+- paragraph: "Applied 2 transformations: Custom: prompt: \"Clean and validate the orders DataFrame according to the following contract. ...\" · visualise: false · output_columns: \"\" · mode: \"code\" · code: \"import re from datetime import datetime from decimal import Decimal, ROUND_HA...\". Impact: 6 row(s) affected, 54 cell(s) modified | Sort Data: sort by order_id (ascending). Impact: row order updated."
+- text: 05:49:46 AM
+- button "Expand log":
+- paragraph: Pipeline completed successfully
+- text: 05:49:46 AM
+- button "Expand log":
+- paragraph: Pipeline execution completed successfully.
+- text: 05:49:41 AM
+- button "Expand log":
+- paragraph: Pipeline execution started.
+- text: 05:35:46 AM
+- button "Expand log":
+- paragraph: "Applied 2 transformations: Custom: prompt: \"Clean and validate the orders DataFrame according to the following contract. ...\" · visualise: false · output_columns: \"\" · mode: \"code\" · code: \"import re from datetime import datetime from decimal import Decimal, ROUND_HA...\". Impact: 6 row(s) affected, 54 cell(s) modified | Sort Data: sort by order_id (ascending). Impact: row order updated."
+- text: 05:35:46 AM
+- button "Expand log":
+- paragraph: Pipeline completed successfully
+- text: 05:35:46 AM
+- button "Expand log":
+- paragraph: Pipeline execution completed successfully.
+- text: 05:34:58 AM
+- button "Expand log":
+- paragraph: Pipeline execution started.
+- text: 05:24:43 AM
+- button "Expand log":
+- paragraph: Pipeline completed successfully
+- text: 05:24:43 AM
+- button "Expand log":
+- paragraph: Pipeline execution completed successfully.
+- text: 05:24:42 AM
+- button "Expand log":
+- paragraph: Pipeline execution started.
+- tablist:
+  - tab "AI Builder":
+    - generic: AI Builder
+  - tab "Schedule":
+    - generic: Schedule
+  - tab "Transform" [selected]:
+    - generic: Transform
+  - tab "Profile":
+    - generic: Profile
+- button:
+- complementary:
+  - img "Data Output Icon"
+  - generic: Data Output
+  - generic: Select Destination
+  - paragraph: Choose where to export your transformed data.
+  - button "Download Locally Skip cloud upload and download the node output directly from Rhombus once the pipeline completes.":
+    - generic: Download Locally
+    - paragraph: Skip cloud upload and download the node output directly from Rhombus once the pipeline completes.
+  - button "Google Cloud Storage rhombus-assessment-output-20261017-hc6":
+    - img "Google Cloud Storage"
+    - generic: rhombus-assessment-output-20261017-hc6
+  - button "Delete rhombus-assessment-output-20261017-hc6 destination":
+  - button "Add New Destination":
+    - generic: Add New Destination
+  - generic: Export Configuration
+  - heading "Export Format" [level=3]
+  - combobox:
+    - generic: CSV
+  - combobox
+  - heading "Custom Filename" [level=3]
+  - textbox "RhombusAI_output": orders_cleaned
+  - paragraph: Data will be exported automatically when the pipeline runs.
+  - button "Apply"
+- textbox
+- button:
+- button "Facet":
+  - generic: Facet
+- generic "40 credits remaining out of 50":
+  - text: 40/50
+- button "Send message" [disabled]:

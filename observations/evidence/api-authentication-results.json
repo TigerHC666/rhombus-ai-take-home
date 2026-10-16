@@ -1,0 +1,26 @@
+{
+  "suite": "public-authentication-api",
+  "scope": "Authentication endpoints only; pipeline API coverage remains pending",
+  "stats": {
+    "startTime": "2026-10-16T18:49:08.038Z",
+    "duration": 1196.2089999999998,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "provider discovery returns the configured OIDC provider",
+      "status": "expected"
+    },
+    {
+      "title": "CSRF endpoint provides a nonempty token without exposing it in artifacts",
+      "status": "expected"
+    },
+    {
+      "title": "sign-in without CSRF is rejected before provider authentication",
+      "status": "expected"
+    }
+  ]
+}

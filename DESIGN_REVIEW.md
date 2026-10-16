@@ -1,5 +1,81 @@
 # Independent Design Review
 
+## Interim authenticated-test coverage review
+
+Reviewed `api-tests/project-access.spec.cjs`, `api-tests/authentication.spec.cjs`, `ui-tests/pipeline-state.spec.cjs`, and `ui-tests/session.spec.cjs`. The primary reports passing authenticated/anonymous project API checks and pipeline-state UI execution; this review inspected their code without independently replaying cloud requests.
+
+The project API pair now provides relevant direct backend coverage: the positive test replays an actually observed request and asserts status plus the intended restricted project ID/name; the negative test uses a fresh unauthenticated context and asserts 401, an authentication-related error body, and absence of project items. These are meaningful access-control checks, rather than guessed endpoints or status-only assertions. Keep their scope as project access: they do not test pipeline execution, schedule behavior, or data correctness. The existing authentication suite remains supplementary.
+
+**UI coverage remains materially incomplete.** Current tests establish authenticated inventory and visible S3 source selection only. They do not automate builder creation/repair, prove the selected source's binding (a visible filename may merely be an available option), select the real GCS output, configure/disable scheduling, await a correlated fresh run, or assert downloaded output validity. Passing these tests cannot be presented as full-pipeline UI coverage. No fixed sleeps were found; outcome-based waiting is appropriate.
+
+Concrete test improvements before final implementation review:
+
+- Parameterize project ID/name and authentication-state location for reproducibility instead of requiring the author's exact project. Document setup for existing-project checks separately from full journey tests.
+- Create `.runtime` and evidence output directories before writing. A clean clone must not depend on ignored directories already existing locally.
+- Preserve distinct evidence per execution rather than overwriting one network inventory; connect it to the run/scenario manifest.
+- Assert actual source/output binding and a new run identity, not only visible controls or generic success text. Follow through to raw GCS content validation and finally disable scheduling even if assertions fail.
+- Avoid treating broad page-body dumps as publication-ready evidence: keep them local and redact/review any excerpts before committing. The source comment promising metadata-only evidence does not itself enforce that the full page contains only metadata.
+- The authenticated API test's request discovery is acceptable for an observed-interface test, but requires browser/session setup. Document that dependency rather than describing it as an independently credentialless API suite.
+
+### AI-builder-only baseline recovery proposal
+
+Preserve current failed output and configuration evidence. Ask the builder to inspect the executable transformation actually connected between S3 and the selected GCS output, including all upstream filters and downstream casts. Require it to identify the active node IDs/edges and verify whether the output still follows an old node after replacement. Do not accept a changed instruction or response as proof of executable repair.
+
+Through the builder, change zero handling explicitly: missing/null and negative prices are rejected; numeric/string zero must survive every filter and required-field check. Avoid truthiness tests that interpret zero as missing. Ask it to regenerate the active executable transformation through supported tooling and reconnect the actual export path, without inserting expected rows or hardcoded outputs.
+
+For monetary formatting, ask the builder to keep both money columns as two-decimal strings through the final transformation and inspect whether downstream export/type inference converts them back to numeric values. A UI preview can hide formatting; acceptance must use raw CSV bytes. If the exporter inherently strips trailing zeros despite correct string output, document the platform limitation separately instead of weakening the frozen oracle silently.
+
+Execute a fresh bounded baseline only after those corrections, capture its new run/object identities, and validate all seven records including A010 and exact money serialization. If still incorrect, compare intermediate node row counts and A010 presence to localize the first loss; ask the builder to repair that stage. Only after a verified baseline should the scheduled baseline and isolated drift matrix proceed. No simulator or locally cleaned substitute satisfies this gate.
+
+## Interim live-evidence audit (not checkpoint 2 sign-off)
+
+Independently read the baseline finding, builder/repair evidence, execution logs, GCS inventory, all four downloaded CSVs, authentication test source, and recorded authentication test results. No cloud actions or secret access were performed; authentication tests were inspected rather than independently rerun.
+
+**Raw output now confirms a baseline failure.** Each inventory-listed local CSV is 477 bytes and matches its recorded SHA-256 `1b0583dad21a144c63e4d5562cb5320db42ad2ff8e5468ed4817f2fb934efbe7`. Each contains six records and omits valid zero-price A010. Eleven of twelve monetary cells violate the exactly-two-decimal serialization contract. Independently invoking the local validator on all four files rejects each. This invocation used the frozen baseline source fixture, not an independently downloaded S3 source; source/run provenance still relies on the primary's captured evidence and inventory.
+
+The four artifacts have distinct GCS object names/generations and creation timestamps, but identical contents. This verifies output agreement across those objects; it does not establish controlled fixed-configuration determinism, since repairs/configuration changes and trigger attribution have not been independently reconciled. No scheduled execution is established.
+
+### Report corrections required
+
+- `observations/baseline-builder-cache.md` still says raw download and validation are pending. Replace those stale statements with the actual file links, generation/timestamps, matching hashes, six-record result, missing A010, and formatting failures.
+- Prefer a finding title such as **Builder repair confirmation did not restore baseline correctness**. The current title asserts failure to regenerate executable code more strongly than the independently available evidence supports. Cache/stale-code causality remains the builder's diagnosis until an actual before/after executable-code comparison verifies it.
+- Preserve the distinction between the original instruction defect, the prompt-repair run, and the replacement-node attempt. Map every output object to its supported configuration/repair stage and trigger evidence; mark unknown attribution as unknown. Four objects alone cannot establish that a replacement node was executed or that output selection used it.
+- Describe missing A010 as substantive data loss and reduced decimal places as a separate serialization failure. Do not call the latter wrong monetary arithmetic: the six retained records have the expected numeric amounts, despite formatting differences.
+- Avoid implying that the intentionally defective original configuration was explicitly run after the rejected action. The primary reports an automatic approval rejection before repair; subsequent output evidence must retain its actual sequence.
+
+### Authentication API evidence
+
+The saved result records three expected/passing tests, zero skipped/unexpected/flaky cases. Test source asserts response status and content for observed provider discovery, CSRF token presence, and a fresh-context sign-in rejected for missing CSRF. The negative test checks the 302 destination and `MissingCSRF`, rather than treating any redirect as success. Token assertions avoid printing its value.
+
+These are useful live authentication API checks, accurately labeled as authentication-only. They do not establish pipeline endpoint behavior, authenticated project access, scheduling, or export correctness. Maintain that scope label; add relevant pipeline backend coverage when authorized login is restored. Google's automated-browser restriction should remain a documented access limitation, without bypass claims.
+
+Baseline is not accepted yet. Repair correctness, fresh source/output provenance, successful scheduled baseline, scenario isolation, drift/repair evidence, full UI/backend coverage, and final deliverables remain outstanding. The primary reports no active schedules and that the original account is currently signed out; these are reported operational facts, not reviewer-verified cloud state.
+
+## Current checkpoint 1 status (supersedes historical blockers below)
+
+Design and frozen fixtures are accepted for implementation. Checkpoints 2 (completed implementation/live evidence review) and 3 (fix verification) have not occurred. No live pipeline, schedule, drift, determinism, UI, or API result is approved by this review.
+
+The primary reports restored browser access; user authorization for implementation and staged private-repository pushes; authenticated GitHub CLI; S3 `orders.csv` connected; and GCS destination created/bound with the approved dedicated bucket-level create/delete identity. These replace historical statements about missing approvals, absent integrations, and unavailable repository delivery. No schedule has been activated. Cloud state was not independently inspected by this reviewer.
+
+Independent local verification at commit `fcf2e0e`:
+
+- Read the committed manifest and all sixteen fixture/oracle blobs directly from Git, rather than relying only on working-tree files. Every SHA-256 and CSV row count matches: twelve input rows and seven expected rows for each of eight cases.
+- Executed `python -B -m unittest discover -s data-validation -p 'test_*.py' -v` with Python 3.12.4: all eight local validator tests passed. These demonstrate rejection of selected corrupt artifacts and correct local oracle comparison; they do not verify cloud execution.
+- Reviewed `validate.py`: exact expected-row comparisons preserve ordering and detect semantic discrepancies; source hashes prevent accepting a different fixture; repeat comparison does not silently sort away differences. Output explicitly declares that provenance requires a live manifest and determinism is unchecked without repeats.
+- The local Git ownership safeguard required a command-scoped `safe.directory` override for this known workspace. No global Git configuration, secrets, or cloud state were changed.
+
+### Concrete findings and remaining gates
+
+1. **Baseline blocker: zero-price rejection.** The saved builder response explicitly says "zero/negative dropped", conflicting with the frozen nonnegative-price contract and valid A010 (0.00). This is verified instruction/response-level evidence, not yet a demonstrated runtime defect. Preserve that evidence, use the AI builder to correct the rule, and verify the actual output retains A010 before claiming baseline correctness. Do not hand-edit cleaning code.
+2. **Expected absence needs structured evidence.** The current validator raises an exception for an absent output or empty file before it writes a JSON report. It cannot by itself fulfill the requirement to record every stopped/failed run. Before drift execution, provide a run/report layer that records verified output absence and failure metadata, or explicitly handles these cases as structured failures. Never substitute an invented empty CSV. This is a reporting/readiness gap, not a false-pass defect in the existing comparison.
+3. **Source freshness and integration:** demonstrate an actual S3 read and fresh GCS write, with fixture hash, output object identity/generation, run identifier, and timestamps. A configured connection is insufficient. Ensure subsequent input replacement is read rather than cached.
+4. **Scheduling:** inspect supported interval and disable controls; maintain the three-run/30-minute supervised bounds; obtain a successful scheduled baseline; verify disabled state after each window. Apply bounds to repair/repeat runs too.
+5. **Scenario evidence:** preserve baseline configuration for isolation, capture pre-repair failure, apply chatbot-only fixes, validate actual downloaded outputs, and record post-repair scheduled behavior. Capture inferred quantity types before labeling the suffix case a verified type change.
+6. **Automation and delivery:** implement full-journey UI tests and at least two observed-backend tests including a meaningful negative case. Complete scenario reports, actual repeated-run comparisons, README findings/usability feedback, and an accessible video. GitHub transport is reported resolved; final repository contents/accessibility still require verification.
+7. **Budget and cleanup:** continue checking AUD 10 actual-spend headroom, bounded schedules, private bucket scope, and credential exclusion. Preserve reproducibility instructions when revoking temporary integration access after experiments.
+
+The source brief was read in full by the primary agent and mapped in `REQUIREMENTS.md`; the reviewer still distinguishes reviewing that mapping from personally viewing the original source. Historical sections below record earlier states and are not current blockers unless repeated in this section.
+
 ## Checkpoint 1 fixture acceptance
 
 Independently inspected the revised contract, baseline input, hand-authored baseline oracle, both semantic variants, generator source, and manifest. A read-only CSV/hash check confirmed all eight input files have 12 rows, all eight expected files have seven rows, and all 16 SHA-256 values match the manifest. This is local fixture verification, not a live platform result.

@@ -1,0 +1,63 @@
+
+- paragraph: Pipeline execution started.
+- text: 05:35:46 AM
+- button:
+- paragraph: "Applied 2 transformations: Custom: prompt: \"Clean and validate the orders DataFrame according to the following contract. ...\" · visualise: false · output_columns: \"\" · mode: \"code\" · code: \"import re from datetime import datetime from decimal import Decimal, ROUND_HA...\". Impact: 6 row(s) affected, 54 cell(s) modified | Sort Data: sort by order_id (ascending). Impact: row order updated."
+- text: 05:35:46 AM
+- button:
+- paragraph: Pipeline completed successfully
+- text: 05:35:46 AM
+- button:
+- paragraph: Pipeline execution completed successfully.
+- text: 05:34:58 AM
+- button:
+- paragraph: Pipeline execution started.
+- text: 05:24:43 AM
+- button:
+- paragraph: Pipeline completed successfully
+- text: 05:24:43 AM
+- button:
+- paragraph: Pipeline execution completed successfully.
+- text: 05:24:42 AM
+- button:
+- paragraph: Pipeline execution started.
+- tablist:
+  - tab:
+    - generic: AI Builder
+  - tab [selected]:
+    - generic: Schedule
+- button:
+- complementary:
+  - generic: Schedules
+  - generic: Manage schedules within this project
+  - button:
+    - text: Add Schedule
+  - paragraph: No schedules found
+  - button:
+    - text: Create your first schedule
+- textbox [disabled]
+- button [disabled]:
+- button [disabled]
+- text: 39/50
+- button:
+- dialog "Create Schedule":
+  - heading "Create Schedule" [level=2]
+  - paragraph: Dialog content and actions are available below.
+  - text: Frequency
+  - combobox [active]:
+    - generic: Custom
+  - combobox
+  - generic: Custom Cron Expression
+  - button "Cron expression help":
+  - textbox "Custom Cron Expression":
+    - /placeholder: 0 0 * * * (e.g., daily at midnight)
+  - paragraph: "Enter a valid cron expression in the format: minute hour day month day-of-week"
+  - generic "Quick examples"
+  - text: Notification Settings
+  - button "Notify on failure" [pressed]:
+  - generic: Notify on failure
+  - paragraph: Receive notifications when the schedule fails to run.
+  - button "Cancel"
+  - button "Create"
+  - button "Close":
+    - generic: Close

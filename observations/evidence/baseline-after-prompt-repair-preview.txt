@@ -1,0 +1,317 @@
+- alert
+- button "Rhombus AI Logo":
+  - img "Rhombus AI Logo"
+- button:
+- button "Dashboard":
+  - generic: Dashboard
+- button "New Project":
+  - generic: New Project
+- button "Search":
+  - generic: Search
+- generic: All Projects (1)
+- link "LLM Observability Assessment":
+  - /url: /workflow/5348
+  - generic: LLM Observability Assessment
+  - button:
+- generic: T
+- generic: tiger.cai1116@gmail.com
+- tablist:
+  - tab "Canvas":
+    - generic: Canvas
+  - tab "Workspace":
+    - generic: Workspace
+  - tab "Preview" [active] [selected]:
+    - generic: Preview
+- button "Logs":
+  - generic: Logs
+- button:
+- heading "Node Preview" [level=2]
+- button "Single Line":
+  - generic: Single Line
+- button "Attach to Chat":
+  - generic: Attach to Chat
+- button "Download":
+  - generic: Download
+- table:
+  - rowgroup:
+    - row "# order_id Text customer Text email Text order_date Text quantity Numeric unit_price Numeric currency Categorical status Categorical total_amount Numeric":
+      - columnheader "#":
+        - generic: "#"
+      - columnheader "order_id Text":
+        - button "order_id":
+          - generic: order_id
+        - button "Text"
+      - columnheader "customer Text":
+        - button "customer":
+          - generic: customer
+        - button "Text"
+      - columnheader "email Text":
+        - button "email":
+          - generic: email
+        - button "Text"
+      - columnheader "order_date Text":
+        - button "order_date":
+          - generic: order_date
+        - button "Text"
+      - columnheader "quantity Numeric":
+        - button "quantity":
+          - generic: quantity
+        - button "Numeric"
+      - columnheader "unit_price Numeric":
+        - button "unit_price":
+          - generic: unit_price
+        - button "Numeric"
+      - columnheader "currency Categorical":
+        - button "currency":
+          - generic: currency
+        - button "Categorical"
+      - columnheader "status Categorical":
+        - button "status":
+          - generic: status
+        - button "Categorical"
+      - columnheader "total_amount Numeric":
+        - button "total_amount":
+          - generic: total_amount
+        - button "Numeric"
+  - rowgroup:
+    - row "1 A001 Alice Example alice@example.test 2026-03-04 2 12.5 AUD paid 25":
+      - cell "1":
+        - generic: "1"
+      - cell "A001":
+        - generic: A001
+      - cell "Alice Example":
+        - generic: Alice Example
+      - cell "alice@example.test":
+        - generic: alice@example.test
+      - cell "2026-03-04":
+        - generic: 2026-03-04
+      - cell "2":
+        - generic: "2"
+      - cell "12.5":
+        - generic: "12.5"
+      - cell "AUD":
+        - generic: AUD
+      - cell "paid":
+        - generic: paid
+      - cell "25":
+        - generic: "25"
+    - row "2 A002 Unknown bob@example.test 2026-04-05 3 4.2 AUD paid 12.6":
+      - cell "2":
+        - generic: "2"
+      - cell "A002":
+        - generic: A002
+      - cell "Unknown":
+        - generic: Unknown
+      - cell "bob@example.test":
+        - generic: bob@example.test
+      - cell "2026-04-05":
+        - generic: 2026-04-05
+      - cell "3":
+        - generic: "3"
+      - cell "4.2":
+        - generic: "4.2"
+      - cell "AUD":
+        - generic: AUD
+      - cell "paid":
+        - generic: paid
+      - cell "12.6":
+        - generic: "12.6"
+    - row "3 A003 Casey Example null 2026-05-06 1 20 AUD pending 20":
+      - cell "3":
+        - generic: "3"
+      - cell "A003":
+        - generic: A003
+      - cell "Casey Example":
+        - generic: Casey Example
+      - cell "null":
+        - generic: "null"
+      - cell "2026-05-06":
+        - generic: 2026-05-06
+      - cell "1":
+        - generic: "1"
+      - cell "20":
+        - generic: "20"
+      - cell "AUD":
+        - generic: AUD
+      - cell "pending":
+        - generic: pending
+      - cell "20":
+        - generic: "20"
+    - row "4 A008 Hotel Example hotel@example.test 2026-09-10 4 0.25 AUD paid 1":
+      - cell "4":
+        - generic: "4"
+      - cell "A008":
+        - generic: A008
+      - cell "Hotel Example":
+        - generic: Hotel Example
+      - cell "hotel@example.test":
+        - generic: hotel@example.test
+      - cell "2026-09-10":
+        - generic: 2026-09-10
+      - cell "4":
+        - generic: "4"
+      - cell "0.25":
+        - generic: "0.25"
+      - cell "AUD":
+        - generic: AUD
+      - cell "paid":
+        - generic: paid
+      - cell "1":
+        - generic: "1"
+    - row "5 A009 India Example india@example.test 2026-10-11 2 7.5 AUD pending 15":
+      - cell "5":
+        - generic: "5"
+      - cell "A009":
+        - generic: A009
+      - cell "India Example":
+        - generic: India Example
+      - cell "india@example.test":
+        - generic: india@example.test
+      - cell "2026-10-11":
+        - generic: 2026-10-11
+      - cell "2":
+        - generic: "2"
+      - cell "7.5":
+        - generic: "7.5"
+      - cell "AUD":
+        - generic: AUD
+      - cell "pending":
+        - generic: pending
+      - cell "15":
+        - generic: "15"
+    - row "6 A011 Kilo Example kilo@example.test 2026-12-01 5 1.1 AUD paid 5.5":
+      - cell "6":
+        - generic: "6"
+      - cell "A011":
+        - generic: A011
+      - cell "Kilo Example":
+        - generic: Kilo Example
+      - cell "kilo@example.test":
+        - generic: kilo@example.test
+      - cell "2026-12-01":
+        - generic: 2026-12-01
+      - cell "5":
+        - generic: "5"
+      - cell "1.1":
+        - generic: "1.1"
+      - cell "AUD":
+        - generic: AUD
+      - cell "paid":
+        - generic: paid
+      - cell "5.5":
+        - generic: "5.5"
+- paragraph: Rows per page
+- combobox:
+  - generic: "20"
+- generic: Page
+- spinbutton: "1"
+- generic: of 1
+- button "Go to first page" [disabled]:
+  - generic: Go to first page
+- button "Go to previous page" [disabled]:
+  - generic: Go to previous page
+- button "Go to next page" [disabled]:
+  - generic: Go to next page
+- button "Go to last page" [disabled]:
+  - generic: Go to last page
+- generic: Logs
+- generic: 15 visible
+- button:
+- button "All"
+- button "15":
+  - text: "15"
+- button "0":
+  - text: "0"
+- button "0":
+  - text: "0"
+- button:
+- text: 05:50:11 AM
+- button "Expand log":
+- paragraph: "Applied 2 transformations: Custom: prompt: \"Clean and validate the orders DataFrame according to the following contract. ...\" · visualise: false · output_columns: \"\" · mode: \"code\" · code: \"import re from datetime import datetime from decimal import Decimal, ROUND_HA...\". Impact: 6 row(s) affected, 54 cell(s) modified | Sort Data: sort by order_id (ascending). Impact: row order updated."
+- text: 05:50:11 AM
+- button "Expand log":
+- paragraph: Pipeline completed successfully
+- text: 05:50:11 AM
+- button "Expand log":
+- paragraph: Pipeline execution completed successfully.
+- text: 05:50:03 AM
+- button "Expand log":
+- paragraph: Pipeline execution started.
+- text: 05:49:46 AM
+- button "Expand log":
+- paragraph: "Applied 2 transformations: Custom: prompt: \"Clean and validate the orders DataFrame according to the following contract. ...\" · visualise: false · output_columns: \"\" · mode: \"code\" · code: \"import re from datetime import datetime from decimal import Decimal, ROUND_HA...\". Impact: 6 row(s) affected, 54 cell(s) modified | Sort Data: sort by order_id (ascending). Impact: row order updated."
+- text: 05:49:46 AM
+- button "Expand log":
+- paragraph: Pipeline completed successfully
+- text: 05:49:46 AM
+- button "Expand log":
+- paragraph: Pipeline execution completed successfully.
+- text: 05:49:41 AM
+- button "Expand log":
+- paragraph: Pipeline execution started.
+- text: 05:35:46 AM
+- button "Expand log":
+- paragraph: "Applied 2 transformations: Custom: prompt: \"Clean and validate the orders DataFrame according to the following contract. ...\" · visualise: false · output_columns: \"\" · mode: \"code\" · code: \"import re from datetime import datetime from decimal import Decimal, ROUND_HA...\". Impact: 6 row(s) affected, 54 cell(s) modified | Sort Data: sort by order_id (ascending). Impact: row order updated."
+- text: 05:35:46 AM
+- button "Expand log":
+- paragraph: Pipeline completed successfully
+- text: 05:35:46 AM
+- button "Expand log":
+- paragraph: Pipeline execution completed successfully.
+- text: 05:34:58 AM
+- button "Expand log":
+- paragraph: Pipeline execution started.
+- text: 05:24:43 AM
+- button "Expand log":
+- paragraph: Pipeline completed successfully
+- text: 05:24:43 AM
+- button "Expand log":
+- paragraph: Pipeline execution completed successfully.
+- text: 05:24:42 AM
+- button "Expand log":
+- paragraph: Pipeline execution started.
+- tablist:
+  - tab "AI Builder":
+    - generic: AI Builder
+  - tab "Schedule":
+    - generic: Schedule
+  - tab "Transform" [selected]:
+    - generic: Transform
+  - tab "Profile":
+    - generic: Profile
+- button:
+- complementary:
+  - img "Data Output Icon"
+  - generic: Data Output
+  - generic: Select Destination
+  - paragraph: Choose where to export your transformed data.
+  - button "Download Locally Skip cloud upload and download the node output directly from Rhombus once the pipeline completes.":
+    - generic: Download Locally
+    - paragraph: Skip cloud upload and download the node output directly from Rhombus once the pipeline completes.
+  - button "Google Cloud Storage rhombus-assessment-output-20261017-hc6":
+    - img "Google Cloud Storage"
+    - generic: rhombus-assessment-output-20261017-hc6
+  - button "Delete rhombus-assessment-output-20261017-hc6 destination":
+  - button "Add New Destination":
+    - generic: Add New Destination
+  - generic: Export Configuration
+  - heading "Export Format" [level=3]
+  - combobox:
+    - generic: CSV
+  - combobox
+  - heading "Custom Filename" [level=3]
+  - textbox "RhombusAI_output": orders_cleaned
+  - paragraph: Data will be exported automatically when the pipeline runs.
+  - button "Apply"
+- textbox
+- button:
+- button "Facet":
+  - generic: Facet
+- generic "40 credits remaining out of 50":
+  - text: 40/50
+- button "Send message" [disabled]:
+- region "Notifications alt+T":
+  - list:
+    - status:
+      - button "Close toast":
+      - generic: "Pipeline completed successfully. Actions: customize · sort | Selected: Custom, Sort Data"

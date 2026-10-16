@@ -1,0 +1,391 @@
+- alert
+- button "Rhombus AI Logo":
+  - img "Rhombus AI Logo"
+- button:
+- button "Dashboard":
+  - generic: Dashboard
+- button "New Project":
+  - generic: New Project
+- button "Search":
+  - generic: Search
+- generic: All Projects (1)
+- link "LLM Observability Assessment":
+  - /url: /workflow/5348
+  - generic: LLM Observability Assessment
+  - button:
+- generic: T
+- generic: tiger.cai1116@gmail.com
+- tablist:
+  - tab "Canvas" [selected]:
+    - generic: Canvas
+  - tab "Workspace":
+    - generic: Workspace
+- button "Logs":
+  - generic: Logs
+- button:
+- button "Amazon S3 Data Input":
+  - generic "Amazon S3":
+  - generic: Data Input
+  - button:
+  - button:
+  - button:
+- button:
+  - generic: Custom
+  - generic: "Clean and validate the orders DataFrame according to the following contract. The input columns are: order_id, customer, email, order_date, quantity, unit_price, currency, status. IMPORTANT: Do not hardcode any rows or expected results. All logic must be general. Step 1 - Trim whitespace. For every column that holds string/object dtype values, strip leading and trailing whitespace from every cell. Replace any cell that is purely whitespace (or an empty string after stripping) with None/NaN for subsequent checks. Columns that are already non-string dtype (e.g. datetime64, int64, float64) are left untouched by this step. Step 2 - Case normalisation. - order_id: if string, uppercase. - currency: if string, uppercase. - email: if string, lowercase. - status: if string, lowercase. - customer: preserve original case (do not change). Step 3 - Fill missing customer. If customer is None/NaN/empty string after stripping, set it to the string Unknown. Step 4 - Email validation. For each email value: if it is None/NaN/empty, replace with an empty string. Otherwise test against the pattern ^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$. If the value does NOT match, replace with an empty string. Valid emails keep their (already lowercased) value. Step 5 - Drop rows missing required fields. Required columns: order_id, order_date, quantity, unit_price, currency, status. After steps 1-4, if any of these six columns is None/NaN/NaT/empty string in a row, drop that row entirely. For order_date, treat pandas NaT as missing. For unit_price when numeric, treat NaN as missing but 0 is NOT missing (zero is a valid price). Step 6 - Currency filter. Only keep rows where currency == AUD. Drop all others. Step 7 - Status filter. Only keep rows where status is paid or pending. Drop all others. Step 8 - Date parsing. The order_date column may arrive as datetime64 (already parsed by the engine) or as a plain string. Handle both: - If a cell is already a pandas Timestamp or datetime object (i.e. not a string and not NaT), format it directly as YYYY-MM-DD using strftime('%Y-%m-%d'). Preserve it; do not re-parse. - If a cell is a string, parse it strictly as MM/DD/YYYY using datetime.strptime(value, '%m/%d/%Y') inside a try/except. If parsing raises any exception (invalid date, wrong format, impossible date), drop the row. On success, replace with strftime('%Y-%m-%d'). - If a cell is NaT or None/NaN, the row was already dropped in Step 5. If any survive, drop them here. Step 9 - Quantity validation. The quantity column may arrive as a numeric dtype (int64/float64) or as a string. Handle both: - If the value is already a numeric type (not a string): it must be finite, a whole number, and >= 1. Check using pd.notna(val) and not math.isinf(float(val)) and float(val) == int(float(val)) and int(float(val)) >= 1. Rows failing this are dropped. Store as Python int. - If the value is a string: strip it, then apply the regex ^[1-9][0-9]*$ (no decimal point, no sign, no leading zero, value >= 1). Rows failing this check are dropped. Convert accepted values to Python int. Step 10 - Unit price validation and parsing. Unit price may optionally begin with a single dollar sign character (string case) or arrive as a numeric dtype. Handle both: - If the value is already a numeric type (not a string): it must be finite and >= 0 (zero is valid; negative is not). Check using pd.notna(val) and not math.isinf(float(val)) and float(val) >= 0. Rows failing this are dropped. Store as decimal.Decimal(str(round(float(val), 10))). - If the value is a string: strip it. Remove a leading dollar sign if present. The remaining string must match the regex ^[0-9]+(\\.[0-9]{1,2})?$ (no commas, no exponent notation, no negative sign, one to two optional decimal places). Rows failing the regex are dropped. Parse accepted values with decimal.Decimal. If the resulting Decimal is strictly less than 0, drop the row. Zero is accepted. Step 11 - Deduplication. First, identify fully identical rows across all columns currently in the DataFrame (after all prior cleaning). Remove exact duplicates, keeping only the first occurrence. Second, among remaining rows, group by order_id. If any order_id appears more than once and the rows in that group are NOT all identical (i.e. they differ in at least one column value), drop ALL rows with that order_id (conflicting duplicates). Step 12 - Calculate total_amount. Import Decimal and ROUND_HALF_UP from the decimal module. Import math. total_amount = Decimal(str(quantity)) * unit_price_decimal (where unit_price_decimal is the Decimal stored in Step 10). Round total_amount to 2 decimal places using ROUND_HALF_UP: total_amount.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP). Step 13 - Serialise numeric columns. - unit_price: format as a string with exactly 2 decimal places (e.g. 0.00 for zero, 12.50 for 12.5). Store this string in the unit_price column. - total_amount: format as a string with exactly 2 decimal places. Store in a new total_amount column. - quantity: store as a plain integer (Python int, not float). Step 14 - Select and order output columns. Return a DataFrame with exactly these columns in this order: order_id, customer, email, order_date, quantity, unit_price, currency, status, total_amount. Do not add any timestamp, processing date, row-number, or metadata column. Do not modify any column not listed in these steps."
+  - button:
+  - button:
+  - button:
+- button:
+- button:
+- button:
+- tablist:
+  - tab "AI Builder" [selected]:
+    - generic: AI Builder
+  - tab "Schedule":
+    - generic: Schedule
+- button:
+- complementary:
+  - paragraph: /pipeline Build the cleaning pipeline on this project's canvas using the existing Amazon S3 Data Input bound to orders.csv. Create and configure all cleaning transformations yourself. Do not replace the S3 source with a local upload or a static copy. Each run must read the current S3 object.
+  - paragraph: "The source contract is: order_id, customer, email, order_date, quantity, unit_price, currency, status. Dates are MM/DD/YYYY; unit_price is in major AUD units. Output exactly these columns in order: order_id,customer,email,order_date,quantity,unit_price,currency,status,total_amount."
+  - paragraph: Trim surrounding whitespace in all text. Uppercase order_id and currency; lowercase email and status; preserve customer case. Fill missing/blank customer with Unknown. Replace invalid or missing email with an empty string; use the simple pattern ^[^\s@]+@[^\s@]+.[^\s@]+$. Require nonempty order_id, order_date, quantity, unit_price, currency and status. Only AUD and statuses paid/pending are allowed. Parse dates strictly as MM/DD/YYYY and output YYYY-MM-DD; reject invalid dates. Quantity must be positive integer digits. Unit price may have a leading dollar sign and at most two decimal places; reject negative, missing, nonfinite, exponent or comma-containing prices. Remove invalid required-value rows. Deduplicate identical normalized business rows; reject conflicting duplicate order IDs. Sort by order_id ascending.
+  - paragraph: Calculate total_amount = quantity * unit_price using decimal arithmetic and ROUND_HALF_UP, serialize unit_price and total_amount with two decimal places, and quantity as integer digits. Do not insert processing timestamps into business data. Do not hardcode rows or expected results. Keep transformations general for the contract.
+  - paragraph: "Add and connect a Data Output node for CSV export. The GCS destination connection will be configured next; do not invent credentials or enable a schedule. Explain the resulting transformations and any unsupported rules. Do not merely provide instructions: build the nodes on the canvas."
+  - button "Copy message":
+    - generic: Copy message
+  - img "Avatar"
+  - paragraph: "All four nodes are on the canvas. Here's a summary of what was built:"
+  - heading "Pipeline updated on the canvas." [level=6]
+  - table:
+    - rowgroup:
+      - row "Change Node Purpose":
+        - columnheader "Change"
+        - columnheader "Node"
+        - columnheader "Purpose"
+    - rowgroup:
+      - row "Existing orders.csv S3 input — reads the live orders.csv object on every run; no local copy.":
+        - cell "Existing"
+        - cell "orders.csv":
+          - button "orders.csv":
+            - generic: orders.csv
+        - cell "S3 input — reads the live orders.csv object on every run; no local copy.":
+          - text: S3 input — reads the live
+          - button "orders.csv":
+            - generic: orders.csv
+          - text: object on every run; no local copy.
+      - row "Added orders_cleaned LLM transformation node — applies every cleaning and validation rule (see detail below).":
+        - cell "Added"
+        - cell "orders_cleaned":
+          - button "orders_cleaned":
+            - generic: orders_cleaned
+        - cell "LLM transformation node — applies every cleaning and validation rule (see detail below)."
+      - row "Added Node icon orders_sorted Sort node — sorts the cleaned rows by order_id ascending.":
+        - cell "Added"
+        - cell "Node icon orders_sorted":
+          - button "Node icon orders_sorted":
+            - img "Node icon"
+            - generic: orders_sorted
+        - cell "Sort node — sorts the cleaned rows by order_id ascending.":
+          - text: Sort node — sorts the cleaned rows by
+          - code: order_id
+          - text: ascending.
+      - row "Added orders_output Output node — exports to CSV ( orders_cleaned .csv). Ready for a GCS destination to be wired in; no credentials have been set.":
+        - cell "Added"
+        - cell "orders_output":
+          - button "orders_output":
+            - generic: orders_output
+        - cell "Output node — exports to CSV ( orders_cleaned .csv). Ready for a GCS destination to be wired in; no credentials have been set.":
+          - text: Output node — exports to CSV (
+          - button "orders_cleaned":
+            - generic: orders_cleaned
+          - text: .csv). Ready for a GCS destination to be wired in; no credentials have been set.
+  - heading "What orders_cleaned does, rule by rule" [level=3]:
+    - text: What
+    - button "orders_cleaned":
+      - generic: orders_cleaned
+    - text: does, rule by rule
+  - table:
+    - rowgroup:
+      - row "Rule How it's applied":
+        - columnheader "Rule"
+        - columnheader "How it's applied"
+    - rowgroup:
+      - row "Trim whitespace Every string/object column is stripped; purely-whitespace cells become None .":
+        - cell "Trim whitespace"
+        - cell "Every string/object column is stripped; purely-whitespace cells become None .":
+          - text: Every string/object column is stripped; purely-whitespace cells become
+          - code: None
+          - text: .
+      - row "Case normalisation order_id → uppercase; currency → uppercase; email → lowercase; status → lowercase; customer case is preserved.":
+        - cell "Case normalisation"
+        - cell "order_id → uppercase; currency → uppercase; email → lowercase; status → lowercase; customer case is preserved.":
+          - code: order_id
+          - text: → uppercase;
+          - code: currency
+          - text: → uppercase;
+          - code: email
+          - text: → lowercase;
+          - code: status
+          - text: → lowercase;
+          - code: customer
+          - text: case is preserved.
+      - row "Fill missing customer None /blank customer is replaced with \"Unknown\" .":
+        - cell "Fill missing customer"
+        - cell "None /blank customer is replaced with \"Unknown\" .":
+          - code: None
+          - text: /blank customer is replaced with
+          - code: "\"Unknown\""
+          - text: .
+      - row "Email validation Regex ^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$ ; non-matching or missing → empty string (row is kept).":
+        - cell "Email validation"
+        - cell "Regex ^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$ ; non-matching or missing → empty string (row is kept).":
+          - text: Regex
+          - code: ^[^\s@]+@[^\s@]+\.[^\s@]+$
+          - text: ; non-matching or missing → empty string (row is kept).
+      - row "Drop rows with missing required fields Any row with a blank/null order_id , order_date , quantity , unit_price , currency , or status is dropped.":
+        - cell "Drop rows with missing required fields"
+        - cell "Any row with a blank/null order_id , order_date , quantity , unit_price , currency , or status is dropped.":
+          - text: Any row with a blank/null
+          - code: order_id
+          - text: ","
+          - code: order_date
+          - text: ","
+          - code: quantity
+          - text: ","
+          - code: unit_price
+          - text: ","
+          - code: currency
+          - text: ", or"
+          - code: status
+          - text: is dropped.
+      - row "Currency allow-list Only AUD rows are kept.":
+        - cell "Currency allow-list"
+        - cell "Only AUD rows are kept.":
+          - text: Only
+          - code: AUD
+          - text: rows are kept.
+      - row "Status allow-list Only paid and pending rows are kept.":
+        - cell "Status allow-list"
+        - cell "Only paid and pending rows are kept.":
+          - text: Only
+          - code: paid
+          - text: and
+          - code: pending
+          - text: rows are kept.
+      - row "Date parsing datetime.strptime(value, '%m/%d/%Y') — impossible dates (e.g. 02/30/2024 ) raise and drop the row. Valid dates are reformatted to YYYY-MM-DD .":
+        - cell "Date parsing"
+        - cell "datetime.strptime(value, '%m/%d/%Y') — impossible dates (e.g. 02/30/2024 ) raise and drop the row. Valid dates are reformatted to YYYY-MM-DD .":
+          - code: datetime.strptime(value, '%m/%d/%Y')
+          - text: — impossible dates (e.g.
+          - code: 02/30/2024
+          - text: ) raise and drop the row. Valid dates are reformatted to
+          - code: YYYY-MM-DD
+          - text: .
+      - row "Quantity validation Regex ^[1-9][0-9]*$ — must be a positive integer with no decimals, sign, or leading zeros. Stored as Python int .":
+        - cell "Quantity validation"
+        - cell "Regex ^[1-9][0-9]*$ — must be a positive integer with no decimals, sign, or leading zeros. Stored as Python int .":
+          - text: Regex
+          - code: ^[1-9][0-9]*$
+          - text: — must be a positive integer with no decimals, sign, or leading zeros. Stored as Python
+          - code: int
+          - text: .
+      - 'row "Unit price validation Optional leading $ stripped; remainder must match ^[0-9]+(\\.[0-9]{1,2})?$ — no commas, no exponents. Parsed as decimal.Decimal ; zero/negative dropped."':
+        - cell "Unit price validation"
+        - 'cell "Optional leading $ stripped; remainder must match ^[0-9]+(\\.[0-9]{1,2})?$ — no commas, no exponents. Parsed as decimal.Decimal ; zero/negative dropped."':
+          - text: Optional leading
+          - code: $
+          - text: stripped; remainder must match
+          - code: "^[0-9]+(\\.[0-9]{1,2})?$"
+          - text: — no commas, no exponents. Parsed as
+          - code: decimal.Decimal
+          - text: ; zero/negative dropped.
+      - row "Deduplication Exact duplicate rows removed (first kept); then order_id groups with any row-level conflict drop all rows for that ID.":
+        - cell "Deduplication"
+        - cell "Exact duplicate rows removed (first kept); then order_id groups with any row-level conflict drop all rows for that ID.":
+          - text: Exact duplicate rows removed (first kept); then
+          - code: order_id
+          - text: groups with any row-level conflict drop all rows for that ID.
+      - row "total_amount calculation Decimal(str(quantity)) × unit_price_decimal , rounded to 2 d.p. with ROUND_HALF_UP .":
+        - cell "total_amount calculation":
+          - code: total_amount
+          - text: calculation
+        - cell "Decimal(str(quantity)) × unit_price_decimal , rounded to 2 d.p. with ROUND_HALF_UP .":
+          - code: Decimal(str(quantity)) × unit_price_decimal
+          - text: ", rounded to 2 d.p. with"
+          - code: ROUND_HALF_UP
+          - text: .
+      - row "Serialisation unit_price and total_amount → 2 d.p. strings (e.g. \"12.50\" ); quantity → plain integer.":
+        - cell "Serialisation"
+        - cell "unit_price and total_amount → 2 d.p. strings (e.g. \"12.50\" ); quantity → plain integer.":
+          - code: unit_price
+          - text: and
+          - code: total_amount
+          - text: → 2 d.p. strings (e.g.
+          - code: "\"12.50\""
+          - text: );
+          - code: quantity
+          - text: → plain integer.
+      - 'row "Column order Output is exactly: order_id, customer, email, order_date, quantity, unit_price, currency, status, total_amount ."':
+        - cell "Column order"
+        - 'cell "Output is exactly: order_id, customer, email, order_date, quantity, unit_price, currency, status, total_amount ."':
+          - text: "Output is exactly:"
+          - code: order_id, customer, email, order_date, quantity, unit_price, currency, status, total_amount
+          - text: .
+  - heading "Notes on unsupported rules in native transformers" [level=3]
+  - paragraph:
+    - text: The deduplication-with-conflict-detection logic (drop the entire
+    - code: order_id
+    - text: group if any rows conflict) is not expressible in the built-in
+    - code: remove_duplicate
+    - text: transformer, which only keeps/drops by key equality. It is encoded in the LLM node's Python instruction instead. All other rules are likewise implemented there because they form a tightly coupled validation chain; splitting them across multiple standard nodes would break the "drop row on any field failure" interdependency.
+  - paragraph:
+    - text: "Next step: open the"
+    - button "orders_output":
+      - generic: orders_output
+    - text: node, add your GCS destination connection, and set the write mode as needed — no other pipeline changes are required.
+  - button "Worked for 1m 6s":
+    - generic: Worked for 1m 6s
+  - generic: Loaded
+  - generic: skill guidance
+  - generic: Searched
+  - generic: for a tool
+  - generic: Reviewed
+  - generic: pipeline
+  - generic: Read
+  - generic: transformation guidance
+  - paragraph:
+    - text: Now I'll build the pipeline in stages. The cleaning rules require Python-level logic (regex, decimal arithmetic, date parsing, dedup conflict detection), so I'll use an LM node for the cleaning step, followed by a
+    - code: sort
+    - text: node and an
+    - code: output
+    - text: node.
+  - paragraph: Stage 1 — Cleaning node
+  - button:
+    - generic: Modified pipeline
+  - button:
+    - generic: Modified pipeline
+    - generic: "+1"
+  - paragraph: Stage 2 — Sort node
+  - generic: Searched
+  - generic: for a tool
+  - generic: Retrieved
+  - generic: transformer spec
+  - generic: Retrieved
+  - generic: transformer spec
+  - button:
+    - generic: Modified pipeline
+  - generic: Reviewed
+  - generic: pipeline
+  - paragraph: The LLM node didn't persist from the prior stage — the pipeline still shows only the input node. I'll compile all three new nodes together in one call.
+  - button:
+    - generic: Modified pipeline
+    - generic: "+3"
+  - button:
+    - generic: Modified pipeline
+    - generic: "+3"
+  - button "Copy message":
+    - generic: Copy message
+  - paragraph: "/pipeline Correct the existing cleaning node before execution. Our frozen contract permits zero unit_price; your Step 10 incorrectly rejects zero. Accept Decimal values >= 0; reject only negative or invalid prices. Also the live S3 preview infers order_date as DateTime and quantity as Numeric: preserve already parsed valid dates, reject NaT/null, and handle integer numeric quantities without interpreting them as invalid string formats. Dates originate as MM/DD/YYYY; output YYYY-MM-DD. Preserve every other contract rule, the existing S3 orders.csv input, sorting, and the GCS destination already selected on the output node. Verify all four nodes remain connected and fully configured; do not change credentials or enable scheduling. Apply the corrections yourself using AI Builder and explain any remaining configuration blockers."
+  - button "Copy message":
+    - generic: Copy message
+  - img "Avatar"
+  - paragraph: The patch compiled and persisted successfully. The pipeline is updated.
+  - heading "Updated the pipeline on the canvas." [level=6]
+  - table:
+    - rowgroup:
+      - row "Change Node Purpose":
+        - columnheader "Change"
+        - columnheader "Node"
+        - columnheader "Purpose"
+    - rowgroup:
+      - row "Patched orders_cleaned Corrected two contract rules (see below). All other rules, the S3 input, the sort, and the output node are unchanged.":
+        - cell "Patched"
+        - cell "orders_cleaned":
+          - button "orders_cleaned":
+            - generic: orders_cleaned
+        - cell "Corrected two contract rules (see below). All other rules, the S3 input, the sort, and the output node are unchanged."
+  - heading "What was corrected in orders_cleaned" [level=3]:
+    - text: What was corrected in
+    - button "orders_cleaned":
+      - generic: orders_cleaned
+  - heading "1. Zero unit_price is now accepted" [level=6]
+  - paragraph:
+    - text: Step 10 now tests
+    - code: ">= 0"
+    - text: instead of
+    - code: "> 0"
+    - text: for both the numeric and string paths. Only strictly negative prices are rejected. Zero (
+    - code: "0"
+    - text: ","
+    - code: "0.00"
+    - text: ","
+    - code: $0
+    - text: ","
+    - code: $0.00
+    - text: ) passes and serialises as
+    - code: "\"0.00\""
+    - text: .
+  - paragraph: 2. Pre-parsed datetime and numeric columns are handled natively
+  - list:
+    - text: "order_date: If the S3 engine has already inferred the column as"
+    - code: datetime64
+    - text: ", cells arrive as pandas"
+    - code: Timestamp
+    - text: objects. The node now detects this (not-a-string, not-NaT) and formats directly with
+    - code: strftime('%Y-%m-%d')
+    - text: without re-parsing. NaT is still treated as missing and the row is dropped. String cells still go through strict
+    - code: strptime('%m/%d/%Y')
+    - text: as before.
+    - text: "quantity: If the column arrives as"
+    - code: int64
+    - text: /
+    - code: float64
+    - text: ", the node now validates the value numerically (finite, whole number, ≥ 1) rather than applying the string regex, avoiding false rejections on integer-inferred columns. String values still use the"
+    - code: ^[1-9][0-9]*$
+    - text: regex path.
+    - text: "unit_price: If the column arrives as numeric, the node validates (finite, ≥ 0) and stores via"
+    - code: decimal.Decimal
+    - text: . The string path (optional
+    - code: $
+    - text: prefix, regex, Decimal) is unchanged.
+  - heading "Remaining configuration blocker" [level=3]
+  - paragraph:
+    - text: The
+    - button "orders_output":
+      - generic: orders_output
+    - text: node is currently set to local download only — no GCS
+    - code: destination_id
+    - text: is configured on it yet. The user mentioned "the GCS destination already selected on the output node," but the compiled canvas state does not yet show a
+    - code: destination_id
+    - text: ". To complete the export path:"
+  - list:
+    - text: Open the
+    - button "orders_output":
+      - generic: orders_output
+    - text: node on the canvas.
+    - listitem: Select your GCS destination connection from the destination picker.
+    - text: Set the write mode (
+    - code: append
+    - text: or
+    - code: overwrite
+    - text: ) as required.
+  - paragraph: No credential changes or scheduling are needed from the pipeline side — only the destination binding on that output node.
+  - button "Worked for 58s":
+    - generic: Worked for 58s
+  - generic: Loaded
+  - generic: skill guidance
+  - button:
+    - generic: Modified pipeline
+    - generic: ~1
+  - button:
+    - generic: Modified pipeline
+    - generic: ~1
+  - button "Copy message":
+    - generic: Copy message
+  - button:
+- textbox
+- button:
+- button "Facet":
+  - generic: Facet
+- generic "40 credits remaining out of 50":
+  - text: 40/50
+- button "Send message" [disabled]:

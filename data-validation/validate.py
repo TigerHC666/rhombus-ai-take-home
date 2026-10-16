@@ -84,7 +84,18 @@ def main():
     parser.add_argument("--repeat", action="append", default=[], type=Path)
     parser.add_argument("--report", type=Path)
     args = parser.parse_args()
-    result = validate(args.scenario, args.source, args.output, args.repeat)
+    try:
+        result = validate(args.scenario, args.source, args.output, args.repeat)
+    except (OSError, ValueError, KeyError, csv.Error) as error:
+        result = {
+            "scenario": args.scenario,
+            "passed": False,
+            "evidence_level": "artifact_unavailable_or_invalid; inspect live run evidence",
+            "source_present": args.source.is_file(),
+            "output_present": args.output.is_file(),
+            "determinism": "not_checked",
+            "errors": [f"{type(error).__name__}: {error}"],
+        }
     rendered = json.dumps(result, indent=2) + "\n"
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)
