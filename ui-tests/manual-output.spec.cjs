@@ -118,6 +118,7 @@ test('S3 source through AI-built pipeline to a fresh GCS export', async ({ page 
     checkpoint('confirming-source');
     await confirmSource(page);
     if (process.env.BUILDER_PROMPT_FILE) {
+      checkpoint('repairing-with-builder');
       const originalSource = configuration.find(node => node.source_type === 's3');
       const originalDestination = configuration.find(node => node.transformation_type === 'output');
       await submitBuilderPrompt(page, fs.readFileSync(process.env.BUILDER_PROMPT_FILE, 'utf8'), directory);

@@ -1,0 +1,12 @@
+{
+  "observed_at": "2026-10-16T20:51:57.378Z",
+  "http_status": 200,
+  "job_id": "93b26d73-de3a-4ef9-8249-c7efc48e91ed",
+  "fields": [
+    "message",
+    "task_id",
+    "execution_mode"
+  ],
+  "execution_mode": "auto",
+  "execution_mode_type": "string"
+}
