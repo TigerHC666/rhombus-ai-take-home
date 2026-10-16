@@ -1,0 +1,186 @@
+{
+  "scenario": "schema-combined",
+  "trigger": "scheduled",
+  "observed_after": "2026-10-16T21:01:40.141Z",
+  "started_at": "2026-10-16T21:01:29.012Z",
+  "source": "source-provenance.json",
+  "activation_attempted": true,
+  "schedule_disabled": true,
+  "cleanup_attempted": true,
+  "status": "failed",
+  "stage": "strict_validation",
+  "outputs_observed": [
+    {
+      "name": "orders_cleaned_1792184541783.csv",
+      "generation": "1792184543532697",
+      "timeCreated": "2026-10-16T21:02:23.541Z",
+      "size": "487"
+    }
+  ],
+  "errors": [
+    {
+      "name": "Error",
+      "message": "Every output must match the independent business oracle\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m"
+    }
+  ],
+  "configuration_sha256": "fd9b5b525aa12bb9ae09c921b108c45f60cc128600a54b98f70ffc38c0d4b533",
+  "cron": "*/1 * * * *",
+  "prior_executions": [
+    {
+      "id": 18508,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:58:16.387Z",
+      "completed_at": "2026-10-16T20:58:21.335Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 4.9372498989105225
+    },
+    {
+      "id": 18506,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:54:21.701Z",
+      "completed_at": "2026-10-16T20:54:27.089Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.3782854080200195
+    },
+    {
+      "id": 18504,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:50:14.830Z",
+      "completed_at": "2026-10-16T20:50:20.359Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.520596265792847
+    },
+    {
+      "id": 18500,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:36:18.471Z",
+      "completed_at": "2026-10-16T20:36:24.315Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.8336803913116455
+    },
+    {
+      "id": 18496,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:26:19.353Z",
+      "completed_at": "2026-10-16T20:26:24.813Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.450022459030151
+    },
+    {
+      "id": 18494,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:19:16.147Z",
+      "completed_at": "2026-10-16T20:19:21.508Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.348796606063843
+    },
+    {
+      "id": 18490,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:05:17.727Z",
+      "completed_at": "2026-10-16T20:05:22.748Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.011039733886719
+    },
+    {
+      "id": 18489,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:04:19.194Z",
+      "completed_at": "2026-10-16T20:05:06.670Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 47.46637511253357
+    },
+    {
+      "id": 18487,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T20:03:17.231Z",
+      "completed_at": "2026-10-16T20:03:22.091Z",
+      "success": false,
+      "failed_node": "llm_cb15bd2a03a6e17e230c09e81dedeb16",
+      "total_duration_seconds": 3.756834030151367
+    },
+    {
+      "id": 18453,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T19:25:25.226Z",
+      "completed_at": "2026-10-16T19:25:30.844Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.602298021316528
+    }
+  ],
+  "executions": [
+    {
+      "id": 18511,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:02:19.443Z",
+      "completed_at": "2026-10-16T21:02:25.055Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.585435152053833
+    }
+  ],
+  "verified_trigger_literal": "scheduled",
+  "outputs": [
+    {
+      "name": "orders_cleaned_1792184541783.csv",
+      "generation": "1792184543532697",
+      "size": "487",
+      "timeCreated": "2026-10-16T21:02:23.541Z",
+      "updated": "2026-10-16T21:02:23.541Z",
+      "md5Hash": "PoRBRCn88yjawNeXWq8nZA==",
+      "crc32c": "InFMUg==",
+      "sha256": "339f3d637883e55715779848c2691dbf524ece8ba1022dc24485cfd86837498c",
+      "retrieved_at": "2026-10-16T21:02:30.108484+00:00"
+    }
+  ],
+  "output": {
+    "name": "orders_cleaned_1792184541783.csv",
+    "generation": "1792184543532697",
+    "size": "487",
+    "timeCreated": "2026-10-16T21:02:23.541Z",
+    "updated": "2026-10-16T21:02:23.541Z",
+    "md5Hash": "PoRBRCn88yjawNeXWq8nZA==",
+    "crc32c": "InFMUg==",
+    "sha256": "339f3d637883e55715779848c2691dbf524ece8ba1022dc24485cfd86837498c",
+    "retrieved_at": "2026-10-16T21:02:30.108484+00:00"
+  },
+  "output_attribution": "Candidates observed during the schedule window; exact object-to-execution linkage is not established",
+  "output_validations": [
+    {
+      "name": "orders_cleaned_1792184541783.csv",
+      "generation": "1792184543532697",
+      "sha256": "339f3d637883e55715779848c2691dbf524ece8ba1022dc24485cfd86837498c",
+      "report": "validation-output-1.json",
+      "passed": false,
+      "business_values_match": false
+    }
+  ],
+  "validation": {
+    "report": "validation.json",
+    "report_scope": "First object only; aggregate below includes every downloaded candidate",
+    "output_count": 1,
+    "passed": false,
+    "business_values_match": false
+  },
+  "observed_until": "2026-10-16T21:02:32.111Z"
+}

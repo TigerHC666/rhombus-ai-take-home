@@ -1,0 +1,22 @@
+{
+  "scenario": "schema-combined",
+  "passed": false,
+  "evidence_level": "local_artifact_validation; provenance requires a live run manifest",
+  "source_sha256": "cb41de7b30ea253ecd880bd9e90691a8e6f8c6a2dbcb16c6439589b8486bd13b",
+  "output_sha256": "339f3d637883e55715779848c2691dbf524ece8ba1022dc24485cfd86837498c",
+  "source_rows": 12,
+  "output_rows": 7,
+  "business_values_match": false,
+  "determinism": "not_checked",
+  "repeats": [],
+  "errors": [
+    "Schema/order mismatch: ['order_id', 'customer', 'email', 'order_date', 'quantity', 'unit_price', 'currency', 'status', 'total_amount', 'price_per_unit']",
+    "Output row 1 has wrong field count",
+    "Output row 2 has wrong field count",
+    "Output row 3 has wrong field count",
+    "Output row 4 has wrong field count",
+    "Output row 5 has wrong field count",
+    "Output row 6 has wrong field count",
+    "Output row 7 has wrong field count"
+  ]
+}
