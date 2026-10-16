@@ -9,6 +9,8 @@ from urllib.parse import quote
 
 from google.oauth2 import service_account
 from google.auth.transport.requests import AuthorizedSession
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 BUCKET = os.environ.get('ASSESSMENT_GCS_BUCKET', 'rhombus-assessment-output-20261017-hc6')
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,6 +26,12 @@ def main():
     credentials = service_account.Credentials.from_service_account_file(
         args.key, scopes=['https://www.googleapis.com/auth/devstorage.read_only'])
     session = AuthorizedSession(credentials)
+    # Retry only idempotent reads after transient transport/service failures.
+    # Authorization and artifact-validation failures remain terminal.
+    session.mount('https://storage.googleapis.com/', HTTPAdapter(max_retries=Retry(
+        total=2, connect=2, read=2, status=2, backoff_factor=0.5,
+        status_forcelist=[500, 502, 503, 504], allowed_methods=['GET'],
+        respect_retry_after_header=False)))
     args.destination.mkdir(parents=True, exist_ok=True)
     objects = []
     page_token = None

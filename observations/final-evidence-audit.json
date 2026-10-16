@@ -1,0 +1,76 @@
+{
+  "audited_at": "2026-10-16T22:10:04.951127+00:00",
+  "scope": "Integrity of seven completed scheduled observation records, not product-test success",
+  "records": [
+    {
+      "scenario": "schema-drop",
+      "evidence": "observations/evidence/schema-drop/scheduled-pre-repair-1792187486763",
+      "source_sha256": "cbe3ef027b459e326b83fd112b9dd3428d9507ff2ec8bca935ba522de02caa6d",
+      "evidence_integrity_verified": true,
+      "observed_test_result": "failed; no new scheduled execution or fresh output",
+      "ui_schedule_disabled": true,
+      "backend_schedule_disabled": null,
+      "baseline_source_restored": true
+    },
+    {
+      "scenario": "schema-rename",
+      "evidence": "observations/evidence/schema-rename/scheduled-pre-repair-1792187643781",
+      "source_sha256": "1ea5facc8c0ec98e0cdfdf7954d57ab312e736ac72d462276c0e317c8a8e7d2e",
+      "evidence_integrity_verified": true,
+      "observed_test_result": "failed; no new scheduled execution or fresh output",
+      "ui_schedule_disabled": true,
+      "backend_schedule_disabled": null,
+      "baseline_source_restored": true
+    },
+    {
+      "scenario": "schema-type",
+      "evidence": "observations/evidence/schema-type/scheduled-pre-repair-1792187787410",
+      "source_sha256": "5baee38c559d8e7d64deaeb001d3aca4c47398094781946d1dd76c2295e02217",
+      "evidence_integrity_verified": true,
+      "observed_test_result": "failed; no new scheduled execution or fresh output",
+      "ui_schedule_disabled": true,
+      "backend_schedule_disabled": null,
+      "baseline_source_restored": true
+    },
+    {
+      "scenario": "schema-add",
+      "evidence": "observations/evidence/schema-add/scheduled-pre-repair-1792187928050",
+      "source_sha256": "3a7e8a0b8f1fdbd74d559cb48babf7573001d50ee488896f7926d58f0f5fdc00",
+      "evidence_integrity_verified": true,
+      "observed_test_result": "failed; no new scheduled execution or fresh output",
+      "ui_schedule_disabled": true,
+      "backend_schedule_disabled": null,
+      "baseline_source_restored": true
+    },
+    {
+      "scenario": "schema-combined",
+      "evidence": "observations/evidence/schema-combined/scheduled-pre-repair-1792188079066",
+      "source_sha256": "cb41de7b30ea253ecd880bd9e90691a8e6f8c6a2dbcb16c6439589b8486bd13b",
+      "evidence_integrity_verified": true,
+      "observed_test_result": "failed; no new scheduled execution or fresh output",
+      "ui_schedule_disabled": true,
+      "backend_schedule_disabled": true,
+      "baseline_source_restored": true
+    },
+    {
+      "scenario": "semantic-cents",
+      "evidence": "observations/evidence/semantic-cents/scheduled-pre-repair-1792188224203",
+      "source_sha256": "ae8fd14bcd3c82cc2801a224880ea8f90e8b01637f153040ba0cc480e7d46d9f",
+      "evidence_integrity_verified": true,
+      "observed_test_result": "failed; no new scheduled execution or fresh output",
+      "ui_schedule_disabled": true,
+      "backend_schedule_disabled": true,
+      "baseline_source_restored": true
+    },
+    {
+      "scenario": "semantic-dates",
+      "evidence": "observations/evidence/semantic-dates/scheduled-pre-repair-1792188373479",
+      "source_sha256": "4521b9c7cb2fc62b789199a6573fb09eca5afba48c83f27939c14cf4c4423b5c",
+      "evidence_integrity_verified": true,
+      "observed_test_result": "failed; no new scheduled execution or fresh output",
+      "ui_schedule_disabled": true,
+      "backend_schedule_disabled": true,
+      "baseline_source_restored": true
+    }
+  ]
+}

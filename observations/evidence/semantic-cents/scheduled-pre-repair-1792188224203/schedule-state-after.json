@@ -1,0 +1,12 @@
+{
+  "observed_at": "2026-10-16T22:05:46.521Z",
+  "state": {
+    "id": 282,
+    "project_id": 5348,
+    "enabled": false,
+    "cron_expression": "*/1 * * * *",
+    "next_run_at": "2026-10-16T22:06:00Z",
+    "last_run_at": "2026-10-16T22:05:10.558Z",
+    "skipped_runs_count": 1
+  }
+}

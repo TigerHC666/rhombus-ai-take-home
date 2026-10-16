@@ -1,0 +1,157 @@
+{
+  "scenario": "semantic-dates",
+  "phase": "scheduled-pre-repair",
+  "trigger": "unverified",
+  "observed_after": "2026-10-16T22:06:24.884Z",
+  "started_at": "2026-10-16T22:06:13.492Z",
+  "source": "source-provenance.json",
+  "activation_attempted": true,
+  "schedule_disabled": true,
+  "cleanup_attempted": true,
+  "status": "failed",
+  "stage": "strict_validation",
+  "outputs_observed": [],
+  "errors": [
+    {
+      "name": "Error",
+      "message": "A new GCS generation must appear after schedule observation begins\n\nA new GCS generation must appear after schedule observation begins\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 110000ms exceeded while waiting on the predicate"
+    },
+    {
+      "name": "Error",
+      "message": "Fresh output must correlate with a new schedule-history execution\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m"
+    },
+    {
+      "name": "Error",
+      "message": "Every output must match the independent business oracle\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m"
+    }
+  ],
+  "configuration_sha256": "f6f40ae051777d18334352d1592a5926ae1325545c3cfc2fb9e2e92201826458",
+  "frozen_configuration_before_match": true,
+  "cron": "*/1 * * * *",
+  "inactive_before_source_verified": true,
+  "backend_inactive_before_source_verified": true,
+  "source_uploaded_before_activation": true,
+  "prior_executions": [
+    {
+      "id": 18542,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:43:15.296Z",
+      "completed_at": "2026-10-16T21:43:20.889Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 5.5766921043396
+    },
+    {
+      "id": 18541,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:42:22.347Z",
+      "completed_at": "2026-10-16T21:43:08.678Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 46.31290578842163
+    },
+    {
+      "id": 18539,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:41:21.732Z",
+      "completed_at": "2026-10-16T21:41:26.180Z",
+      "success": false,
+      "failed_node": "sort_node_4",
+      "total_duration_seconds": 3.2960309982299805
+    },
+    {
+      "id": 18538,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:40:14.814Z",
+      "completed_at": "2026-10-16T21:40:19.356Z",
+      "success": false,
+      "failed_node": "sort_node_4",
+      "total_duration_seconds": 3.3893978595733643
+    },
+    {
+      "id": 18537,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:39:21.498Z",
+      "completed_at": "2026-10-16T21:40:26.099Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 64.58363103866577
+    },
+    {
+      "id": 18535,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:38:16.733Z",
+      "completed_at": "2026-10-16T21:38:21.285Z",
+      "success": false,
+      "failed_node": "sort_node_4",
+      "total_duration_seconds": 3.3845322132110596
+    },
+    {
+      "id": 18534,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:37:13.660Z",
+      "completed_at": "2026-10-16T21:37:18.229Z",
+      "success": false,
+      "failed_node": "sort_node_4",
+      "total_duration_seconds": 3.4046244621276855
+    },
+    {
+      "id": 18533,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:35:19.084Z",
+      "completed_at": "2026-10-16T21:35:23.608Z",
+      "success": false,
+      "failed_node": "sort_node_4",
+      "total_duration_seconds": 3.393613338470459
+    },
+    {
+      "id": 18532,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:34:17.180Z",
+      "completed_at": "2026-10-16T21:34:55.297Z",
+      "success": false,
+      "failed_node": "sort_node_4",
+      "total_duration_seconds": 37.028889656066895
+    },
+    {
+      "id": 18530,
+      "schedule_id": 282,
+      "trigger": "scheduled",
+      "started_at": "2026-10-16T21:33:14.021Z",
+      "completed_at": "2026-10-16T21:33:18.798Z",
+      "success": true,
+      "failed_node": null,
+      "total_duration_seconds": 4.760441541671753
+    }
+  ],
+  "schedule_disabled_at": "2026-10-16T22:08:15.109Z",
+  "backend_schedule_disabled": true,
+  "executions": [],
+  "logs_scope": "Visible UI logs after schedule shutdown; not restricted to the observed executions",
+  "frozen_configuration_after_match": true,
+  "outputs": [],
+  "output_attribution": "Candidates observed during the schedule window; exact object-to-execution linkage is not established",
+  "output_validations": [],
+  "missing_output_validation": {
+    "report": "validation.json",
+    "passed": false,
+    "output_present": false
+  },
+  "validation": {
+    "report": "validation.json",
+    "report_scope": "No fresh object downloaded; report records unavailable output, not CSV equality",
+    "output_count": 0,
+    "passed": false,
+    "business_values_match": false
+  },
+  "observed_until": "2026-10-16T22:08:27.561Z"
+}

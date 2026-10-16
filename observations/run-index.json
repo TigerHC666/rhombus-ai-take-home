@@ -1,13 +1,51 @@
 [
   {
     "scenario": "baseline",
-    "phase": "input-type-probe",
-    "evidence": "observations/evidence/baseline/input-type-probe-1792183017207",
+    "phase": "final-null-repair",
+    "evidence": "observations/evidence/baseline/final-null-repair-1792186369775",
     "trigger": "manual",
-    "started_at": "2026-10-16T20:36:57.210Z",
+    "started_at": "2026-10-16T21:33:56.359Z",
+    "finished_at": "2026-10-16T21:36:42.413Z",
+    "observed_job_status": "FAILED",
+    "source_sha256": "5ae93188cc660b26ca260dda268fec0f9df9344fd165c8910bbbb9df8b5eb014",
+    "implementation_and_graph_sha256": "deda6da94a68b53fb65e83e84cb7c263007a5f0e602470878219d825966ef0d1",
+    "full_configuration_verified_before_run": false,
+    "output_count": 0,
+    "outputs": [],
+    "output_rows": null,
+    "business_values_match": null,
+    "strict_contract_passed": false,
+    "schedule_disabled": null,
+    "validation_present": true
+  },
+  {
+    "scenario": "baseline",
+    "phase": "final-reader-repair",
+    "evidence": "observations/evidence/baseline/final-reader-repair-1792186651190",
+    "trigger": "manual",
+    "started_at": "2026-10-16T21:38:38.790Z",
+    "finished_at": "2026-10-16T21:40:18.500Z",
+    "observed_job_status": "FAILED",
+    "source_sha256": "5ae93188cc660b26ca260dda268fec0f9df9344fd165c8910bbbb9df8b5eb014",
+    "implementation_and_graph_sha256": "0a9ed4de089cffea36e5678d759aaa1ce6c744b40263edf894513e7f1c7461ed",
+    "full_configuration_verified_before_run": false,
+    "output_count": 0,
+    "outputs": [],
+    "output_rows": null,
+    "business_values_match": null,
+    "strict_contract_passed": false,
+    "schedule_disabled": null,
+    "validation_present": true
+  },
+  {
+    "scenario": "baseline",
+    "phase": "final-ui-journey",
+    "evidence": "observations/evidence/baseline/final-ui-journey-1792186016689",
+    "trigger": "manual",
+    "started_at": "2026-10-16T21:26:56.694Z",
     "finished_at": null,
-    "observed_job_status": null,
-    "source_sha256": null,
+    "observed_job_status": "RUNNING",
+    "source_sha256": "5ae93188cc660b26ca260dda268fec0f9df9344fd165c8910bbbb9df8b5eb014",
     "implementation_and_graph_sha256": null,
     "full_configuration_verified_before_run": false,
     "output_count": 0,
@@ -17,6 +55,95 @@
     "strict_contract_passed": null,
     "schedule_disabled": null,
     "validation_present": false
+  },
+  {
+    "scenario": "baseline",
+    "phase": "final-ui-journey",
+    "evidence": "observations/evidence/baseline/final-ui-journey-1792186089018",
+    "trigger": "manual",
+    "started_at": "2026-10-16T21:30:14.231Z",
+    "finished_at": "2026-10-16T21:32:14.478Z",
+    "observed_job_status": "SUCCESS",
+    "source_sha256": "5ae93188cc660b26ca260dda268fec0f9df9344fd165c8910bbbb9df8b5eb014",
+    "implementation_and_graph_sha256": "4c235bccbe981ed1c4a5bc52649bf9333e4cadcb63e69778b36e310ad28ba70a",
+    "full_configuration_verified_before_run": false,
+    "output_count": 2,
+    "outputs": [
+      {
+        "name": "orders_cleaned_1792186305893.csv",
+        "generation": "1792186307288830",
+        "sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
+        "timeCreated": "2026-10-16T21:31:47.298Z"
+      },
+      {
+        "name": "orders_cleaned_1792186311505.csv",
+        "generation": "1792186312949175",
+        "sha256": "f7096db47512daf76023bb43041049a3d99f3a67b43d2fc925112acff6a957dd",
+        "timeCreated": "2026-10-16T21:31:52.955Z"
+      }
+    ],
+    "output_rows": 7,
+    "business_values_match": true,
+    "strict_contract_passed": false,
+    "schedule_disabled": null,
+    "validation_present": true
+  },
+  {
+    "scenario": "baseline",
+    "phase": "final-working-baseline",
+    "evidence": "observations/evidence/baseline/final-working-baseline-1792186864029",
+    "trigger": "manual",
+    "started_at": "2026-10-16T21:42:17.127Z",
+    "finished_at": "2026-10-16T21:43:28.734Z",
+    "observed_job_status": "SUCCESS",
+    "source_sha256": "5ae93188cc660b26ca260dda268fec0f9df9344fd165c8910bbbb9df8b5eb014",
+    "implementation_and_graph_sha256": "c0e5517278902aac32a4a110deb5fafc86515ad796a6d25aadf3ecb3e7ff8280",
+    "full_configuration_verified_before_run": false,
+    "output_count": 3,
+    "outputs": [
+      {
+        "name": "orders_cleaned_1792186980631.csv",
+        "generation": "1792186982090280",
+        "sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
+        "timeCreated": "2026-10-16T21:43:02.095Z"
+      },
+      {
+        "name": "orders_cleaned_1792186984951.csv",
+        "generation": "1792186987150063",
+        "sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
+        "timeCreated": "2026-10-16T21:43:07.155Z"
+      },
+      {
+        "name": "orders_cleaned_1792186997483.csv",
+        "generation": "1792186999440628",
+        "sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
+        "timeCreated": "2026-10-16T21:43:19.446Z"
+      }
+    ],
+    "output_rows": 7,
+    "business_values_match": true,
+    "strict_contract_passed": false,
+    "schedule_disabled": null,
+    "validation_present": true
+  },
+  {
+    "scenario": "baseline",
+    "phase": "input-type-probe",
+    "evidence": "observations/evidence/baseline/input-type-probe-1792183017207",
+    "trigger": "manual",
+    "started_at": "2026-10-16T20:38:23.479Z",
+    "finished_at": "2026-10-16T20:40:58.590Z",
+    "observed_job_status": "RUNNING",
+    "source_sha256": "5ae93188cc660b26ca260dda268fec0f9df9344fd165c8910bbbb9df8b5eb014",
+    "implementation_and_graph_sha256": "f08a91abf79b05cb9d43fa11b9139afbfd2f8703db36def5cccb95c5435a3f35",
+    "full_configuration_verified_before_run": false,
+    "output_count": 0,
+    "outputs": [],
+    "output_rows": null,
+    "business_values_match": null,
+    "strict_contract_passed": false,
+    "schedule_disabled": null,
+    "validation_present": true
   },
   {
     "scenario": "baseline",
@@ -403,6 +530,25 @@
   },
   {
     "scenario": "baseline",
+    "phase": "scheduled-followup",
+    "evidence": "observations/evidence/baseline/scheduled-1792187050139",
+    "trigger": "unverified",
+    "started_at": "2026-10-16T21:44:21.909Z",
+    "finished_at": "2026-10-16T21:46:33.482Z",
+    "observed_job_status": null,
+    "source_sha256": "5ae93188cc660b26ca260dda268fec0f9df9344fd165c8910bbbb9df8b5eb014",
+    "implementation_and_graph_sha256": "c0e5517278902aac32a4a110deb5fafc86515ad796a6d25aadf3ecb3e7ff8280",
+    "full_configuration_verified_before_run": false,
+    "output_count": 0,
+    "outputs": [],
+    "output_rows": null,
+    "business_values_match": null,
+    "strict_contract_passed": false,
+    "schedule_disabled": true,
+    "validation_present": true
+  },
+  {
+    "scenario": "baseline",
     "phase": "scheduled",
     "evidence": "observations/evidence/baseline/scheduled-first",
     "trigger": "scheduled",
@@ -445,6 +591,58 @@
         "generation": "1792178880930285",
         "sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
         "timeCreated": "2026-10-16T19:28:00.937Z"
+      }
+    ],
+    "output_rows": 7,
+    "business_values_match": true,
+    "strict_contract_passed": false,
+    "schedule_disabled": null,
+    "validation_present": true
+  },
+  {
+    "scenario": "schema-add",
+    "phase": "post-repair",
+    "evidence": "observations/evidence/schema-add/post-repair-1792183846396",
+    "trigger": "manual",
+    "started_at": "2026-10-16T20:51:55.966Z",
+    "finished_at": "2026-10-16T20:53:19.989Z",
+    "observed_job_status": "SUCCESS",
+    "source_sha256": "3a7e8a0b8f1fdbd74d559cb48babf7573001d50ee488896f7926d58f0f5fdc00",
+    "implementation_and_graph_sha256": "d7ddd8cc8eacafcf75e47007db47252a3a2b338ade9c75a71a8ef8f87211c43a",
+    "full_configuration_verified_before_run": false,
+    "output_count": 1,
+    "outputs": [
+      {
+        "name": "orders_cleaned_1792183978673.csv",
+        "generation": "1792183980698676",
+        "sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
+        "timeCreated": "2026-10-16T20:53:00.705Z"
+      }
+    ],
+    "output_rows": 7,
+    "business_values_match": true,
+    "strict_contract_passed": false,
+    "schedule_disabled": null,
+    "validation_present": true
+  },
+  {
+    "scenario": "schema-add",
+    "phase": "post-repair-upstream-drop",
+    "evidence": "observations/evidence/schema-add/post-repair-upstream-drop-1792184091369",
+    "trigger": "manual",
+    "started_at": "2026-10-16T20:56:13.252Z",
+    "finished_at": "2026-10-16T20:57:13.811Z",
+    "observed_job_status": "SUCCESS",
+    "source_sha256": "3a7e8a0b8f1fdbd74d559cb48babf7573001d50ee488896f7926d58f0f5fdc00",
+    "implementation_and_graph_sha256": "c6536584590ac415c026922cfbf7d12719704160ead559937df2ee65f600ab92",
+    "full_configuration_verified_before_run": false,
+    "output_count": 1,
+    "outputs": [
+      {
+        "name": "orders_cleaned_1792184210822.csv",
+        "generation": "1792184211425314",
+        "sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
+        "timeCreated": "2026-10-16T20:56:51.431Z"
       }
     ],
     "output_rows": 7,
@@ -506,6 +704,129 @@
     "validation_present": true
   },
   {
+    "scenario": "schema-add",
+    "phase": "scheduled",
+    "evidence": "observations/evidence/schema-add/scheduled-1792184016528",
+    "trigger": "scheduled",
+    "started_at": "2026-10-16T20:53:50.220Z",
+    "finished_at": "2026-10-16T20:54:35.014Z",
+    "observed_job_status": null,
+    "source_sha256": "3a7e8a0b8f1fdbd74d559cb48babf7573001d50ee488896f7926d58f0f5fdc00",
+    "implementation_and_graph_sha256": "d7ddd8cc8eacafcf75e47007db47252a3a2b338ade9c75a71a8ef8f87211c43a",
+    "full_configuration_verified_before_run": false,
+    "output_count": 1,
+    "outputs": [
+      {
+        "name": "orders_cleaned_1792184063943.csv",
+        "generation": "1792184065671358",
+        "sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
+        "timeCreated": "2026-10-16T20:54:25.679Z"
+      }
+    ],
+    "output_rows": 7,
+    "business_values_match": true,
+    "strict_contract_passed": false,
+    "schedule_disabled": true,
+    "validation_present": true
+  },
+  {
+    "scenario": "schema-add",
+    "phase": "scheduled",
+    "evidence": "observations/evidence/schema-add/scheduled-1792184250981",
+    "trigger": "scheduled",
+    "started_at": "2026-10-16T20:57:40.897Z",
+    "finished_at": "2026-10-16T20:58:28.717Z",
+    "observed_job_status": null,
+    "source_sha256": "3a7e8a0b8f1fdbd74d559cb48babf7573001d50ee488896f7926d58f0f5fdc00",
+    "implementation_and_graph_sha256": "c6536584590ac415c026922cfbf7d12719704160ead559937df2ee65f600ab92",
+    "full_configuration_verified_before_run": false,
+    "output_count": 1,
+    "outputs": [
+      {
+        "name": "orders_cleaned_1792184298623.csv",
+        "generation": "1792184299890826",
+        "sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
+        "timeCreated": "2026-10-16T20:58:19.902Z"
+      }
+    ],
+    "output_rows": 7,
+    "business_values_match": true,
+    "strict_contract_passed": false,
+    "schedule_disabled": true,
+    "validation_present": true
+  },
+  {
+    "scenario": "schema-add",
+    "phase": "scheduled-pre-repair",
+    "evidence": "observations/evidence/schema-add/scheduled-pre-repair-1792187928050",
+    "trigger": "unverified",
+    "started_at": "2026-10-16T21:58:59.613Z",
+    "finished_at": "2026-10-16T22:01:03.889Z",
+    "observed_job_status": null,
+    "source_sha256": "3a7e8a0b8f1fdbd74d559cb48babf7573001d50ee488896f7926d58f0f5fdc00",
+    "implementation_and_graph_sha256": "c0e5517278902aac32a4a110deb5fafc86515ad796a6d25aadf3ecb3e7ff8280",
+    "full_configuration_verified_before_run": false,
+    "output_count": 0,
+    "outputs": [],
+    "output_rows": null,
+    "business_values_match": null,
+    "strict_contract_passed": false,
+    "schedule_disabled": true,
+    "validation_present": true
+  },
+  {
+    "scenario": "schema-combined",
+    "phase": "post-repair",
+    "evidence": "observations/evidence/schema-combined/post-repair-1792184344149",
+    "trigger": "manual",
+    "started_at": "2026-10-16T21:00:04.452Z",
+    "finished_at": "2026-10-16T21:01:20.781Z",
+    "observed_job_status": "SUCCESS",
+    "source_sha256": "cb41de7b30ea253ecd880bd9e90691a8e6f8c6a2dbcb16c6439589b8486bd13b",
+    "implementation_and_graph_sha256": "482bbe5be489530c16481701139a9ef6bae42246a096f4204562f05be4f98b6c",
+    "full_configuration_verified_before_run": false,
+    "output_count": 1,
+    "outputs": [
+      {
+        "name": "orders_cleaned_1792184463604.csv",
+        "generation": "1792184465465635",
+        "sha256": "339f3d637883e55715779848c2691dbf524ece8ba1022dc24485cfd86837498c",
+        "timeCreated": "2026-10-16T21:01:05.475Z"
+      }
+    ],
+    "output_rows": 7,
+    "business_values_match": false,
+    "strict_contract_passed": false,
+    "schedule_disabled": null,
+    "validation_present": true
+  },
+  {
+    "scenario": "schema-combined",
+    "phase": "post-repair-projection",
+    "evidence": "observations/evidence/schema-combined/post-repair-projection-1792184568046",
+    "trigger": "manual",
+    "started_at": "2026-10-16T21:03:34.856Z",
+    "finished_at": "2026-10-16T21:03:59.806Z",
+    "observed_job_status": "SUCCESS",
+    "source_sha256": "cb41de7b30ea253ecd880bd9e90691a8e6f8c6a2dbcb16c6439589b8486bd13b",
+    "implementation_and_graph_sha256": "df503111a294b560fb98c53c77ba1f0d7463e14f1ec57ab72df05a9bd954bb11",
+    "full_configuration_verified_before_run": false,
+    "output_count": 1,
+    "outputs": [
+      {
+        "name": "orders_cleaned_1792184619301.csv",
+        "generation": "1792184620514036",
+        "sha256": "3c9fd235b4854fbf340cef70809b12c0a7523436ac8afd03ff54c4e69cae7882",
+        "timeCreated": "2026-10-16T21:03:40.522Z"
+      }
+    ],
+    "output_rows": 7,
+    "business_values_match": true,
+    "strict_contract_passed": false,
+    "schedule_disabled": null,
+    "validation_present": true
+  },
+  {
     "scenario": "schema-combined",
     "phase": "pre-repair",
     "evidence": "observations/evidence/schema-combined/pre-repair-1792180103200",
@@ -544,6 +865,77 @@
     "validation_present": true
   },
   {
+    "scenario": "schema-combined",
+    "phase": "scheduled",
+    "evidence": "observations/evidence/schema-combined/scheduled-1792184489005",
+    "trigger": "scheduled",
+    "started_at": "2026-10-16T21:01:40.141Z",
+    "finished_at": "2026-10-16T21:02:32.111Z",
+    "observed_job_status": null,
+    "source_sha256": "cb41de7b30ea253ecd880bd9e90691a8e6f8c6a2dbcb16c6439589b8486bd13b",
+    "implementation_and_graph_sha256": "482bbe5be489530c16481701139a9ef6bae42246a096f4204562f05be4f98b6c",
+    "full_configuration_verified_before_run": false,
+    "output_count": 1,
+    "outputs": [
+      {
+        "name": "orders_cleaned_1792184541783.csv",
+        "generation": "1792184543532697",
+        "sha256": "339f3d637883e55715779848c2691dbf524ece8ba1022dc24485cfd86837498c",
+        "timeCreated": "2026-10-16T21:02:23.541Z"
+      }
+    ],
+    "output_rows": 7,
+    "business_values_match": false,
+    "strict_contract_passed": false,
+    "schedule_disabled": true,
+    "validation_present": true
+  },
+  {
+    "scenario": "schema-combined",
+    "phase": "scheduled",
+    "evidence": "observations/evidence/schema-combined/scheduled-1792184653885",
+    "trigger": "scheduled",
+    "started_at": "2026-10-16T21:04:25.827Z",
+    "finished_at": "2026-10-16T21:05:31.816Z",
+    "observed_job_status": null,
+    "source_sha256": "cb41de7b30ea253ecd880bd9e90691a8e6f8c6a2dbcb16c6439589b8486bd13b",
+    "implementation_and_graph_sha256": "df503111a294b560fb98c53c77ba1f0d7463e14f1ec57ab72df05a9bd954bb11",
+    "full_configuration_verified_before_run": false,
+    "output_count": 1,
+    "outputs": [
+      {
+        "name": "orders_cleaned_1792184722050.csv",
+        "generation": "1792184724005669",
+        "sha256": "3c9fd235b4854fbf340cef70809b12c0a7523436ac8afd03ff54c4e69cae7882",
+        "timeCreated": "2026-10-16T21:05:24.013Z"
+      }
+    ],
+    "output_rows": 7,
+    "business_values_match": true,
+    "strict_contract_passed": false,
+    "schedule_disabled": true,
+    "validation_present": true
+  },
+  {
+    "scenario": "schema-combined",
+    "phase": "scheduled-pre-repair",
+    "evidence": "observations/evidence/schema-combined/scheduled-pre-repair-1792188079066",
+    "trigger": "unverified",
+    "started_at": "2026-10-16T22:01:29.807Z",
+    "finished_at": "2026-10-16T22:03:33.480Z",
+    "observed_job_status": null,
+    "source_sha256": "cb41de7b30ea253ecd880bd9e90691a8e6f8c6a2dbcb16c6439589b8486bd13b",
+    "implementation_and_graph_sha256": "c0e5517278902aac32a4a110deb5fafc86515ad796a6d25aadf3ecb3e7ff8280",
+    "full_configuration_verified_before_run": false,
+    "output_count": 0,
+    "outputs": [],
+    "output_rows": null,
+    "business_values_match": null,
+    "strict_contract_passed": false,
+    "schedule_disabled": true,
+    "validation_present": true
+  },
+  {
     "scenario": "schema-drop",
     "phase": "post-repair",
     "evidence": "observations/evidence/schema-drop/post-repair-1792180984019",
@@ -567,6 +959,32 @@
         "generation": "1792181104990316",
         "sha256": "3c9fd235b4854fbf340cef70809b12c0a7523436ac8afd03ff54c4e69cae7882",
         "timeCreated": "2026-10-16T20:05:04.997Z"
+      }
+    ],
+    "output_rows": 7,
+    "business_values_match": true,
+    "strict_contract_passed": false,
+    "schedule_disabled": null,
+    "validation_present": true
+  },
+  {
+    "scenario": "schema-drop",
+    "phase": "post-repair",
+    "evidence": "observations/evidence/schema-drop/post-repair-1792185641023",
+    "trigger": "manual",
+    "started_at": "2026-10-16T21:21:34.114Z",
+    "finished_at": "2026-10-16T21:22:46.050Z",
+    "observed_job_status": "SUCCESS",
+    "source_sha256": "cbe3ef027b459e326b83fd112b9dd3428d9507ff2ec8bca935ba522de02caa6d",
+    "implementation_and_graph_sha256": "9ddcaaaee28479762b348f97672be6dcbec2843e80d9e12abd78dae6874e751e",
+    "full_configuration_verified_before_run": false,
+    "output_count": 1,
+    "outputs": [
+      {
+        "name": "orders_cleaned_1792185744865.csv",
+        "generation": "1792185746839534",
+        "sha256": "3c9fd235b4854fbf340cef70809b12c0a7523436ac8afd03ff54c4e69cae7882",
+        "timeCreated": "2026-10-16T21:22:26.845Z"
       }
     ],
     "output_rows": 7,
@@ -695,6 +1113,108 @@
     "strict_contract_passed": null,
     "schedule_disabled": true,
     "validation_present": false
+  },
+  {
+    "scenario": "schema-drop",
+    "phase": "post-repair",
+    "evidence": "observations/evidence/schema-drop/scheduled-1792185777857",
+    "trigger": "scheduled",
+    "started_at": "2026-10-16T21:23:09.787Z",
+    "finished_at": "2026-10-16T21:24:27.265Z",
+    "observed_job_status": null,
+    "source_sha256": "cbe3ef027b459e326b83fd112b9dd3428d9507ff2ec8bca935ba522de02caa6d",
+    "implementation_and_graph_sha256": "9ddcaaaee28479762b348f97672be6dcbec2843e80d9e12abd78dae6874e751e",
+    "full_configuration_verified_before_run": false,
+    "output_count": 1,
+    "outputs": [
+      {
+        "name": "orders_cleaned_1792185854683.csv",
+        "generation": "1792185856075598",
+        "sha256": "3c9fd235b4854fbf340cef70809b12c0a7523436ac8afd03ff54c4e69cae7882",
+        "timeCreated": "2026-10-16T21:24:16.080Z"
+      }
+    ],
+    "output_rows": 7,
+    "business_values_match": true,
+    "strict_contract_passed": false,
+    "schedule_disabled": true,
+    "validation_present": true
+  },
+  {
+    "scenario": "schema-drop",
+    "phase": "scheduled-pre-repair",
+    "evidence": "observations/evidence/schema-drop/scheduled-pre-repair-1792187214142",
+    "trigger": "unverified",
+    "started_at": "2026-10-16T21:46:54.146Z",
+    "finished_at": "2026-10-16T21:47:30.413Z",
+    "observed_job_status": null,
+    "source_sha256": null,
+    "implementation_and_graph_sha256": "c0e5517278902aac32a4a110deb5fafc86515ad796a6d25aadf3ecb3e7ff8280",
+    "full_configuration_verified_before_run": false,
+    "output_count": 0,
+    "outputs": [],
+    "output_rows": null,
+    "business_values_match": null,
+    "strict_contract_passed": null,
+    "schedule_disabled": null,
+    "validation_present": false
+  },
+  {
+    "scenario": "schema-drop",
+    "phase": "scheduled-pre-repair",
+    "evidence": "observations/evidence/schema-drop/scheduled-pre-repair-1792187291214",
+    "trigger": "unverified",
+    "started_at": "2026-10-16T21:48:11.218Z",
+    "finished_at": "2026-10-16T21:48:50.018Z",
+    "observed_job_status": null,
+    "source_sha256": null,
+    "implementation_and_graph_sha256": "c0e5517278902aac32a4a110deb5fafc86515ad796a6d25aadf3ecb3e7ff8280",
+    "full_configuration_verified_before_run": false,
+    "output_count": 0,
+    "outputs": [],
+    "output_rows": null,
+    "business_values_match": null,
+    "strict_contract_passed": null,
+    "schedule_disabled": null,
+    "validation_present": false
+  },
+  {
+    "scenario": "schema-drop",
+    "phase": "scheduled-pre-repair",
+    "evidence": "observations/evidence/schema-drop/scheduled-pre-repair-1792187364342",
+    "trigger": "unverified",
+    "started_at": "2026-10-16T21:49:35.708Z",
+    "finished_at": "2026-10-16T21:50:38.881Z",
+    "observed_job_status": null,
+    "source_sha256": "cbe3ef027b459e326b83fd112b9dd3428d9507ff2ec8bca935ba522de02caa6d",
+    "implementation_and_graph_sha256": "c0e5517278902aac32a4a110deb5fafc86515ad796a6d25aadf3ecb3e7ff8280",
+    "full_configuration_verified_before_run": false,
+    "output_count": 0,
+    "outputs": [],
+    "output_rows": null,
+    "business_values_match": null,
+    "strict_contract_passed": false,
+    "schedule_disabled": true,
+    "validation_present": true
+  },
+  {
+    "scenario": "schema-drop",
+    "phase": "scheduled-pre-repair",
+    "evidence": "observations/evidence/schema-drop/scheduled-pre-repair-1792187486763",
+    "trigger": "unverified",
+    "started_at": "2026-10-16T21:51:41.269Z",
+    "finished_at": "2026-10-16T21:53:42.867Z",
+    "observed_job_status": null,
+    "source_sha256": "cbe3ef027b459e326b83fd112b9dd3428d9507ff2ec8bca935ba522de02caa6d",
+    "implementation_and_graph_sha256": "c0e5517278902aac32a4a110deb5fafc86515ad796a6d25aadf3ecb3e7ff8280",
+    "full_configuration_verified_before_run": false,
+    "output_count": 0,
+    "outputs": [],
+    "output_rows": null,
+    "business_values_match": null,
+    "strict_contract_passed": false,
+    "schedule_disabled": true,
+    "validation_present": true
   },
   {
     "scenario": "schema-rename",
@@ -986,6 +1506,51 @@
     "validation_present": true
   },
   {
+    "scenario": "schema-rename",
+    "phase": "scheduled-pre-repair",
+    "evidence": "observations/evidence/schema-rename/scheduled-pre-repair-1792187643781",
+    "trigger": "unverified",
+    "started_at": "2026-10-16T21:54:14.813Z",
+    "finished_at": "2026-10-16T21:56:17.709Z",
+    "observed_job_status": null,
+    "source_sha256": "1ea5facc8c0ec98e0cdfdf7954d57ab312e736ac72d462276c0e317c8a8e7d2e",
+    "implementation_and_graph_sha256": "c0e5517278902aac32a4a110deb5fafc86515ad796a6d25aadf3ecb3e7ff8280",
+    "full_configuration_verified_before_run": false,
+    "output_count": 0,
+    "outputs": [],
+    "output_rows": null,
+    "business_values_match": null,
+    "strict_contract_passed": false,
+    "schedule_disabled": true,
+    "validation_present": true
+  },
+  {
+    "scenario": "schema-type",
+    "phase": "post-repair",
+    "evidence": "observations/evidence/schema-type/post-repair-1792183625231",
+    "trigger": "manual",
+    "started_at": "2026-10-16T20:48:10.375Z",
+    "finished_at": "2026-10-16T20:49:06.797Z",
+    "observed_job_status": "SUCCESS",
+    "source_sha256": "5baee38c559d8e7d64deaeb001d3aca4c47398094781946d1dd76c2295e02217",
+    "implementation_and_graph_sha256": "e004bb7013873021f32ff28c19d949c637f293cd0f0827606f08a5de34d91f48",
+    "full_configuration_verified_before_run": false,
+    "output_count": 1,
+    "outputs": [
+      {
+        "name": "orders_cleaned_1792183728520.csv",
+        "generation": "1792183730244703",
+        "sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
+        "timeCreated": "2026-10-16T20:48:50.253Z"
+      }
+    ],
+    "output_rows": 7,
+    "business_values_match": true,
+    "strict_contract_passed": false,
+    "schedule_disabled": null,
+    "validation_present": true
+  },
+  {
     "scenario": "schema-type",
     "phase": "pre-repair",
     "evidence": "observations/evidence/schema-type/pre-repair-1792179923802",
@@ -1019,6 +1584,77 @@
     "outputs": [],
     "output_rows": null,
     "business_values_match": null,
+    "strict_contract_passed": false,
+    "schedule_disabled": null,
+    "validation_present": true
+  },
+  {
+    "scenario": "schema-type",
+    "phase": "scheduled",
+    "evidence": "observations/evidence/schema-type/scheduled-1792183761670",
+    "trigger": "scheduled",
+    "started_at": "2026-10-16T20:49:33.633Z",
+    "finished_at": "2026-10-16T20:50:28.642Z",
+    "observed_job_status": null,
+    "source_sha256": "5baee38c559d8e7d64deaeb001d3aca4c47398094781946d1dd76c2295e02217",
+    "implementation_and_graph_sha256": "e004bb7013873021f32ff28c19d949c637f293cd0f0827606f08a5de34d91f48",
+    "full_configuration_verified_before_run": false,
+    "output_count": 1,
+    "outputs": [
+      {
+        "name": "orders_cleaned_1792183817144.csv",
+        "generation": "1792183818937417",
+        "sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
+        "timeCreated": "2026-10-16T20:50:18.945Z"
+      }
+    ],
+    "output_rows": 7,
+    "business_values_match": true,
+    "strict_contract_passed": false,
+    "schedule_disabled": true,
+    "validation_present": true
+  },
+  {
+    "scenario": "schema-type",
+    "phase": "scheduled-pre-repair",
+    "evidence": "observations/evidence/schema-type/scheduled-pre-repair-1792187787410",
+    "trigger": "unverified",
+    "started_at": "2026-10-16T21:56:37.581Z",
+    "finished_at": "2026-10-16T21:58:37.800Z",
+    "observed_job_status": null,
+    "source_sha256": "5baee38c559d8e7d64deaeb001d3aca4c47398094781946d1dd76c2295e02217",
+    "implementation_and_graph_sha256": "c0e5517278902aac32a4a110deb5fafc86515ad796a6d25aadf3ecb3e7ff8280",
+    "full_configuration_verified_before_run": false,
+    "output_count": 0,
+    "outputs": [],
+    "output_rows": null,
+    "business_values_match": null,
+    "strict_contract_passed": false,
+    "schedule_disabled": true,
+    "validation_present": true
+  },
+  {
+    "scenario": "semantic-cents",
+    "phase": "post-repair",
+    "evidence": "observations/evidence/semantic-cents/post-repair-1792184745756",
+    "trigger": "manual",
+    "started_at": "2026-10-16T21:06:41.428Z",
+    "finished_at": "2026-10-16T21:07:41.795Z",
+    "observed_job_status": "SUCCESS",
+    "source_sha256": "ae8fd14bcd3c82cc2801a224880ea8f90e8b01637f153040ba0cc480e7d46d9f",
+    "implementation_and_graph_sha256": "910a65ec6c0d6b8b668eae7d801374ced9e3498f2d4ded164f7ef2a6c1a44aa0",
+    "full_configuration_verified_before_run": false,
+    "output_count": 1,
+    "outputs": [
+      {
+        "name": "orders_cleaned_1792184842382.csv",
+        "generation": "1792184843615188",
+        "sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
+        "timeCreated": "2026-10-16T21:07:23.622Z"
+      }
+    ],
+    "output_rows": 7,
+    "business_values_match": true,
     "strict_contract_passed": false,
     "schedule_disabled": null,
     "validation_present": true
@@ -1076,6 +1712,103 @@
     "validation_present": true
   },
   {
+    "scenario": "semantic-cents",
+    "phase": "scheduled",
+    "evidence": "observations/evidence/semantic-cents/scheduled-1792184869120",
+    "trigger": "scheduled",
+    "started_at": "2026-10-16T21:07:58.879Z",
+    "finished_at": "2026-10-16T21:09:29.776Z",
+    "observed_job_status": null,
+    "source_sha256": "ae8fd14bcd3c82cc2801a224880ea8f90e8b01637f153040ba0cc480e7d46d9f",
+    "implementation_and_graph_sha256": "910a65ec6c0d6b8b668eae7d801374ced9e3498f2d4ded164f7ef2a6c1a44aa0",
+    "full_configuration_verified_before_run": false,
+    "output_count": 1,
+    "outputs": [
+      {
+        "name": "orders_cleaned_1792184954959.csv",
+        "generation": "1792184956662625",
+        "sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
+        "timeCreated": "2026-10-16T21:09:16.669Z"
+      }
+    ],
+    "output_rows": 7,
+    "business_values_match": true,
+    "strict_contract_passed": false,
+    "schedule_disabled": true,
+    "validation_present": true
+  },
+  {
+    "scenario": "semantic-cents",
+    "phase": "scheduled-pre-repair",
+    "evidence": "observations/evidence/semantic-cents/scheduled-pre-repair-1792188224203",
+    "trigger": "unverified",
+    "started_at": "2026-10-16T22:03:54.843Z",
+    "finished_at": "2026-10-16T22:05:58.552Z",
+    "observed_job_status": null,
+    "source_sha256": "ae8fd14bcd3c82cc2801a224880ea8f90e8b01637f153040ba0cc480e7d46d9f",
+    "implementation_and_graph_sha256": "c0e5517278902aac32a4a110deb5fafc86515ad796a6d25aadf3ecb3e7ff8280",
+    "full_configuration_verified_before_run": false,
+    "output_count": 0,
+    "outputs": [],
+    "output_rows": null,
+    "business_values_match": null,
+    "strict_contract_passed": false,
+    "schedule_disabled": true,
+    "validation_present": true
+  },
+  {
+    "scenario": "semantic-dates",
+    "phase": "post-repair",
+    "evidence": "observations/evidence/semantic-dates/post-repair-1792184990172",
+    "trigger": "manual",
+    "started_at": "2026-10-16T21:10:50.154Z",
+    "finished_at": "2026-10-16T21:11:58.118Z",
+    "observed_job_status": "SUCCESS",
+    "source_sha256": "4521b9c7cb2fc62b789199a6573fb09eca5afba48c83f27939c14cf4c4423b5c",
+    "implementation_and_graph_sha256": "12e3384f3613baf17f3a026dafecdc788b220cb7280c88a9907af397fd50192a",
+    "full_configuration_verified_before_run": false,
+    "output_count": 1,
+    "outputs": [
+      {
+        "name": "orders_cleaned_1792185097317.csv",
+        "generation": "1792185099194151",
+        "sha256": "9e6ca069e9930e97f555b28c8c04e0178a6cbff518b69ae99327ead1d9cb3059",
+        "timeCreated": "2026-10-16T21:11:39.200Z"
+      }
+    ],
+    "output_rows": 7,
+    "business_values_match": false,
+    "strict_contract_passed": false,
+    "schedule_disabled": null,
+    "validation_present": true
+  },
+  {
+    "scenario": "semantic-dates",
+    "phase": "post-repair-reader-correction",
+    "evidence": "observations/evidence/semantic-dates/post-repair-reader-correction-1792185217533",
+    "trigger": "manual",
+    "started_at": "2026-10-16T21:14:41.138Z",
+    "finished_at": "2026-10-16T21:15:46.274Z",
+    "observed_job_status": "SUCCESS",
+    "source_sha256": "4521b9c7cb2fc62b789199a6573fb09eca5afba48c83f27939c14cf4c4423b5c",
+    "implementation_and_graph_sha256": "09d2cc7e7d50d399e63a80a64402c6a4e86add8d065ae11ac9db343a2948cd57",
+    "full_configuration_verified_before_run": false,
+    "output_count": 1,
+    "outputs": [
+      {
+        "name": "orders_cleaned_1792185324207.csv",
+        "generation": "1792185324874705",
+        "sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
+        "timeCreated": "2026-10-16T21:15:24.882Z"
+      }
+    ],
+    "output_rows": 7,
+    "business_values_match": true,
+    "strict_contract_passed": false,
+    "schedule_disabled": null,
+    "validation_present": true
+  },
+  {
     "scenario": "semantic-dates",
     "phase": "pre-repair",
     "evidence": "observations/evidence/semantic-dates/pre-repair-1792180290165",
@@ -1125,6 +1858,77 @@
     "business_values_match": false,
     "strict_contract_passed": false,
     "schedule_disabled": null,
+    "validation_present": true
+  },
+  {
+    "scenario": "semantic-dates",
+    "phase": "scheduled",
+    "evidence": "observations/evidence/semantic-dates/scheduled-1792185124059",
+    "trigger": "scheduled",
+    "started_at": "2026-10-16T21:12:16.447Z",
+    "finished_at": "2026-10-16T21:13:21.881Z",
+    "observed_job_status": null,
+    "source_sha256": "4521b9c7cb2fc62b789199a6573fb09eca5afba48c83f27939c14cf4c4423b5c",
+    "implementation_and_graph_sha256": "12e3384f3613baf17f3a026dafecdc788b220cb7280c88a9907af397fd50192a",
+    "full_configuration_verified_before_run": false,
+    "output_count": 1,
+    "outputs": [
+      {
+        "name": "orders_cleaned_1792185191923.csv",
+        "generation": "1792185193840852",
+        "sha256": "9e6ca069e9930e97f555b28c8c04e0178a6cbff518b69ae99327ead1d9cb3059",
+        "timeCreated": "2026-10-16T21:13:13.848Z"
+      }
+    ],
+    "output_rows": 7,
+    "business_values_match": false,
+    "strict_contract_passed": false,
+    "schedule_disabled": true,
+    "validation_present": true
+  },
+  {
+    "scenario": "semantic-dates",
+    "phase": "scheduled",
+    "evidence": "observations/evidence/semantic-dates/scheduled-1792185555712",
+    "trigger": "scheduled",
+    "started_at": "2026-10-16T21:19:29.725Z",
+    "finished_at": "2026-10-16T21:20:16.836Z",
+    "observed_job_status": null,
+    "source_sha256": "4521b9c7cb2fc62b789199a6573fb09eca5afba48c83f27939c14cf4c4423b5c",
+    "implementation_and_graph_sha256": "09d2cc7e7d50d399e63a80a64402c6a4e86add8d065ae11ac9db343a2948cd57",
+    "full_configuration_verified_before_run": false,
+    "output_count": 1,
+    "outputs": [
+      {
+        "name": "orders_cleaned_1792185606631.csv",
+        "generation": "1792185608595132",
+        "sha256": "c1b839d03b50347885b57e0d6f97588ad7026e40809f7e1dd7786c268d22de83",
+        "timeCreated": "2026-10-16T21:20:08.603Z"
+      }
+    ],
+    "output_rows": 7,
+    "business_values_match": true,
+    "strict_contract_passed": false,
+    "schedule_disabled": true,
+    "validation_present": true
+  },
+  {
+    "scenario": "semantic-dates",
+    "phase": "scheduled-pre-repair",
+    "evidence": "observations/evidence/semantic-dates/scheduled-pre-repair-1792188373479",
+    "trigger": "unverified",
+    "started_at": "2026-10-16T22:06:24.884Z",
+    "finished_at": "2026-10-16T22:08:27.561Z",
+    "observed_job_status": null,
+    "source_sha256": "4521b9c7cb2fc62b789199a6573fb09eca5afba48c83f27939c14cf4c4423b5c",
+    "implementation_and_graph_sha256": "c0e5517278902aac32a4a110deb5fafc86515ad796a6d25aadf3ecb3e7ff8280",
+    "full_configuration_verified_before_run": false,
+    "output_count": 0,
+    "outputs": [],
+    "output_rows": null,
+    "business_values_match": null,
+    "strict_contract_passed": false,
+    "schedule_disabled": true,
     "validation_present": true
   }
 ]

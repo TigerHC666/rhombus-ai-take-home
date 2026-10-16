@@ -1,0 +1,45 @@
+Dashboard
+New Project
+Search
+All Projects (1)
+LLM Observability Assessment
+T
+tiger.cai1116@gmail.com
+Canvas
+Workspace
+Preview
+Logs
+Data Input
+Data Input
+Custom
+llm_node_19
+Sort Data
+sort_node_4
+Data Output
+Export to rhombus-assessment-output-20261017-hc6 (csv)
+Logs
+0 visible
+All
+0
+0
+0
+
+No logs yet
+
+Pipeline messages will appear here.
+
+AI Builder
+Schedule
+Transform
+Profile
+Schedules
+Manage schedules within this project
+Add Schedule
+Schedule for LLM Observability Assessment
+Inactive
+Custom
+Custom: */1 * * * *
+Skipped 2 time(s) in a row due to unchanged data.
+Facet
+4,933/50
+Schedule stopped

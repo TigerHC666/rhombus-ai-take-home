@@ -1,6 +1,6 @@
 # Checkpoint 2: implementation and evidence review
 
-Status: **in progress; not signed off**. Checkpoint 1 design/fixture acceptance is complete. Checkpoint 3 final fix verification has not started. This review separates independently inspected artifacts from primary-agent reports and does not certify unfinished live work.
+Status: **implementation and evidence coverage accepted with recorded failures**. This is not an all-pass product certification or final account-cleanup/delivery sign-off. Checkpoint 3 retains the remaining external gates.
 
 ## Latest verification update
 
@@ -18,7 +18,7 @@ The diagnostic marker finding was mitigated by matched-job payload checks, but t
 
 The actual final UI journey reached existing S3/GCS/schedule configuration and Builder interaction, but a fresh export regressed missing-customer handling. Two subsequent repairs failed with empty results. See [final baseline progression](observations/final-baseline.md). A newly restored baseline must be validated before its graph can be frozen for the seven scheduled unrepaired cases. Historical successful case repairs remain valid historical observations; they do not certify the current graph.
 
-Checkpoint 2 remains open for final baseline recovery and scheduled verification, all seven frozen scheduled unrepaired observations, final demo playback/access and updated reports. Checkpoint 3 must still verify final fixes and cleanup/security/delivery state.
+All seven frozen scheduled unrepaired observations are now complete and documented in the central scheduling table. None yielded a fresh execution/output; these are failed bounded observations, not simulated success. Restored baseline business recovery, historical scheduled successes and a separate controlled skip are distinguished. The final demo and regression evidence are delivered. IAM cleanup, latest billing and recipient access remain checkpoint 3 gates.
 
 ## Evidence established so far
 
@@ -37,13 +37,13 @@ Checkpoint 2 remains open for final baseline recovery and scheduled verification
 | Unrelated job states could terminate polling | Filter by the captured process-response job ID | Normal-path runtime verified; error branches not universally certified |
 | Schedule could change during Builder repair | Require visible unchecked inactive switch before source mutation and after Builder reload; capture both states | Normal-path runtime verified; error branches not universally certified |
 | Saved configuration is not execution-code proof | Preserve safe node/parameter key schema; inspect available executed-code evidence without exposing credentials | Not resolved by snapshot equality alone |
-| No-output timeout omitted history/report | Disable first, capture authoritative history and UI logs, write explicit missing-artifact report; retain combined errors | Old skip evidence exists; new missing-report branch awaits runtime verification |
+| No-output timeout omitted history/report | Disable first, capture authoritative history and UI logs, write explicit missing-artifact report; retain combined errors | Runtime verified by frozen baseline and all seven scheduled drift windows |
 | Strict monetary-format failure could hide scenario outcomes | Preserve strict failures while reporting business values, execution state and repair result separately | Approach accepted; final summaries must remain consistent |
 | Scheduler still reports unchanged after source byte replacement | Record both source hashes, skip notices, observed windows and cleanup; investigate supported refresh semantics | Actual behavior established; cause unknown |
-| Scheduled unrepaired drift coverage | All seven original frozen pre-repair observations are manual; mutate S3 before bounded scheduled runs under a restored frozen baseline | Outstanding; do not substitute manual evidence |
+| Scheduled unrepaired drift coverage | All seven original frozen pre-repair observations are manual; mutate S3 before bounded scheduled runs under a restored frozen baseline | Complete as bounded failed observations; original manual evidence remains separate |
 | Isolated drop scheduled recovery | Fresh controlled repair and scheduled follow-up | Reviewed; scheduled #18522 business-correct, strict formatting failed |
-| UI pipeline journey | Automate existing authorized S3/GCS connection selection/configuration and schedule setup; cloud account signup is outside this pre-provisioned boundary | Final baseline/demo implementation pending verification |
-| Submission artifacts incomplete | Final README commands/scenario table/top findings/usability feedback; usable demo link; dependency and permission setup; repository access | Outstanding |
+| UI pipeline journey | Automate existing authorized S3/GCS connection selection/configuration and schedule setup; cloud account signup is outside this pre-provisioned boundary | Actual existing-connection UI journey recorded; subsequent business recovery and demo reviewed |
+| Submission delivery | Final README commands/scenario table/top findings/usability feedback; usable demo link; dependency and permission setup; repository access | Artifacts present; recipient access and account cleanup remain external gates |
 
 ## Methodological constraints
 
@@ -56,3 +56,15 @@ The reviewer helped improve two harness files at the primary agent's explicit re
 ## Completion gate
 
 Checkpoint 2 requires completed or explicitly blocked requirement coverage, preserved raw evidence, meaningful runnable tests, final readable reports, and verification of recent harness corrections. Checkpoint 3 must then verify fixes, remaining limitations, inactive schedules, credential exclusion, and final repository/video delivery. No all-pass claim is appropriate while strict contract failures persist.
+
+
+## Coverage acceptance
+
+The required source/Builder/destination journey, real schedule observations, four independent schema mutations plus combined mutation, two semantic changes, direct API negative cases, independent actual-artifact validation, case reports, README and short demonstration are represented by runnable code and preserved real evidence. Failed scheduling windows and monetary-format violations remain explicit findings. The reviewer independently viewed the three decoded demo sample frames; captions/cards are readable and distinguish historical footage from later recorded results. Whole-video decoding was verified by the primary agent.
+
+This acceptance is bounded to the documented dataset/configurations and observed windows. The later scheduled drift series uses a recovered baseline revision, not an identical replay of the original pre-repair node graph. Historical scheduled success satisfies the observed scheduling behavior, but a fresh controlled export from the final recovered baseline is not claimed. Optional dashboard and three separately triggered repeats were not required or claimed.
+
+
+## Final observed operational state
+
+The reviewer inspected [final state evidence](observations/evidence/final-state/README.md): schedule-list HTTP 200 at 2026-10-16 22:09:03.782 UTC reports schedule 282/project 5348 `enabled: false`. A separate actual S3 read at 22:08:52.927 UTC matches baseline SHA-256 `5ae93188cc660b26ca260dda268fec0f9df9344fd165c8910bbbb9df8b5eb014` and records no upload in that read. The retained final history page contains completed returned rows; this is not proof of globally idle backend work. These close the final observed schedule/source gate, not credential revocation or billing verification. The primary regenerated the evidence index with 82 manifests before delivery.

@@ -1,0 +1,173 @@
+Dashboard
+New Project
+Search
+All Projects (1)
+LLM Observability Assessment
+T
+tiger.cai1116@gmail.com
+Canvas
+Workspace
+Preview
+Executions
+Logs
+Schedule for LLM Observability Assessment
+Export CSV
+Execution
+	
+Started
+	
+Duration
+	
+Status
+	
+Failed Node
+	
+Completed Nodes
+
+
+Execution #18542
+	
+10/17/2026, 8:43:15 AM
+	
+5.6s
+	Success	
+—
+	
+Data Input
+Custom
+Data Output
+Sort Data
+
+
+Execution #18541
+	
+10/17/2026, 8:42:22 AM
+	
+46.3s
+	Success	
+—
+	
+Data Input
+Custom
+Data Output
+Sort Data
+
+
+Execution #18539
+	
+10/17/2026, 8:41:21 AM
+	
+3.3s
+	Failure	
+Sort Data
+	
+Data Input
+Custom
+
+
+Execution #18538
+	
+10/17/2026, 8:40:14 AM
+	
+3.4s
+	Failure	
+Sort Data
+	
+Data Input
+Custom
+
+
+Execution #18537
+	
+10/17/2026, 8:39:21 AM
+	
+1m 5s
+	Success	
+—
+	
+Data Input
+Custom
+Data Output
+Sort Data
+
+
+Execution #18535
+	
+10/17/2026, 8:38:16 AM
+	
+3.4s
+	Failure	
+Sort Data
+	
+Data Input
+Custom
+
+
+Execution #18534
+	
+10/17/2026, 8:37:13 AM
+	
+3.4s
+	Failure	
+Sort Data
+	
+Data Input
+Custom
+
+
+Execution #18533
+	
+10/17/2026, 8:35:19 AM
+	
+3.4s
+	Failure	
+Sort Data
+	
+Data Input
+Custom
+
+
+Execution #18532
+	
+10/17/2026, 8:34:17 AM
+	
+37.0s
+	Failure	
+Sort Data
+	
+Data Input
+Custom
+
+
+Execution #18530
+	
+10/17/2026, 8:33:14 AM
+	
+4.8s
+	Success	
+—
+	
+Data Input
+Custom
+Data Output
+Sort Data
+Rows per page
+20
+
+1-10 of 10
+
+AI Builder
+Schedule
+Transform
+Profile
+Schedules
+Manage schedules within this project
+Add Schedule
+Schedule for LLM Observability Assessment
+Inactive
+Custom
+Custom: */1 * * * *
+Skipped 2 time(s) in a row due to unchanged data.
+Facet
+4,933/50
+Schedule stopped

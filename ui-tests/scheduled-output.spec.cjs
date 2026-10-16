@@ -20,6 +20,24 @@ test('scheduled pipeline produces a fresh independently validated GCS artifact',
   const cron = process.env.SCHEDULE_CRON || '*/5 * * * *';
   if (!['*/1 * * * *', '*/5 * * * *'].includes(cron)) throw new Error('Unsupported supervised schedule interval');
   let configuration;
+  let scheduleListRequest;
+  page.on('request', request => {
+    const url = new URL(request.url());
+    if (url.origin === 'https://api.rhombusai.com' && request.method() === 'GET' &&
+        url.pathname === `/api/dataset/analyzer/v2/projects/${settings.projectId}/pipeline/schedules`) scheduleListRequest = request;
+  });
+  const readScheduleState = async label => {
+    expect(scheduleListRequest, 'Schedule list request must have been observed in the UI').toBeDefined();
+    const response = await context.request.fetch(scheduleListRequest);
+    expect(response.status()).toBe(200);
+    const body = await response.json();
+    expect(Array.isArray(body)).toBe(true);
+    expect(body).toHaveLength(1);
+    const fields = ['id', 'project_id', 'enabled', 'cron_expression', 'next_run_at', 'last_run_at', 'skipped_runs_count'];
+    const state = Object.fromEntries(fields.filter(key => body[0][key] !== undefined).map(key => [key, body[0][key]]));
+    fs.writeFileSync(path.join(directory, `schedule-state-${label}.json`), JSON.stringify({ observed_at: new Date().toISOString(), state }, null, 2));
+    return state;
+  };
   page.on('response', async response => {
     const url = new URL(response.url());
     if (url.origin !== 'https://api.rhombusai.com' || url.pathname !== `/api/dataset/analyzer/v2/projects/${settings.projectId}/nodes` || response.status() !== 200) return;
@@ -78,6 +96,9 @@ test('scheduled pipeline produces a fresh independently validated GCS artifact',
   await expect(inactiveBefore).toBeVisible();
   await expect(inactiveBefore).not.toBeChecked();
   manifest.inactive_before_source_verified = true;
+  const scheduleBefore = await readScheduleState('before-source');
+  expect(scheduleBefore.enabled, 'Backend schedule must be disabled before source mutation').toBe(false);
+  manifest.backend_inactive_before_source_verified = true;
   fs.writeFileSync(path.join(directory, 'schedule-before-source.txt'), await page.getByRole('complementary').innerText());
 
   const historyButton = () => page.getByRole('complementary').getByRole('button').filter({ has: page.locator('svg.lucide-history') });
@@ -154,6 +175,10 @@ test('scheduled pipeline produces a fresh independently validated GCS artifact',
       await expect(inactive).toBeVisible({ timeout: 60000 });
       await expect(inactive).not.toBeChecked();
       manifest.schedule_disabled = true;
+      manifest.schedule_disabled_at = new Date().toISOString();
+      const scheduleAfter = await readScheduleState('after');
+      manifest.backend_schedule_disabled = scheduleAfter.enabled === false;
+      expect(manifest.backend_schedule_disabled, 'Backend schedule must be disabled after collection').toBe(true);
       fs.writeFileSync(path.join(directory, 'schedule-inactive.txt'), await page.getByRole('complementary').innerText());
       } catch (error) {
         cleanupFailure = error;
@@ -199,7 +224,7 @@ test('scheduled pipeline produces a fresh independently validated GCS artifact',
     persist();
     // A failed scheduled job still proves the trigger identity, never success.
     expect(newExecutions.length).toBeLessThanOrEqual(3);
-    expect(newExecutions.some(row => row.success === true)).toBe(true);
+    expect(newExecutions.some(row => row.success === true), 'At least one observed scheduled execution must succeed').toBe(true);
   });
   manifest.stage = 'artifact_download';
   persist();

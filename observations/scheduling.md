@@ -44,3 +44,20 @@ The original [test manifest](evidence/schema-rename/scheduled-1792181888371/run-
 The [controlled frozen-baseline manifest](evidence/baseline/scheduled-1792187050139/run-manifest.json) observes from 2026-10-16 21:44:21.909 through evidence completion at 21:46:33.482 UTC. No fresh export or new execution was recorded. The [inactive capture](evidence/baseline/scheduled-1792187050139/schedule-inactive.txt) reports one unchanged-data skip. Saved configuration matches the frozen recovery snapshot before and after observation, and cleanup is verified inactive. The [missing-output validation](evidence/baseline/scheduled-1792187050139/validation.json) explicitly fails with `output_present: false`. This verifies the new no-output reporting and frozen-comparison branches against the actual service; it is not a fresh controlled scheduled success.
 
 The same manifest's prior API history identifies successful scheduled #18541 (21:42:22.347-21:43:08.678 UTC) and #18542 (21:43:15.296-21:43:20.889 UTC). These intervals overlap the recovered manual observation's three equal business-correct exports. The manual run had recorded inactive UI checks, so those checks did not establish absence of subsequent scheduled activity. Exact per-object linkage and the reason for this state discrepancy remain unknown. The historical scheduled successes and controlled skip are separate facts; neither is substituted for the other.
+
+
+## Final unrepaired scheduled source-change series
+
+These windows use the recovered frozen baseline revision. Each uploads real variant bytes, observes the bounded schedule, validates missing output explicitly, verifies saved configuration and restores baseline bytes afterward. No completed row below contains a new execution-history entry or fresh export. Counts are notices/state, not executed jobs. Earlier manual pre-repair experiments and repaired scheduled successes remain separate.
+
+| Case | Completed evidence | Skip count before/after | Interpretation | Disabled-state evidence |
+| --- | --- | --- | --- | --- |
+| Drop | [1792187486763](evidence/schema-drop/scheduled-pre-repair-1792187486763/run-manifest.json) | 1 -> 2 | Increased skip; retry of previously changed source | UI |
+| Rename | [1792187643781](evidence/schema-rename/scheduled-pre-repair-1792187643781/run-manifest.json) | 2 -> 1 | Bounded no new execution; counter attribution unknown | UI |
+| Type | [1792187787410](evidence/schema-type/scheduled-pre-repair-1792187787410/run-manifest.json) | 2 -> 2 | Bounded no new execution; counter attribution unknown | UI |
+| Add | [1792187928050](evidence/schema-add/scheduled-pre-repair-1792187928050/run-manifest.json) | 2 -> 1 | Bounded no new execution; counter attribution unknown | UI |
+| Combined | [1792188079066](evidence/schema-combined/scheduled-pre-repair-1792188079066/run-manifest.json) | 1 -> 2 | Increased backend skip count; last_run_at advances, no job row | UI + backend before/after |
+| Cents | [1792188224203](evidence/semantic-cents/scheduled-pre-repair-1792188224203/run-manifest.json) | 2 -> 1 | Bounded no new execution; counter attribution unknown | UI + backend before/after |
+| Dates | [1792188373479](evidence/semantic-dates/scheduled-pre-repair-1792188373479/run-manifest.json) | 1 -> 1 | Bounded no new execution; counter attribution unknown | UI + backend before/after |
+
+Combined's backend `last_run_at` changes from 22:00:14.544 to 22:03:10.392 UTC despite no new execution row. Treat it as scheduler-state evidence rather than a pipeline job timestamp. Backend state checks were introduced for combined onward and are not retroactive for the first four cases.
