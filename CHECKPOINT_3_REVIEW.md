@@ -31,3 +31,8 @@ Cloud IAM/key revocation and final billing verification are pending account acce
 ## Final observed operational state
 
 The reviewer inspected [final state evidence](observations/evidence/final-state/README.md): schedule-list HTTP 200 at 2026-10-16 22:09:03.782 UTC reports schedule 282/project 5348 `enabled: false`. A separate actual S3 read at 22:08:52.927 UTC matches baseline SHA-256 `5ae93188cc660b26ca260dda268fec0f9df9344fd165c8910bbbb9df8b5eb014` and records no upload in that read. The retained final history page contains completed returned rows; this is not proof of globally idle backend work. These close the final observed schedule/source gate, not credential revocation or billing verification. The primary regenerated the evidence index with 82 manifests before delivery.
+
+## Owner-authorized delivery update — October 18, 2026
+
+The owner explicitly authorized public repository visibility and submission to the recruiting team. Public visibility is now enabled. The review above records the state at the time of the audit; its earlier authorization/access blockers are superseded by this update. Cloud permissions are retained for reproduction following the subsequent discussion with the owner. Final billing remains unverified; no new unconditional reviewer sign-off is claimed.
+
